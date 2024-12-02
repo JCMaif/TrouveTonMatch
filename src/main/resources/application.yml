@@ -1,0 +1,33 @@
+spring:
+  application:
+    name: TrouveTonMatch
+  datasource:
+    driverClassName: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/match?currentSchema=public
+    username: postgres
+    password: postgres
+  jpa:
+    show-sql: true
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: create-drop
+    defer-datasource-initialization: true
+  sql:
+    init:
+      data-locations: "classpath*:data.sql"
+      mode: always
+  security:
+    jwt:
+      secret: a656f4f87edae419df63fc317ed353be1f17f43efd6ab60b9d10110fa25ab746
+      expiration: 7  # jours
+server:
+  port: 8080
+  servlet:
+    context-path: /api
+
+springdoc:
+  api-docs:
+    path: /public/documentation/api-docs
+  swagger-ui:
+    path: /public/documentation/swagger-ui.html
+
