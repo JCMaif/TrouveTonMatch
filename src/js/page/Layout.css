@@ -6,8 +6,20 @@
 }
 
 body {
+  --green: #71c920;
+  --pink: #e31766;
+  --light-pink: #e24782;
+  --light-green : #e7ffcc;
+  background-color: var(--light-green);
+}
+
+body {
   font-family: Arial, sans-serif;
   line-height: 1.6;
+}
+
+.layout {
+  margin: auto;
 }
 
 /* Header Styles */
@@ -15,8 +27,8 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: #003366;
-  color: white;
+  background-color: #ffffff;
+  color: rgb(0, 0, 0);
   padding: 10px 20px;
 }
 
@@ -25,13 +37,17 @@ body {
   font-weight: bold;
 }
 
+.header .logo img {
+  width: 196px;
+}
+
 .header .nav {
   display: flex;
   gap: 20px;
 }
 
 .header .nav a {
-  color: white;
+  color: rgb(0, 0, 0);
   text-decoration: none;
   font-size: 18px;
 }
@@ -47,14 +63,14 @@ body {
 }
 
 .header .auth-info span {
-  color: white;
+  color: rgb(0, 0, 0);
 }
 
 .header .auth-info button {
   padding: 8px 12px;
   border: none;
   background-color: #ff4d4d;
-  color: white;
+  color: rgb(0, 0, 0);
   cursor: pointer;
 }
 
@@ -62,17 +78,90 @@ body {
   background-color: #e60000;
 }
 
+
+
 /* Footer Styles */
 .footer {
-  background-color: #003366;
-  color: white;
+  background-color:white;
+  color: var(--pink);
+  padding: 20px;
   text-align: center;
-  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+}
+
+.footer-contacts {
+  font-size: 16px;
+}
+
+.footer-contacts a {
+  color: var(--light-pink);
+  text-decoration: none;
+}
+
+.footer-contacts a:hover {
+  color: var(--pink);
+}
+
+.footer-social {
+  display: flex;
+  gap: 15px;
+  font-size: 24px;
+}
+
+.social-icon {
+  color: var(--pink);
+  transition: transform 0.3s ease, color 0.3s ease;
+}
+
+.social-icon:hover {
+  transform: scale(1.2);
+  color: var(--light-green);
+}
+
+.footer-copyright {
   margin-top: 20px;
+  font-size: 14px;
+  color: black;
 }
 
 /* Main Content Styles */
 main {
   padding: 20px;
-  min-height: 70vh; /* Adjust based on your content */
+  min-height: 80vh;
+}
+
+.content {
+
+  background-image: url(/public/banniere_page_d_accueil_site_internet.jpg);
+  background-position: center;
+  max-height: 100vh;
+}
+
+.content h1 {
+  text-align: center;
+  
+}  
+
+@media (min-width: 576px) {
+  .layout {
+    max-width: 540px;
+  }
+}
+@media (min-width: 768px) {
+  .layout {
+    max-width: 720px;
+  }
+}
+@media (min-width: 992px) {
+  .layout {
+    max-width: 960px;
+  }
+}
+@media (min-width: 1200px) {
+  .layout {
+    max-width: 1170px;
+  }
 }
