@@ -29,11 +29,12 @@ public class SecurityConfig {
                         .requestMatchers(
                                 "/auth/**",
                                 "/user/**",
-                                "/public/documentation/**"
+                                "/public/documentation/**",
+                                "/logout/**"
                         ).permitAll()
                         .requestMatchers("/admin/**").hasRole("ADMIN")
                         .anyRequest().authenticated())
-                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterAfter(jwtFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
 
@@ -47,4 +48,3 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 }
-
