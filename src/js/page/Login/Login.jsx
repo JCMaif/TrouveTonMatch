@@ -1,6 +1,11 @@
 import React, { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
+import "./Login.scss";
+import { authService } from "../../services/authService";
+import InputField from "../../components/common/InputField/InputField";
+import Checkbox from "../../components/common/CheckBox/CheckBox";
+import SubmitButton from "../../components/common/buttons/SubmitButton/SubmitButton";
 
 const Login = () => {
   const [username, setUsername] = useState("");
@@ -14,36 +19,26 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch("http://localhost:8080/api/auth/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          username,
-          password,
-        }),
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        const { token } = data;
-        login(token);
-
+      const data = await authService.login(username, password); 
+      const { token } = data;
+      console.log("Token : ", token);
+  
+      if (token) {
+        login(token); 
         if (rememberMe) {
           localStorage.setItem("jwtToken", token);
         }
         sessionStorage.setItem("jwtToken", token);
         navigate("/");
       } else {
-        const errData = await response.json();
-        setError(errData.message || "Login failed");
+        console.error("Aucun token reçu après la connexion.");
       }
     } catch (err) {
-      console.error("Login failed:", err);
-      alert("An error occurred during login.");
+      console.error("Erreur dans la soumission du formulaire de connexion : ", err);
+      setError(err.message);
     }
   };
+  
 
   return (
     <div className="login-container">
@@ -52,28 +47,30 @@ const Login = () => {
         {error && <p className="error-message">{error}</p>}
 
         <form onSubmit={handleSubmit}>
-          <input
+          <InputField
             type="text"
             placeholder="Username"
             value={username}
-            onChange={(e) => setUsername(e.target.value)}
+            onChange={setUsername}
+            name="username"
+            id="username"
+            mandatory
           />
-          <input
+          <InputField
             type="password"
             placeholder="Password"
             value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            onChange={setPassword}
+            name="password"
+            id="password"
+            mandatory
           />
-          <div>
-            <input
-              type="checkbox"
-              checked={rememberMe}
-              onChange={() => setRememberMe(!rememberMe)}
-            />
-            <label>Remember me</label>
-          </div>
-
-          <button type="submit">Login</button>
+          <Checkbox
+            checked={rememberMe}
+            onChange={() => setRememberMe(!rememberMe)}
+            label="Remember me"
+          />
+          <SubmitButton text="Login" />
         </form>
       </div>
     </div>

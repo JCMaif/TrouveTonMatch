@@ -1,0 +1,25 @@
+/* Global Styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  line-height: 1.6;
+}
+
+.layout {
+  margin: auto;
+}
+
+/* Main Content Styles */
+main {
+  padding: 20px;
+  min-height: 80vh;
+}
+
+.content h1 {
+  text-align: center;
+}  

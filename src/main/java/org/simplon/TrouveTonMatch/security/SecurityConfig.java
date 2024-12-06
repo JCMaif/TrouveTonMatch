@@ -29,8 +29,7 @@ public class SecurityConfig {
                         .requestMatchers(
                                 "/auth/**",
                                 "/user/**",
-                                "/public/documentation/**",
-                                "/logout/**"
+                                "/public/documentation/**"
                         ).permitAll()
                         .requestMatchers("/admin/**").hasRole("ADMIN")
                         .anyRequest().authenticated())

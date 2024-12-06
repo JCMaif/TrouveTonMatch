@@ -6,11 +6,9 @@ import com.auth0.jwt.exceptions.JWTCreationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import org.simplon.TrouveTonMatch.model.UserApi;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Service;
 
 import java.time.*;
-import java.util.List;
 
 @Service
 public class JwtService {
@@ -23,17 +21,24 @@ public class JwtService {
 
 
     public String generateToken(UserApi user) {
-        List<String> roles = user.getAuthorities().stream()
-                .map(GrantedAuthority::getAuthority)
-                .toList();
+        String role = user.getRole().name();
         try {
             Algorithm algorithm = Algorithm.HMAC256(secret);
-            return JWT.create()
+            var token = JWT.create()
                     .withSubject(user.getUsername())
-                    .withClaim("roles", roles)
+                    .withClaim("role", role)
                     .withClaim("username", user.getUsername())
+                    .withClaim("id", user.getId())
                     .withExpiresAt(genAccessTokenExpirationDate())
                     .sign(algorithm);
+
+            System.out.println("Token généré : " + JWT.create()
+                    .withSubject(user.getUsername())
+                    .withClaim("role", role)
+                    .withClaim("username", user.getUsername())
+                    .withClaim("id", user.getId())
+                    .sign(algorithm));
+            return token;
         } catch (JWTCreationException e) {
             throw new JWTCreationException("Error while creating JWT", e);
         }
@@ -51,19 +56,22 @@ public class JwtService {
         }
     }
 
-    public List<String> extractRoles(String token) {
+    public String extractRole(String token) {
         try {
             Algorithm algorithm = Algorithm.HMAC256(secret);
             DecodedJWT decodedJWT = JWT.require(algorithm)
                     .build()
                     .verify(token);
-            return decodedJWT.getClaim("roles").asList(String.class);
+            return decodedJWT.getClaim("role").asString();
         } catch (Exception e) {
-            throw new RuntimeException("Error while extracting roles from JWT", e);
+            throw new RuntimeException("Error while extracting role from JWT", e);
         }
     }
 
     private Instant genAccessTokenExpirationDate() {
-        return LocalDateTime.now().plusDays(expiration).atZone(ZoneId.systemDefault()).toInstant();
+        return LocalDateTime.now()
+                .plusDays(expiration)
+                .atZone(ZoneId.systemDefault())
+                .toInstant();
     }
 }

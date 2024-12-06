@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.List;
 
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
@@ -31,17 +32,14 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-
         var token = this.recoverToken(request);
         if (token != null) {
             var username = jwtService.validateToken(token);
             if (username != null) {
                 var user = userRepository.findByUsername(username);
-                var roles = jwtService.extractRoles(token);
-                var authorities = roles.stream()
-                        .map(SimpleGrantedAuthority::new)
-                        .toList();
-                var authentication = new UsernamePasswordAuthenticationToken(user, null, authorities);
+                var role = jwtService.extractRole(token);
+                var authority = new SimpleGrantedAuthority("ROLE_" + role);
+                var authentication = new UsernamePasswordAuthenticationToken(user, null, List.of(authority));
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
         } filterChain.doFilter(request, response);

@@ -5,7 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.proxy.HibernateProxy;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -33,18 +32,16 @@ public class UserApi implements UserDetails {
     @Enumerated(EnumType.STRING)
     private UserRole role;
 
-    public UserApi(String username, String password, UserRole role) {
+    public UserApi(String username, String password, UserRole role, Long id) {
         this.username = username;
         this.password = password;
         this.role = role;
+        this.id = id;
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        if (this.role == UserRole.ADMIN){
-            return List.of(new SimpleGrantedAuthority("ROLE_ADMIN"));
-        }
-        return List.of(new SimpleGrantedAuthority("ROLE_USER"));
+        return List.of(new SimpleGrantedAuthority(this.role.name()));
     }
 
     @Override

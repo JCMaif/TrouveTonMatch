@@ -1,0 +1,47 @@
+@import "../../styles/variables.scss";
+
+.footer {
+    background-color:white;
+    color: $pink;
+    padding: 20px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+  }
+  
+  .footer-contacts {
+    font-size: 16px;
+  }
+  
+  .footer-contacts a {
+    color: $light-pink;
+    text-decoration: none;
+  }
+  
+  .footer-contacts a:hover {
+    color: $pink;
+  }
+  
+  .footer-social {
+    display: flex;
+    gap: 15px;
+    font-size: 24px;
+  }
+  
+  .social-icon {
+    color: $pink;
+    transition: transform 0.3s ease, color 0.3s ease;
+  }
+  
+  .social-icon:hover {
+    transform: scale(1.2);
+    color: $light-green;
+  }
+  
+  .footer-copyright {
+    margin-top: 20px;
+    font-size: 14px;
+    color: black;
+  }

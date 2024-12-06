@@ -2,9 +2,6 @@ package org.simplon.TrouveTonMatch.service;
 
 import org.simplon.TrouveTonMatch.dtos.UserDto;
 import org.simplon.TrouveTonMatch.repository.UserRepository;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,8 +15,11 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-
     public List<UserDto> getAllUsers() {
         return userRepository.findAll().stream().map(UserDto::fromEntity).toList();
+    }
+
+    public void deleteUser(Long id) {
+        userRepository.deleteById(id);
     }
 }

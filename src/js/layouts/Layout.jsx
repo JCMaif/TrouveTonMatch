@@ -2,8 +2,8 @@ import React, { useContext, useEffect } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext"; 
 import "./Layout.css";
-import Header from "./Header/Header";
-import Footer from "./Footer/Footer";
+import Header from "../shared/Header/Header";
+import Footer from "../shared/Footer/Footer";
 
 const Layout = () => {
     const { isAuthenticated } = useContext(AuthContext);

@@ -32,7 +32,6 @@ public class AuthService implements UserDetailsService {
         }
         String encryptedPassword = new BCryptPasswordEncoder().encode(data.getPassword());
         UserApi user = new UserApi(data.getUsername(), encryptedPassword, data.getRole(), null);
-        user = userRepository.save(user);
-        return user;
+        return userRepository.save(user);
     }
 }
