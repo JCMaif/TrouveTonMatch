@@ -27,11 +27,11 @@ const Utilisateurs = () => {
   }, []);
 
   const handleUserClick = (userId) => {
-    navigate(`/user/${userId}`); 
+    navigate(`/profil/${userId}`); 
   };
 
   const handleEditUser = (userId) => {
-    navigate(`/user/edit/${userId}`); 
+    navigate(`/profil/edit/${userId}`); 
   };
 
   const handleDeleteUser = async (userId) => {

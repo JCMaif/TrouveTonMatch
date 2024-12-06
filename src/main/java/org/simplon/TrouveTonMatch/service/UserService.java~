@@ -23,7 +23,7 @@ public class UserService {
         userRepository.deleteById(id);
     }
 
-    public UserDto findByUsername(String username) {
-        return UserDto.fromEntity(userRepository.findByUsername(username));
+    public UserDto getUserById(Long id) {
+        return UserDto.fromEntity(userRepository.findById(id).get());
     }
 }

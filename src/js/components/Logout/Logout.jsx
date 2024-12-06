@@ -1,5 +1,6 @@
 import React, { useContext } from "react";
 import { AuthContext } from "../../context/AuthContext";
+import "./Logout.scss";
 
 const Logout = () => {
   const { logout } = useContext(AuthContext);

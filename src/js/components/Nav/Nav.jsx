@@ -4,7 +4,7 @@ import { AuthContext } from "../../context/AuthContext";
 
 const Nav = () => {
   const { isAuthenticated, logout } = useContext(AuthContext);
-  const { username, role } = isAuthenticated;
+  const { username, role, id } = isAuthenticated;
 
   if (isAuthenticated && role === "ADMIN") {
     return (
@@ -19,7 +19,10 @@ const Nav = () => {
           <Link to="/matches" className="Nav-link">Matches</Link>
         </li>
         <li>
-          <Link to={`/utilisateurs/${username}`} className="Nav-link">Mon profil</Link>
+          <Link to="/signup" className="Nav-link">Créer un utilisateur</Link>
+        </li>
+        <li>
+          <Link to={`/profil/${id}`} className="Nav-link">Mon profil</Link>
         </li>
       </>
     );
@@ -35,7 +38,7 @@ const Nav = () => {
           <Link to="/projets" className="Nav-link">Projets</Link>
         </li>
         <li>
-          <Link to={`/utilisateurs/${username}`} className="Nav-link">Mon profil</Link>
+          <Link to={`/profil/${id}`} className="Nav-link">Mon profil</Link>
         </li>
       </>
     );
