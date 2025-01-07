@@ -23,6 +23,7 @@ spring:
   web:
     resources:
       static-locations: classpath:/static/
+
 server:
   port: 8080
   servlet:
@@ -33,4 +34,3 @@ springdoc:
     path: /public/documentation/api-docs
   swagger-ui:
     path: /public/documentation/swagger-ui.html
-

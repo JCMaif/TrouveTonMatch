@@ -13,24 +13,40 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 
-@Table(name = "users")
+@Table(name = "utilisateur")
 @Entity
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Inheritance(strategy = InheritanceType.JOINED)
 public class UserApi implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false, unique = true)
     private String username;
 
+    @Column(nullable = false)
     private String password;
+
+    @Column(nullable = false, unique = true)
+    private String email;
 
     @Enumerated(EnumType.STRING)
     private UserRole role;
+
+
+
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "plateforme_id", referencedColumnName = "id")
+    private Plateforme plateforme;
+
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "adresse_id", referencedColumnName = "id")
+    private Adresse adresse;
 
     public UserApi(String username, String password, UserRole role, Long id) {
         this.username = username;

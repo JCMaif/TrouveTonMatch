@@ -1,6 +1,8 @@
 package org.simplon.TrouveTonMatch.dtos;
 
-import lombok.*;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
 import org.simplon.TrouveTonMatch.model.UserApi;
 import org.simplon.TrouveTonMatch.model.UserRole;
 

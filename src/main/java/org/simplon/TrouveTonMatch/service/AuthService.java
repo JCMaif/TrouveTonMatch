@@ -13,9 +13,11 @@ import org.springframework.stereotype.Service;
 @Service
 public class AuthService implements UserDetailsService {
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
+    public AuthService(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -26,13 +28,12 @@ public class AuthService implements UserDetailsService {
         return user;
     }
 
-    public UserApi signUp(SignupDto data) throws Exception {
+    public void signUp(SignupDto data) throws Exception {
         if (userRepository.findByUsername(data.getUsername()) != null) {
             throw new Exception("User already exists");
         }
         String encryptedPassword = new BCryptPasswordEncoder().encode(data.getPassword());
         UserApi user = new UserApi(data.getUsername(), encryptedPassword, data.getRole(), null);
-        user = userRepository.save(user);
-        return user;
+        userRepository.save(user);
     }
 }

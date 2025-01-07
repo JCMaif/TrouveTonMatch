@@ -8,7 +8,6 @@ import org.simplon.TrouveTonMatch.dtos.SignupDto;
 import org.simplon.TrouveTonMatch.model.UserApi;
 import org.simplon.TrouveTonMatch.security.JwtService;
 import org.simplon.TrouveTonMatch.service.AuthService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -24,14 +23,18 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/auth")
 public class AuthController {
 
-    @Autowired
-    private AuthenticationManager authenticationManager;
 
-    @Autowired
-    private AuthService authService;
+    private final AuthenticationManager authenticationManager;
 
-    @Autowired
-    private JwtService jwtService;
+    private final AuthService authService;
+
+    private final JwtService jwtService;
+
+    public AuthController(AuthenticationManager authenticationManager, AuthService authService, JwtService jwtService) {
+        this.authenticationManager = authenticationManager;
+        this.authService = authService;
+        this.jwtService = jwtService;
+    }
 
     @PostMapping("/signup")
     @PermitAll
