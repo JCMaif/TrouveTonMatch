@@ -1,6 +1,6 @@
-@use "../../../../styles/variables.scss" as *;
+@import "../../../../styles/variables";
 
-.delete-button {
+.edit-button {
     background: none;
     border: none;
     cursor: pointer;
