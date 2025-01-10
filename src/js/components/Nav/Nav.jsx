@@ -19,7 +19,7 @@ const Nav = () => {
           <Link to="/matches" className="Nav-link">Matches</Link>
         </li>
         <li>
-          <Link to={`/profil/${id}`} className="Nav-link">Mon profil</Link>
+          <Link to="/plateformes" className="Nav-link">Plateformes</Link>
         </li>
       </>
     );
@@ -35,12 +35,57 @@ const Nav = () => {
           <Link to="/projets" className="Nav-link">Projets</Link>
         </li>
         <li>
-          <Link to={`/profil/${id}`} className="Nav-link">Mon profil</Link>
+          <Link to={`/profil/${id}`} className="Nav-link">Mon espace</Link>
         </li>
       </>
     );
   }
 
+    if (isAuthenticated && role === "PORTEUR") {
+    return (
+      <>
+        <li>
+          <Link to="/projets" className="Nav-link">Projets</Link>
+        </li>
+        <li>
+          <Link to="/parrains" className="Nav-link">Parrains</Link>
+        </li>
+        <li>
+          <Link to={`/profil/${id}`} className="Nav-link">Mon espace</Link>
+        </li>
+      </>
+    );
+  }
+    if (isAuthenticated && role === "PARRAIN") {
+      return (
+        <>
+          <li>
+            <Link to="/projets" className="Nav-link">Projets</Link>
+          </li>
+          <li>
+            <Link to={`/profil/${id}`} className="Nav-link">Mon espace</Link>
+          </li>
+        </>
+      );
+  }
+  if (isAuthenticated && role === "PLATEFORME") {
+    return (
+      <>
+         <li>
+          <Link to="/parrains" className="Nav-link">Parrains</Link>
+        </li>
+        <li>
+          <Link to="/porteurs" className="Nav-link">Porteurs</Link>
+        </li>
+        <li>
+          <Link to="/projets" className="Nav-link">Projets</Link>
+        </li>
+        <li>
+          <Link to="/matches" className="Nav-link">Matches</Link>
+        </li>
+      </>
+    );
+  }
   if (!isAuthenticated) {
     return (
       <li>

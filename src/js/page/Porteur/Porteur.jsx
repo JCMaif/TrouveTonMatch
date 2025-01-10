@@ -4,9 +4,9 @@ import { useNavigate, Link } from "react-router-dom";
 import { userService } from '../../services/userService';
 import EditButton from '../../components/common/buttons/EditButton/EditButton';
 import DeleteButton from '../../components/common/buttons/DeleteButton/DeleteButton';
-import './Utilisateurs.scss';
+import './Porteur.scss';
 
-const Utilisateurs = () => {
+const Porteur = () => {
   const [users, setUsers] = useState([]);
   const [error, setError] = useState('');
   const { isAuthenticated } = useContext(AuthContext);
@@ -83,4 +83,4 @@ const Utilisateurs = () => {
   );
 };
 
-export default Utilisateurs;
+export default Porteur;
