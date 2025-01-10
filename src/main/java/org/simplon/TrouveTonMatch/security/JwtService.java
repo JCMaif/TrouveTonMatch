@@ -4,7 +4,7 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
-import org.simplon.TrouveTonMatch.model.UserApi;
+import org.simplon.TrouveTonMatch.model.Utilisateur;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -22,7 +22,7 @@ public class JwtService {
     private long expiration;
 
 
-    public String generateToken(UserApi user) {
+    public String generateToken(Utilisateur user) {
         String role = user.getRole().name();
         try {
             Algorithm algorithm = Algorithm.HMAC256(secret);

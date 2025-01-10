@@ -20,7 +20,7 @@ import java.util.Objects;
 @AllArgsConstructor
 @NoArgsConstructor
 @Inheritance(strategy = InheritanceType.JOINED)
-public class UserApi implements UserDetails {
+public class Utilisateur implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -48,7 +48,7 @@ public class UserApi implements UserDetails {
     @JoinColumn(name = "adresse_id", referencedColumnName = "id")
     private Adresse adresse;
 
-    public UserApi(String username, String password, UserRole role, Long id) {
+    public Utilisateur(String username, String password, UserRole role, Long id) {
         this.username = username;
         this.password = password;
         this.role = role;
@@ -94,8 +94,8 @@ public class UserApi implements UserDetails {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        UserApi userApi = (UserApi) o;
-        return Objects.equals(id, userApi.id);
+        Utilisateur utilisateur = (Utilisateur) o;
+        return Objects.equals(id, utilisateur.id);
     }
 
     @Override

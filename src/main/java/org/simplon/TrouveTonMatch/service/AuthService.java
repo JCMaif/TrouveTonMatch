@@ -1,9 +1,8 @@
 package org.simplon.TrouveTonMatch.service;
 
 import org.simplon.TrouveTonMatch.dtos.SignupDto;
-import org.simplon.TrouveTonMatch.model.UserApi;
+import org.simplon.TrouveTonMatch.model.Utilisateur;
 import org.simplon.TrouveTonMatch.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -33,7 +32,7 @@ public class AuthService implements UserDetailsService {
             throw new Exception("User already exists");
         }
         String encryptedPassword = new BCryptPasswordEncoder().encode(data.getPassword());
-        UserApi user = new UserApi(data.getUsername(), encryptedPassword, data.getRole(), null);
+        Utilisateur user = new Utilisateur(data.getUsername(), encryptedPassword, data.getRole(), null);
         userRepository.save(user);
     }
 }

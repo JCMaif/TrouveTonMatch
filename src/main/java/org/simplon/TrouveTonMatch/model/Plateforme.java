@@ -1,6 +1,7 @@
 package org.simplon.TrouveTonMatch.model;
 
-import jakarta.persistence.Entity;
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -9,5 +10,19 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class Plateforme extends UserApi{
+@AllArgsConstructor
+public class Plateforme {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    private String nom;
+    private String telephone;
+    private String email;
+
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "adresse_id", referencedColumnName = "id")
+    private Adresse adresse;
+
 }

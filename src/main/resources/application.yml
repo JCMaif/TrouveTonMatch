@@ -10,12 +10,8 @@ spring:
     show-sql: true
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
-      ddl-auto: create-drop
-    defer-datasource-initialization: true
-  sql:
-    init:
-      data-locations: "classpath*:data.sql"
-      mode: always
+      ddl-auto: none
+
   security:
     jwt:
       secret: a656f4f87edae419df63fc317ed353be1f17f43efd6ab60b9d10110fa25ab746
@@ -23,7 +19,10 @@ spring:
   web:
     resources:
       static-locations: classpath:/static/
-
+  flyway:
+    validate-on-migrate: true
+    baseline-on-migrate: true
+    enabled: true
 server:
   port: 8080
   servlet:
