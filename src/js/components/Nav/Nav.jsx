@@ -19,9 +19,6 @@ const Nav = () => {
           <Link to="/matches" className="Nav-link">Matches</Link>
         </li>
         <li>
-          <Link to="/signup" className="Nav-link">Créer un utilisateur</Link>
-        </li>
-        <li>
           <Link to={`/profil/${id}`} className="Nav-link">Mon profil</Link>
         </li>
       </>

@@ -10,10 +10,12 @@ public class PasswordGenerator {
         String userPassword = passwordEncoder.encode("user");
         String porteurPassword = passwordEncoder.encode("porteur");
         String parrainPassword = passwordEncoder.encode("parrain");
+        String plateformePassword = passwordEncoder.encode("plateforme");
 
         System.out.println("admin password : " + adminPassword);
         System.out.println("user password : " + userPassword);
         System.out.println("porteur password : " + porteurPassword);
         System.out.println("parrain password : " + parrainPassword);
+        System.out.println("plateforme password : " + plateformePassword);
     }
 }

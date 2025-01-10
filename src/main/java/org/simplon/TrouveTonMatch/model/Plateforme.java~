@@ -15,4 +15,10 @@ public class Plateforme extends Utilisateur{
 
     private String nom;
     private String telephone;
+    private String email;
+
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "adresse_id", referencedColumnName = "id")
+    private Adresse adresse;
+
 }

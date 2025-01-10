@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { AuthContext } from "../../context/AuthContext";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { userService } from '../../services/userService';
 import EditButton from '../../components/common/buttons/EditButton/EditButton';
 import DeleteButton from '../../components/common/buttons/DeleteButton/DeleteButton';
@@ -47,9 +47,13 @@ const Utilisateurs = () => {
 
   return (
     <div className="users-container">
-      <h1>Users</h1>
+      <h1>Utilisateurs</h1>
       {error && <p className="error-message">{error}</p>}
-      
+      {isAuthenticated.role === 'ADMIN' && (
+        <li>
+          <Link to="/signup" className="Nav-link">Créer un utilisateur</Link>
+        </li>
+      )}
       <table>
         <thead>
           <tr>
