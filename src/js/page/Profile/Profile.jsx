@@ -1,8 +1,8 @@
-import React, { useContext } from "react";
+import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
 import EditButton from "../../components/common/buttons/EditButton/EditButton";
-import "./Profile.scss";
+import "../../styles/page.scss";
 
 const Profile = () => {
   const { isAuthenticated } = useContext(AuthContext);
@@ -13,12 +13,12 @@ const Profile = () => {
     if (id) {
       navigate(`/profil/edit/${id}`);
     } else {
-      console.error("ID utilisateur non défini, navigation annulée.");
+      console.error("Utilisateur non défini");
     }
   };
 
   return (
-    <div className="profile-container">
+    <div className="container">
       <h1>Mon Profil</h1>
       {username ? (
         <div className="profile-details">

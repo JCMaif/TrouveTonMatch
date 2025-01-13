@@ -1,5 +1,6 @@
 package org.simplon.TrouveTonMatch.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -11,12 +12,16 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "porteur")
 public class Porteur extends Utilisateur{
 
     private String disponibilite;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne()
     @JoinColumn(name = "projet_id", nullable = true)
     private Projet projet;
+
+    @ManyToOne()
+    @JoinColumn(name = "plateforme_id")
+    @JsonIgnore
+    private Plateforme plateforme;
 }

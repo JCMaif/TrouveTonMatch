@@ -32,3 +32,5 @@ springdoc:
     path: /public/documentation/api-docs
   swagger-ui:
     path: /public/documentation/swagger-ui.html
+
+debug: true

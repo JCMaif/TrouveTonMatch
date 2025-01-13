@@ -1,23 +1,19 @@
-/* index.css */
 
-/* Réinitialisation des marges et paddings pour éviter les comportements inattendus */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
-/* Style de base pour le corps de l'application */
 body {
   font-family: Arial, sans-serif;
   line-height: 1.6;
-  background-color: #f4f4f4;
+  background-color: #95999c;
   color: #333;
   margin: 0;
   padding: 0;
 }
 
-/* Globalement, un peu de padding autour du contenu */
 .container {
   width: 90%;
   max-width: 1200px;

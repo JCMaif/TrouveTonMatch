@@ -1,6 +1,7 @@
 package org.simplon.TrouveTonMatch.service;
 
 import org.simplon.TrouveTonMatch.dtos.UserDto;
+import org.simplon.TrouveTonMatch.model.UserRole;
 import org.simplon.TrouveTonMatch.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
@@ -25,5 +26,10 @@ public class UserService {
 
     public UserDto findByUsername(String username) {
         return UserDto.fromEntity(userRepository.findByUsername(username));
+    }
+
+    public List<UserDto> getUsersByRole(UserRole role) {
+        return userRepository.findByRole(role).stream().map(UserDto::fromEntity).toList();
+
     }
 }

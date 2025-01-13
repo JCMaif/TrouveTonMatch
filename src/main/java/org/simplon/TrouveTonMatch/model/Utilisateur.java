@@ -13,7 +13,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 
-@Table(name = "utilisateur")
 @Entity
 @Getter
 @Setter
@@ -38,13 +37,7 @@ public class Utilisateur implements UserDetails {
     @Enumerated(EnumType.STRING)
     private UserRole role;
 
-
-
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "plateforme_id", referencedColumnName = "id")
-    private Plateforme plateforme;
-
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "adresse_id", referencedColumnName = "id")
     private Adresse adresse;
 

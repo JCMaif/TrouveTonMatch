@@ -1,6 +1,8 @@
 package org.simplon.TrouveTonMatch.controller;
 
+import jakarta.annotation.security.PermitAll;
 import org.simplon.TrouveTonMatch.dtos.UserDto;
+import org.simplon.TrouveTonMatch.model.UserRole;
 import org.simplon.TrouveTonMatch.service.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -50,5 +52,14 @@ public class UserController {
         UserDto user = userService.findByUsername(username);
 
         return ResponseEntity.ok(user);
+    }
+
+    @GetMapping("/by-role")
+    @PreAuthorize("isAuthenticated")
+    public ResponseEntity<List<UserDto>> getUserByRole(@RequestParam String role){
+        UserRole userRole = UserRole.valueOf(role.toUpperCase());
+        List<UserDto> users = userService.getUsersByRole(userRole);
+        if (users.isEmpty()) return ResponseEntity.noContent().build();
+        return ResponseEntity.ok(users);
     }
 }

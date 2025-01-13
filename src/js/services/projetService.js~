@@ -1,0 +1,24 @@
+// import {apiRequest} from "./apiRequest.js";
+//
+// const BASE_URL ='http://localhost:8080/api/projet';
+//
+// export const projetService = {
+//     findAll: async (token) => {
+//         try {
+//             return await apiRequest(BASE_URL, {method: 'GET'}, token);
+//         } catch (err) {
+//             console.log(err);
+//             throw new Error('Failed to fetch projects');
+//         }
+//     },
+//
+//     findByID: async (projetId, token) => {
+//         try {
+//             return await apiRequest(`${BASE_URL}/${projetId}`, {method: 'GET'}, token);
+//         } catch (err) {
+//             console.log(err);
+//             throw new Error('Failed to fetch project');
+//         }
+//     },
+//
+// }

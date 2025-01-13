@@ -19,7 +19,7 @@ const Match = () => {
             <table>
                 <thead>
                 <tr>
-                    <th></th>
+                    <th>Username</th>
                 </tr>
                 </thead>
                 {isAuthenticated && (

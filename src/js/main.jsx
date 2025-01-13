@@ -15,6 +15,8 @@ import Parrain from "./page/Parrain/Parrain.jsx";
 import Porteur from "./page/Porteur/Porteur.jsx";
 import Plateforme from "./page/Plateforme/Plateforme.jsx";
 import EditProfile from "./page/EditProfile/EditProfile.jsx";
+import ProjetDetails from "./page/Projet/ProjetDetail.jsx";
+import PlateformeDetails from "./page/Plateforme/PlateformeDetails.jsx";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
@@ -26,10 +28,12 @@ createRoot(document.getElementById("root")).render(
             <Route path="/" element={<Home />} />
             <Route path="/utilisateurs" element={<Utilisateurs />} />
             <Route path="/projets" element={<Projet />} />
+            <Route path="/projet/:projetId" element={<ProjetDetails />} />
             <Route path="/matches" element={<Match />} />
             <Route path="/parrains" element={<Parrain />} />
             <Route path="/porteurs" element={<Porteur />} />
             <Route path="/plateformes" element={<Plateforme />} />
+            <Route path="/plateforme/:id" element={<PlateformeDetails />} />
             <Route path="/profil/:id" element={<Profile />} />
             <Route path="/profil/edit/:userId" element={<EditProfile />} />
             <Route path="/signup" element={<Signup />} />

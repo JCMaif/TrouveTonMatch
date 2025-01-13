@@ -1,0 +1,24 @@
+// import {apiRequest} from './apiRequest';
+//
+// const BASE_URL ='http://localhost:8080/api/plateforme';
+//
+//
+// export const plateformeService = {
+//   findAll: async (token) => {
+//     try {
+//       return await apiRequest(BASE_URL, {method: 'GET'}, token);
+//     } catch (err) {
+//       console.log(err);
+//       throw new Error('Failed to fetch plateformes');
+//     }
+//   },
+//
+//   findByID: async (id, token) => {
+//     try {
+//       return await apiRequest(`${BASE_URL}/${id}`, {method: 'GET'}, token);
+//     } catch (err) {
+//       console.log(err);
+//       throw new Error('Failed to fetch plateforme');
+//     }
+//   },
+// };

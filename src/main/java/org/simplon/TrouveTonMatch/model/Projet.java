@@ -8,7 +8,6 @@ import lombok.Setter;
 
 import java.time.LocalDate;
 
-@Table(name = "project")
 @Entity
 @Getter
 @Setter
