@@ -55,9 +55,6 @@ CREATE TABLE utilisateur
     CONSTRAINT pk_utilisateur PRIMARY KEY (id)
 );
 
-ALTER TABLE plateforme
-    ADD CONSTRAINT FK_PLATEFORME_ON_ID FOREIGN KEY (id) REFERENCES utilisateur (id);
-
 ALTER TABLE utilisateur
     ADD CONSTRAINT uc_utilisateur_email UNIQUE (email);
 ALTER TABLE utilisateur

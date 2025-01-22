@@ -1,5 +1,7 @@
 package org.simplon.TrouveTonMatch.controller;
 
+import org.simplon.TrouveTonMatch.dtos.PlateformeDto;
+import org.simplon.TrouveTonMatch.mapper.PlateformeMapper;
 import org.simplon.TrouveTonMatch.model.Plateforme;
 import org.simplon.TrouveTonMatch.service.PlateformeService;
 import org.springframework.http.HttpStatus;
@@ -8,43 +10,52 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/plateforme")
 public class PlateformeController {
 
     private final PlateformeService plateformeService;
+    private final PlateformeMapper plateformeMapper;
 
-    public PlateformeController(PlateformeService plateformeService) {
+    public PlateformeController(PlateformeService plateformeService, PlateformeMapper plateformeMapper) {
         this.plateformeService = plateformeService;
+        this.plateformeMapper = plateformeMapper;
     }
 
     @GetMapping
-    public ResponseEntity<List<Plateforme>> findAll() {
+    public ResponseEntity<List<PlateformeDto>> findAll() {
         List<Plateforme> plateformes = plateformeService.findAll();
-        return ResponseEntity.ok(plateformes);
+        List<PlateformeDto> dtos = plateformes.stream()
+                .map(plateformeMapper::toDto)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(dtos);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Plateforme> findById(@PathVariable Long id) {
+    public ResponseEntity<PlateformeDto> findById(@PathVariable Long id) {
         Plateforme plateforme = plateformeService.findById(id);
-        return ResponseEntity.ok(plateforme);
+        PlateformeDto dto = plateformeMapper.toDto(plateforme);
+        return ResponseEntity.ok(dto);
     }
 
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<Plateforme> create(@RequestBody Plateforme plateforme) {
+    public ResponseEntity<PlateformeDto> create(@RequestBody Plateforme plateforme) {
         Plateforme createdPlateforme = plateformeService.save(plateforme);
-        return ResponseEntity.status(HttpStatus.CREATED).body(createdPlateforme);
+        PlateformeDto dto = plateformeMapper.toDto(createdPlateforme);
+        return ResponseEntity.status(HttpStatus.CREATED).body(dto);
     }
 
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN') or hasRole('PLATEFORME')")
-    public ResponseEntity<Plateforme> update(@PathVariable Long id, @RequestBody Plateforme plateforme) {
+    public ResponseEntity<PlateformeDto> update(@PathVariable Long id, @RequestBody Plateforme plateforme) {
         plateformeService.validateExistenceById(id);
         plateforme.setId(id);
         Plateforme updatedPlateforme = plateformeService.save(plateforme);
-        return ResponseEntity.ok(updatedPlateforme);
+        PlateformeDto dto = plateformeMapper.toDto(updatedPlateforme);
+        return ResponseEntity.ok(dto);
     }
 
     @DeleteMapping("/{id}")

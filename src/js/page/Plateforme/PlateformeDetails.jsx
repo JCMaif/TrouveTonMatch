@@ -35,7 +35,7 @@ const PlateformeDetails = () => {
         };
 
         fetchPlateforme();
-    }, [id, findById]);
+    }, [id]);
 
     if (loading) return <div className="loading">Loading plateforme details...</div>;
     if (error) return <p className="error-message">{error}</p>;

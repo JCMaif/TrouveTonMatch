@@ -5,7 +5,6 @@ import org.simplon.TrouveTonMatch.repository.PlateformeRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class PlateformeService {
@@ -49,10 +48,4 @@ public class PlateformeService {
         }
     }
 
-    private void validateUniquenessByName(String name) {
-        Optional<Plateforme> existing = plateformeRepository.findByNom(name);
-        if (existing.isPresent()) {
-            throw new IllegalArgumentException("Plateforme with name " + name + " already exists.");
-        }
-    }
 }
