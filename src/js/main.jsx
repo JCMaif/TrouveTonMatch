@@ -34,7 +34,7 @@ createRoot(document.getElementById("root")).render(
             <Route path="/porteurs" element={<Porteur />} />
             <Route path="/plateformes" element={<Plateforme />} />
             <Route path="/plateforme/:id" element={<PlateformeDetails />} />
-            <Route path="/profil/:id" element={<Profile />} />
+            <Route path="/profil/:userId" element={<Profile />} />
             <Route path="/profil/edit/:userId" element={<EditProfile />} />
             <Route path="/signup" element={<Signup />} />
           </Route>

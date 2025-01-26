@@ -1,6 +1,5 @@
 package org.simplon.TrouveTonMatch.controller;
 
-import jakarta.annotation.security.PermitAll;
 import org.simplon.TrouveTonMatch.dtos.UserDto;
 import org.simplon.TrouveTonMatch.model.UserRole;
 import org.simplon.TrouveTonMatch.service.UserService;
@@ -39,18 +38,19 @@ public class UserController {
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping("/profil")
-    public ResponseEntity<UserDto> getUserProfile(Authentication authentication) {
-        String username = authentication.getName();
-        UserDto user = userService.findByUsername(username);
+    @GetMapping("/{id}")
+    public ResponseEntity<UserDto> getUserById(@PathVariable Long id) {
+        UserDto user = userService.findById(id);
+        if (user == null) {
+            return ResponseEntity.notFound().build();
+        }
         return ResponseEntity.ok(user);
     }
 
-    @GetMapping("/profil/edit")
-    public ResponseEntity<UserDto> editUserProfile(Authentication authentication) {
+    @PatchMapping("/profil/edit")
+    public ResponseEntity<UserDto> editUserProfile(Authentication authentication, @RequestBody UserDto userDto) {
         String username = authentication.getName();
-        UserDto user = userService.findByUsername(username);
-
+        UserDto user = userService.updateProfile(username, userDto);
         return ResponseEntity.ok(user);
     }
 

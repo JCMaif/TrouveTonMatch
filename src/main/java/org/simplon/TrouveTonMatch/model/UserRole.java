@@ -3,7 +3,7 @@ package org.simplon.TrouveTonMatch.model;
 public enum UserRole {
     ADMIN("admin"),
     PORTEUR("porteur"),
-    PLATEFORME("plateforme"),
+    STAFF("staff"),
     PARRAIN("parrain"),
     USER("user");
 

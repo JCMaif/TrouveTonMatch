@@ -11,8 +11,17 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Plateforme extends Utilisateur{
+public class Plateforme{
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    private String email;
     private String nom;
     private String telephone;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "adresse_id", referencedColumnName = "id")
+    private Adresse adresse;
 }

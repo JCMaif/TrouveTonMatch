@@ -1,5 +1,6 @@
 package org.simplon.TrouveTonMatch.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -41,6 +42,14 @@ public class Utilisateur implements UserDetails {
     @JoinColumn(name = "adresse_id", referencedColumnName = "id")
     private Adresse adresse;
 
+    @Column(nullable = false)
+    private boolean enabled = false;
+
+    @ManyToOne()
+    @JoinColumn(name = "plateforme_id")
+    @JsonIgnore
+    private Plateforme plateforme;
+
     public Utilisateur(String username, String password, UserRole role, Long id) {
         this.username = username;
         this.password = password;
@@ -80,7 +89,7 @@ public class Utilisateur implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return UserDetails.super.isEnabled();
+        return enabled;
     }
 
     @Override

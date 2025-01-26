@@ -1,7 +1,6 @@
 package org.simplon.TrouveTonMatch.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,8 +18,4 @@ public class Parrain extends Utilisateur{
     private String deplacements;
     private String disponibilites;
 
-    @ManyToOne()
-    @JoinColumn(name = "plateforme_id")
-    @JsonIgnore
-    private Plateforme plateforme;
 }

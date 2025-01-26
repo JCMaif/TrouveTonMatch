@@ -29,6 +29,21 @@ public class UserDto {
 
     public static UserDto fromEntity(Utilisateur user) {
 
+//        Long plateformeId = null;
+//        String plateformeName = null;
+//
+//        if (user instanceof Porteur) {
+//            Porteur porteur = (Porteur) user;
+//            plateformeId = porteur.getPlateforme() != null ? porteur.getPlateforme().getId() : null;
+//        } else if (user instanceof Parrain) {
+//            Parrain parrain = (Parrain) user;
+//            plateformeId = parrain.getPlateforme() != null ? parrain.getPlateforme().getId() : null;
+//        }
+//
+//        if (plateformeId != null) {
+//            plateformeName = user instanceof Porteur ? ((Porteur) user).getPlateforme().getNom() : ((Parrain) user).getPlateforme().getNom();
+//        }
+
         return UserDto.builder()
                 .username(user.getUsername())
                 .role(user.getRole())

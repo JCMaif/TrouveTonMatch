@@ -5,6 +5,8 @@ import org.simplon.TrouveTonMatch.repository.PlateformeRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 public class PlateformeService {
@@ -34,6 +36,11 @@ public class PlateformeService {
     public void delete(Long id) {
         validateExistenceById(id);
         plateformeRepository.deleteById(id);
+    }
+
+    public Map<Long, String> getPlaterformeNameById(){
+        return plateformeRepository.findAll().stream()
+                .collect(Collectors.toMap(Plateforme::getId, Plateforme::getNom));
     }
 
     public void validateExistenceById(Long id) {

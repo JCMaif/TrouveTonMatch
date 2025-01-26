@@ -1,5 +1,4 @@
-import React, { useContext } from "react";
-import { AuthContext } from "../../context/AuthContext";
+import React from "react";
 import "./Header.scss";
 import Nav from "../../components/Nav/Nav";
 import Logout from "../../components/Logout/Logout";

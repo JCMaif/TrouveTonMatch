@@ -31,6 +31,7 @@ public class JwtService {
                     .withClaim("role", role)
                     .withClaim("username", user.getUsername())
                     .withClaim("id", user.getId())
+                    .withClaim("plateformeId", user.getPlateforme() != null ? user.getPlateforme().getId() : null)
                     .withExpiresAt(genAccessTokenExpirationDate())
                     .sign(algorithm);
 
@@ -39,6 +40,7 @@ public class JwtService {
                     .withClaim("role", role)
                     .withClaim("username", user.getUsername())
                     .withClaim("id", user.getId())
+                    .withClaim("plateformeId", user.getPlateforme() != null ? user.getPlateforme().getId() : null)
                     .sign(algorithm));
             return token;
         } catch (JWTCreationException e) {

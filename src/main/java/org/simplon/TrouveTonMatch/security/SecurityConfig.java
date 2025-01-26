@@ -37,8 +37,8 @@ public class SecurityConfig {
                         ).permitAll()
                         .requestMatchers(
                                 "/user/**", "/user/profil/**",
-                                "projet/**",
-                                "plateforme/**"
+                                "/projet/**",
+                                "/plateforme/**"
                         ).authenticated()
                         .requestMatchers("/admin/**").hasRole("ADMIN")
                         .anyRequest().authenticated())

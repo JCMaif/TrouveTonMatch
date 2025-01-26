@@ -68,7 +68,7 @@ const Nav = () => {
         </>
       );
   }
-  if (isAuthenticated && role === "PLATEFORME") {
+  if (isAuthenticated && role === "STAFF") {
     return (
       <>
          <li>
