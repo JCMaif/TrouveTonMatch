@@ -4,7 +4,7 @@ import { AuthContext } from "../../context/AuthContext";
 
 const Nav = () => {
   const { isAuthenticated, logout } = useContext(AuthContext);
-  const { username, role, id } = isAuthenticated;
+  const { username, role, id, plateformeId, enabled } = isAuthenticated;
 
   if (isAuthenticated && role === "ADMIN") {
     return (
@@ -25,22 +25,6 @@ const Nav = () => {
     );
   }
 
-  if (isAuthenticated && role === "USER") {
-    return (
-      <>
-        <li>
-          <Link to="/utilisateurs" className="Nav-link">Utilisateurs</Link>
-        </li>
-        <li>
-          <Link to="/projets" className="Nav-link">Projets</Link>
-        </li>
-        <li>
-          <Link to={`/profil/${id}`} className="Nav-link">Mon espace</Link>
-        </li>
-      </>
-    );
-  }
-
     if (isAuthenticated && role === "PORTEUR") {
     return (
       <>
@@ -53,23 +37,29 @@ const Nav = () => {
         <li>
           <Link to={`/profil/${id}`} className="Nav-link">Mon espace</Link>
         </li>
+        <li>
+        <span>Plateforme : {plateformeId}</span>
+        </li>
       </>
     );
   }
     if (isAuthenticated && role === "PARRAIN") {
       return (
-        <>
-          <li>
-            <Link to="/projets" className="Nav-link">Projets</Link>
-          </li>
-          <li>
-            <Link to={`/profil/${id}`} className="Nav-link">Mon espace</Link>
-          </li>
-        </>
+          <>
+              <li>
+                  <Link to="/projets" className="Nav-link">Projets</Link>
+              </li>
+              <li>
+                  <Link to={`/profil/${id}`} className="Nav-link">Mon espace</Link>
+              </li>
+              <li>
+                  <span>Plateforme : {plateformeId}</span>
+              </li>
+          </>
       );
-  }
-  if (isAuthenticated && role === "STAFF") {
-    return (
+    }
+    if (isAuthenticated && role === "STAFF") {
+        return (
       <>
          <li>
           <Link to="/parrains" className="Nav-link">Parrains</Link>

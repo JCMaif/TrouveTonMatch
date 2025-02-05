@@ -2,10 +2,7 @@ package org.simplon.TrouveTonMatch.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -19,6 +16,7 @@ import java.util.Objects;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 @Inheritance(strategy = InheritanceType.JOINED)
 public class Utilisateur implements UserDetails {
 
@@ -62,6 +60,7 @@ public class Utilisateur implements UserDetails {
         return List.of(new SimpleGrantedAuthority(this.role.name()));
     }
 
+    public Boolean getEnabled() { return enabled; }
     @Override
     public String getPassword() {
         return password;
@@ -89,7 +88,7 @@ public class Utilisateur implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return enabled;
+        return UserDetails.super.isEnabled();
     }
 
     @Override

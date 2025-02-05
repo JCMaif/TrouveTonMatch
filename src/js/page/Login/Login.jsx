@@ -6,6 +6,7 @@ import { authService } from "../../services/authService";
 import InputField from "../../components/common/InputField/InputField";
 import Checkbox from "../../components/common/CheckBox/CheckBox";
 import SubmitButton from "../../components/common/buttons/SubmitButton/SubmitButton";
+import {jwtDecode} from "jwt-decode";
 
 const Login = () => {
   const [username, setUsername] = useState("");
@@ -19,12 +20,25 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const data = await authService.login(username, password); 
+      const data = await authService.login(username, password);
+
       const { token } = data;
-      console.log("Token : ", token);
-  
+
+      const decoded = jwtDecode(token);
+      console.log("decoded dans login.jsx : " + JSON.stringify(decoded));
+      console.log("decoded.enabled : " + decoded.enabled);
+      console.log("decoded.id : " + decoded.id);
+      console.log("decoded.role : " + decoded.role);
+
+      if (decoded.enabled === false) {
+        navigate(`/complete-profile/${decoded.id}/${decoded.role}`);
+        return;
+      }
+
+
       if (token) {
-        login(token); 
+        login(token);
+
         if (rememberMe) {
           localStorage.setItem("jwtToken", token);
         }
@@ -38,7 +52,7 @@ const Login = () => {
       setError(err.message);
     }
   };
-  
+
 
   return (
     <div className="login-container">

@@ -47,7 +47,7 @@ VALUES
     ((SELECT id FROM utilisateur WHERE username = 'porteur5'), 'Temps plein', (SELECT id FROM projet WHERE title = 'Mission Mars'));
 
 -- Insertion des parrains
-INSERT INTO parrain (id, parcours, expertise, deplacements, disponibilites)
+INSERT INTO parrain (id, parcours, expertise, deplacement, disponibilite)
 VALUES
     ((SELECT id FROM utilisateur WHERE username = 'parrain1'), 'Ingénieur en informatique', 'Cloud et DevOps', 'Régional', 'Temps partiel'),
     ((SELECT id FROM utilisateur WHERE username = 'parrain2'), 'Buiseness Angel', 'Recherche de financement', 'Régional', 'Temps partiel');

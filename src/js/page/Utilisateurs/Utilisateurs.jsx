@@ -1,7 +1,7 @@
 import { userService } from "../../services/services";
 import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../context/AuthContext";
-import { useNavigate } from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import "../../styles/page.scss";
 import EditButton from "@/components/common/buttons/EditButton/EditButton.jsx";
 import DeleteButton from "@/components/common/buttons/DeleteButton/DeleteButton.jsx";
@@ -59,6 +59,11 @@ const Utilisateurs = () => {
       <div className="container">
         <h1>Utilisateurs</h1>
         {error && <p className="error-message">{error}</p>}
+        {isAuthenticated.role === 'ADMIN' && (
+            <li className='create-user_link'>
+              <Link to="/signup" className="Nav-link">Créer un utilisateur</Link>
+            </li>
+        )}
         {Object.entries(usersByPlateform).map(([platformeName, platformUsers]) => (
             <div key={platformeName} className="platform-group">
               <h2>{platformeName}</h2>

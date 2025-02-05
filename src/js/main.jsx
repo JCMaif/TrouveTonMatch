@@ -17,6 +17,7 @@ import Plateforme from "./page/Plateforme/Plateforme.jsx";
 import EditProfile from "./page/EditProfile/EditProfile.jsx";
 import ProjetDetails from "./page/Projet/ProjetDetail.jsx";
 import PlateformeDetails from "./page/Plateforme/PlateformeDetails.jsx";
+import FinalisationProfile from "@/page/Profile/FinalisationProfile.jsx";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
@@ -37,6 +38,7 @@ createRoot(document.getElementById("root")).render(
             <Route path="/profil/:userId" element={<Profile />} />
             <Route path="/profil/edit/:userId" element={<EditProfile />} />
             <Route path="/signup" element={<Signup />} />
+            <Route path="/complete-profile/:userId/:role" element={<FinalisationProfile />} />
           </Route>
         </Routes>
       </BrowserRouter>

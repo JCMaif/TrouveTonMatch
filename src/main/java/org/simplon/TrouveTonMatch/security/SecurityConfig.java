@@ -33,10 +33,11 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
                                 "/auth/**",
-                                "/public/documentation/**"
+                                "/public/documentation/**",
+                                "/enum/**"
                         ).permitAll()
                         .requestMatchers(
-                                "/user/**", "/user/profil/**",
+                                "/user/**",
                                 "/projet/**",
                                 "/plateforme/**"
                         ).authenticated()

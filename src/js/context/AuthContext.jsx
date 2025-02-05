@@ -10,6 +10,8 @@ export const AuthProvider = ({children}) => {
     role: "",
     id: "",
     token: "",
+    plateformeId: "",
+    enabled: undefined,
   });
 
   const saveToken = (token, rememberMe = false) => {
@@ -23,18 +25,27 @@ export const AuthProvider = ({children}) => {
   };
 
 
-  const login = (jwtToken, rememberMe=false) => {
+  const login = (jwtToken, rememberMe= false) => {
     try {
       //console.log("Token reçu :", jwtToken);
       const decodedToken = jwtDecode(jwtToken);
-      //console.log("Decoded Token: ", decodedToken);
-  
+      console.log("Decoded Token: ", decodedToken);
+      const currentTime = Date.now() / 1000;
+
+      if (decodedToken.exp < currentTime) {
+        console.warn("⚠️ Token expiré.");
+        clearToken();
+        return;
+      }
+
       if (decodedToken?.username && decodedToken?.role && decodedToken?.id) {
         setIsAuthenticated({
           username: decodedToken.username,
           role: decodedToken.role,
           id: decodedToken.id,
           token: jwtToken,
+          enabled: decodedToken.enabled ?? undefined,
+          plateformeId: decodedToken.plateformeId,
         });
         saveToken(jwtToken, rememberMe);
       } else {
@@ -56,6 +67,8 @@ export const AuthProvider = ({children}) => {
         role: "",
         id: "",
         token: "",
+        plateformeId: "",
+        enabled: undefined,
       });
       clearToken();
     }
@@ -77,7 +90,9 @@ export const AuthProvider = ({children}) => {
             username: decodedToken.username,
             role: decodedToken.role,
             id: decodedToken.id,
+            plateformeId: decodedToken.plateformeId,
             token,
+            enabled: decodedToken.enabled ?? undefined,
           });
         }
       } catch (error) {

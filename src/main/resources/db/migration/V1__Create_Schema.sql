@@ -44,8 +44,8 @@ CREATE TABLE parrain (
                          id             BIGINT NOT NULL,
                          parcours       VARCHAR(255),
                          expertise      VARCHAR(255),
-                         deplacements   VARCHAR(255),
-                         disponibilites VARCHAR(255),
+                         deplacement   VARCHAR(255),
+                         disponibilite VARCHAR(255),
                          CONSTRAINT pk_parrain PRIMARY KEY (id),
                          CONSTRAINT fk_parrain_on_id FOREIGN KEY (id) REFERENCES utilisateur (id)
 );

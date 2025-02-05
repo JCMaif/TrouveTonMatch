@@ -26,13 +26,4 @@ public class AuthService implements UserDetailsService {
         }
         return user;
     }
-
-    public void signUp(SignupDto data) throws Exception {
-        if (userRepository.findByUsername(data.getUsername()) != null) {
-            throw new Exception("User already exists");
-        }
-        String encryptedPassword = new BCryptPasswordEncoder().encode(data.getPassword());
-        Utilisateur user = new Utilisateur(data.getUsername(), encryptedPassword, data.getRole(), null);
-        userRepository.save(user);
-    }
 }

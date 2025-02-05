@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.simplon.TrouveTonMatch.model.Plateforme;
 import org.simplon.TrouveTonMatch.model.UserRole;
 
 @Getter
@@ -14,4 +15,9 @@ public class SignupDto {
     String username;
     String password;
     UserRole role;
+    String email;
+    Plateforme plateforme;
+
+    public SignupDto(String username, String password, String email, UserRole role, Plateforme plateforme) {
+    }
 }

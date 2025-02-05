@@ -32,6 +32,7 @@ public class JwtService {
                     .withClaim("username", user.getUsername())
                     .withClaim("id", user.getId())
                     .withClaim("plateformeId", user.getPlateforme() != null ? user.getPlateforme().getId() : null)
+                    .withClaim("enabled", user.getEnabled())
                     .withExpiresAt(genAccessTokenExpirationDate())
                     .sign(algorithm);
 
@@ -40,6 +41,7 @@ public class JwtService {
                     .withClaim("role", role)
                     .withClaim("username", user.getUsername())
                     .withClaim("id", user.getId())
+                    .withClaim("enabled", user.getEnabled())
                     .withClaim("plateformeId", user.getPlateforme() != null ? user.getPlateforme().getId() : null)
                     .sign(algorithm));
             return token;
@@ -69,6 +71,18 @@ public class JwtService {
             return decodedJWT.getClaim("role").asString();
         } catch (Exception e) {
             throw new RuntimeException("Error while extracting role from JWT", e);
+        }
+    }
+
+    public Long extractPlateformeId(String token) {
+        try {
+            Algorithm algorithm = Algorithm.HMAC256(secret);
+            DecodedJWT decodedJWT = JWT.require(algorithm)
+                    .build()
+                    .verify(token);
+            return decodedJWT.getClaim("plateformeId").asLong();
+        } catch (Exception e) {
+            throw new RuntimeException("Error while extracting plateformeId from JWT", e);
         }
     }
 

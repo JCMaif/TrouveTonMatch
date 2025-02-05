@@ -1,7 +1,6 @@
-import { apiRequest } from "./apiRequest";
+import {apiRequest} from "./apiRequest";
 
 const BASE_URL ='http://localhost:8080/api';
-console.log(BASE_URL);
 
 export const authService = {
     login: async (username, password) => {
@@ -11,9 +10,9 @@ export const authService = {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username, password }),
       };
-      return await apiRequest(url, options); 
+        return await apiRequest(url, options);
     },
-  
+
     signup: async (signupData) => {
       const url = `${BASE_URL}/auth/signup`;
       const options = {

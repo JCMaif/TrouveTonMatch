@@ -15,7 +15,6 @@ public class Parrain extends Utilisateur{
 
     private String parcours;
     private String expertise;
-    private String deplacements;
-    private String disponibilites;
-
+    private String deplacement;
+    private String disponibilite;
 }

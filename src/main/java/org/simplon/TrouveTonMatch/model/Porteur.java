@@ -22,5 +22,4 @@ public class Porteur extends Utilisateur{
     @JoinColumn(name = "projet_id", nullable = true)
     @JsonIgnore
     private Projet projet;
-
 }

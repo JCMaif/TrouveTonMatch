@@ -1,67 +1,107 @@
 package org.simplon.TrouveTonMatch.service;
 
-import org.simplon.TrouveTonMatch.dtos.UserDto;
-import org.simplon.TrouveTonMatch.model.Parrain;
-import org.simplon.TrouveTonMatch.model.Porteur;
-import org.simplon.TrouveTonMatch.model.UserRole;
-import org.simplon.TrouveTonMatch.model.Utilisateur;
+import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
+import org.simplon.TrouveTonMatch.dtos.*;
+import org.simplon.TrouveTonMatch.exception.UserNotFoundException;
+import org.simplon.TrouveTonMatch.exception.UsernameAlreadyExistsException;
+import org.simplon.TrouveTonMatch.mapper.UtilisateurMapper;
+import org.simplon.TrouveTonMatch.model.*;
 import org.simplon.TrouveTonMatch.repository.UserRepository;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Map;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService {
 
     private final UserRepository userRepository;
     private final PlateformeService plateformeService;
+    private final BCryptPasswordEncoder passwordEncoder;
+    private final UtilisateurMapper utilisateurMapper;
+    private static final String DEFAULT_PASSWORD = "password321";
 
-    public UserService(UserRepository userRepository, PlateformeService plateformeService) {
+    public UserService(UserRepository userRepository, PlateformeService plateformeService, BCryptPasswordEncoder passwordEncoder, UtilisateurMapper utilisateurMapper) {
         this.userRepository = userRepository;
         this.plateformeService = plateformeService;
+        this.passwordEncoder = passwordEncoder;
+        this.utilisateurMapper = utilisateurMapper;
     }
 
     public List<UserDto> getAllUsers() {
-        List<Utilisateur> users = userRepository.findAll();
-        Map<Long, String> plateformeMap = plateformeService.getPlaterformeNameById();
+        return userRepository.findAll().stream()
+                .map(utilisateurMapper::toDto).toList();
+    }
 
-        return users.stream().map(UserDto::fromEntity).toList();
+    public List<UserDto> getAllUsersByPlateforme(Long plateformeId) {
+        return userRepository.findByPlateformeId(plateformeId)
+                .stream()
+                .map(utilisateurMapper::toDto)
+                .toList();
     }
 
     public void deleteUser(Long id) {
+        if (!userRepository.existsById(id)) {
+            throw new EntityNotFoundException("Utilisateur non trouvé avec l'ID : " + id);
+        }
         userRepository.deleteById(id);
     }
 
-    public UserDto findByUsername(String username) {
-        return UserDto.fromEntity(userRepository.findByUsername(username));
+    public Optional<UserDto> findByUsername(String username) {
+        Utilisateur user = userRepository.findByUsername(username);
+        if (user == null) {
+            throw new EntityNotFoundException("Utilisateur non trouvé avec le username : " + username);
+        }
+        return Optional.ofNullable(utilisateurMapper.toDto(user));
     }
 
-    public List<UserDto> getUsersByRole(UserRole role) {
-        return userRepository.findByRole(role).stream().map(UserDto::fromEntity).toList();
-
+    public List<UserDto> getUsersByRoleAndPlateforme(UserRole role, Long plateformeId) {
+        return userRepository.findByRoleAndPlateformeId(role, plateformeId).stream()
+                .map(utilisateurMapper::toDto)
+                .toList();
     }
 
     public UserDto findById(Long id) {
-        return UserDto.fromEntity(userRepository.findById(id).orElseThrow());
+        return utilisateurMapper.toDto((userRepository.findById(id).orElseThrow()));
     }
 
-    public UserDto updateProfile(String username, UserDto userDto) {
-        Utilisateur user = userRepository.findByUsername(username);
-        user.setUsername(userDto.getUsername() != null ? userDto.getUsername() : user.getUsername());
-        user.setRole(userDto.getRole() != null ? userDto.getRole() : user.getRole());
-        user.setEmail(userDto.getEmail() != null ? userDto.getEmail() : user.getEmail());
-        user.setEnabled(userDto.getEnabled() != null ? userDto.getEnabled() : user.isEnabled());
-        user.setAdresse(userDto.getAdresse() != null ? userDto.getAdresse() : user.getAdresse());
-        if(user instanceof Porteur) {
-            ((Porteur) user).setPlateforme(userDto.getPlateformeId() != null
-                    ? plateformeService.findById(userDto.getPlateformeId())
-                    : ((Porteur) user).getPlateforme());
-        } else if (user instanceof Parrain) {
-            ((Parrain) user).setPlateforme(userDto.getPlateformeId() != null
-                    ? plateformeService.findById(userDto.getPlateformeId())
-                    : ((Parrain) user).getPlateforme());
+    public SignupDto signUp(SignupDto data) {
+        if (findByUsername(data.getUsername()).isPresent()) {
+            throw new UsernameAlreadyExistsException("User already exists");
         }
-        return UserDto.fromEntity(userRepository.save(user));
+
+        String encryptedPassword = passwordEncoder.encode(DEFAULT_PASSWORD);
+
+        Utilisateur user = Utilisateur.builder()
+                .username(data.getUsername())
+                .password(encryptedPassword)
+                .email(data.getEmail())
+                .role(data.getRole())
+                .enabled(false)
+                .plateforme(data.getPlateforme())
+                .build();
+
+        userRepository.save(user);
+
+        return new SignupDto(
+                user.getUsername(),
+                null,
+                user.getEmail(),
+                user.getRole(),
+                user.getPlateforme()
+        );
     }
+
+    public void updatePassword(Long userId, String newPassword) {
+        Utilisateur user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
+        user.setPassword(passwordEncoder.encode(newPassword));
+        userRepository.save(user);
+    }
+
+
+
 }
