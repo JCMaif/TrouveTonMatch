@@ -15,6 +15,7 @@ public record UserDto(
         String expertise,
         String deplacement,
         String disponibilite,
-        String projetTitle
+        String projetTitle,
+        Long projetId
 ) {
 }

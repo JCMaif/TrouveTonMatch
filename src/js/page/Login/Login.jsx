@@ -25,16 +25,6 @@ const Login = () => {
       const { token } = data;
 
       const decoded = jwtDecode(token);
-      console.log("decoded dans login.jsx : " + JSON.stringify(decoded));
-      console.log("decoded.enabled : " + decoded.enabled);
-      console.log("decoded.id : " + decoded.id);
-      console.log("decoded.role : " + decoded.role);
-
-      if (decoded.enabled === false) {
-        navigate(`/complete-profile/${decoded.id}/${decoded.role}`);
-        return;
-      }
-
 
       if (token) {
         login(token);
@@ -43,7 +33,13 @@ const Login = () => {
           localStorage.setItem("jwtToken", token);
         }
         sessionStorage.setItem("jwtToken", token);
-        navigate("/");
+        if (decoded.enabled === false) {
+          console.log("Redirection vers:", `/complete-profile/${decoded.id}/${decoded.role}`);
+          navigate(`/complete-profile/${decoded.id}/${decoded.role}`);
+
+        } else {
+          navigate("/");
+        }
       } else {
         console.error("Aucun token reçu après la connexion.");
       }

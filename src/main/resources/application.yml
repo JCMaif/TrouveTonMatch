@@ -17,7 +17,7 @@ spring:
       expiration: 7  # jours
   web:
     resources:
-      static-locations: classpath:/static/
+      static-locations: classpath:/static/,file:./uploads
   flyway:
     validate-on-migrate: true
     baseline-on-migrate: true
@@ -26,6 +26,7 @@ server:
   port: 8080
   servlet:
     context-path: /api
+
 
 springdoc:
   api-docs:

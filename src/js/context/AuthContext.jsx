@@ -13,6 +13,9 @@ export const AuthProvider = ({children}) => {
     plateformeId: "",
     enabled: undefined,
   });
+  useEffect(() => {
+    initializeAuth();
+  }, []);
 
   const saveToken = (token, rememberMe = false) => {
     const storage = rememberMe ? localStorage : sessionStorage;
@@ -44,7 +47,7 @@ export const AuthProvider = ({children}) => {
           role: decodedToken.role,
           id: decodedToken.id,
           token: jwtToken,
-          enabled: decodedToken.enabled ?? undefined,
+          enabled: decodedToken.enabled,
           plateformeId: decodedToken.plateformeId,
         });
         saveToken(jwtToken, rememberMe);

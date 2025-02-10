@@ -1,8 +1,10 @@
-import React, {useContext, useEffect, useState} from "react";
-import {useParams} from "react-router-dom";
-import {useAuthenticatedService} from "../../hook/useAuthenticatedService.js";
-import {userService} from "../../services/services.js";
-import {AuthContext} from "../../context/AuthContext.jsx";
+import React, { useContext, useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import { useAuthenticatedService } from "../../hook/useAuthenticatedService.js";
+import { userService } from "../../services/services.js";
+import { AuthContext } from "../../context/AuthContext.jsx";
+import { EditableField } from "../../components/common/InputField/EditableField.jsx";
+import { FaEdit } from "react-icons/fa";
 import DeleteButton from "../../components/common/buttons/DeleteButton/DeleteButton.jsx";
 
 const EditProfile = () => {
@@ -11,7 +13,7 @@ const EditProfile = () => {
     const [userDetails, setUserDetails] = useState(null);
     const [error, setError] = useState(null);
     const [editedFields, setEditedFields] = useState({});
-    const { findById , patch} = useAuthenticatedService(userService);
+    const { findById, patch } = useAuthenticatedService(userService);
     const { isAuthenticated } = useContext(AuthContext);
 
     useEffect(() => {
@@ -31,7 +33,7 @@ const EditProfile = () => {
     }, [userId]);
 
     const handleFieldChange = (field, value) => {
-        setEditedFields((prev) => ({...prev, [field]: value }));
+        setEditedFields((prev) => ({ ...prev, [field]: value }));
     }
 
     const saveChanges = async () => {
@@ -44,21 +46,6 @@ const EditProfile = () => {
         }
     };
 
-    const renderEditableField = (label, field, value) => (
-        <div className="editable-field">
-            <label><strong>{label} :</strong></label>
-            {editedFields[field] !== undefined ? (
-                <input
-                    type="text"
-                    value={editedFields[field]}
-                    onChange={(e) => handleFieldChange(field, e.target.value)}
-                />
-            ) : (
-                <span onClick={() => handleFieldChange(field, value)}>{value || "Non renseigné"}</span>
-            )}
-        </div>
-    );
-
     if (loading) return <p>Chargement des informations utilisateur...</p>;
     if (error) return <p className="error-message">{error}</p>;
     if (!userDetails) return <p>Aucune information utilisateur disponible.</p>;
@@ -67,32 +54,26 @@ const EditProfile = () => {
         <div className="container">
             <h1>Modifier le profil</h1>
             <div className="profile-details">
+                <p className="hint">Cliquer sur un champ modifiable ( <FaEdit className="edit-icon"/>) pour le modifier</p>
                 <p><strong>Nom d'utilisateur : {userDetails.username}</strong></p>
-                {renderEditableField("Email", "email", userDetails.email)}
-                {renderEditableField("Adresse", "rue", userDetails.adresse.rue)}
-                {renderEditableField(" ", "cpostal", userDetails.adresse.cpostal)}
-                {renderEditableField(" ", "ville", userDetails.adresse.ville)}
+                <span><strong>Email : </strong> {userDetails.email}</span>
+                <p><strong>Adresse : </strong></p>
+                <EditableField label="Rue " field="rue" value={userDetails.adresse.rue} editedFields={editedFields} handleFieldChange={handleFieldChange} />
+                <EditableField label="Code postal " field="cpostal" value={userDetails.adresse.cpostal} editedFields={editedFields} handleFieldChange={handleFieldChange} />
+                <EditableField label="Ville " field="ville" value={userDetails.adresse.ville} editedFields={editedFields} handleFieldChange={handleFieldChange} />
 
                 {userDetails.role === "PARRAIN" && (
                     <>
-                        {renderEditableField("Parcours", "parcours", userDetails.parcours)}
-                        {renderEditableField("Expertise", "expertise", userDetails.expertise)}
-                        {renderEditableField("Déplacements", "deplacements", userDetails.deplacements)}
-                        {renderEditableField(
-                            "Disponibilités",
-                            "disponibilitesParrain",
-                            userDetails.disponibilitesParrain
-                        )}
+                        <EditableField label="Parcours" field="parcours" value={userDetails.parcours} editedFields={editedFields} handleFieldChange={handleFieldChange} />
+                        <EditableField label="Expertise" field="expertise" value={userDetails.expertise} editedFields={editedFields} handleFieldChange={handleFieldChange} />
+                        <EditableField label="Déplacements" field="deplacement" value={userDetails.deplacement} editedFields={editedFields} handleFieldChange={handleFieldChange} />
+                        <EditableField label="Disponibilités" field="disponibilite" value={userDetails.disponibilite} editedFields={editedFields} handleFieldChange={handleFieldChange} />
                     </>
                 )}
                 {userDetails.role === "PORTEUR" && (
                     <>
-                        {renderEditableField(
-                            "Disponibilités",
-                            "disponibilitesPorteur",
-                            userDetails.disponibilitesPorteur
-                        )}
-                        <p><strong>Projet : </strong>{userDetails.projetName}</p>
+                        <EditableField label="Disponibilités" field="disponibilite" value={userDetails.disponibilite} editedFields={editedFields} handleFieldChange={handleFieldChange} />
+                        <p><strong>Projet : </strong>{userDetails.projetTitle}</p>
                     </>
                 )}
 
@@ -109,4 +90,5 @@ const EditProfile = () => {
         </div>
     );
 };
+
 export default EditProfile;

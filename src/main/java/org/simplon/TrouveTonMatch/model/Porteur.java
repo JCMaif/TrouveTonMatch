@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,8 +19,9 @@ public class Porteur extends Utilisateur{
 
     private String disponibilite;
 
-    @ManyToOne()
+    @OneToOne()
     @JoinColumn(name = "projet_id", nullable = true)
     @JsonIgnore
     private Projet projet;
+
 }

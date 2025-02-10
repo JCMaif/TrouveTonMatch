@@ -1,9 +1,12 @@
 package org.simplon.TrouveTonMatch.controller;
 
+import org.simplon.TrouveTonMatch.dtos.ProjetCreateDto;
+import org.simplon.TrouveTonMatch.dtos.ProjetDto;
 import org.simplon.TrouveTonMatch.model.Projet;
 import org.simplon.TrouveTonMatch.service.ProjetService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,11 +21,22 @@ public class ProjetController {
         this.projetService = projetService;
     }
 
+//    @GetMapping
+//    public ResponseEntity<List<Projet>> findAll() {
+//        List<Projet> projets = projetService.findAll();
+//        return ResponseEntity.ok(projets);
+//    }
+
     @GetMapping
-    public ResponseEntity<List<Projet>> findAll() {
-        List<Projet> projets = projetService.findAll();
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<List<ProjetDto>> findAll() {
+        List<ProjetDto> projets = projetService.findAllByPlateformeId();
+        if (projets.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        }
         return ResponseEntity.ok(projets);
     }
+
 
     @GetMapping("/{id}")
     public ResponseEntity<Projet> findById(@PathVariable Long id) {
@@ -34,8 +48,8 @@ public class ProjetController {
     }
 
     @PostMapping
-    public ResponseEntity<Projet> create(@RequestBody Projet projet) {
-        Projet projetSaved = projetService.save(projet);
+    public ResponseEntity<ProjetCreateDto> create(@RequestBody ProjetCreateDto projetCreateDto) {
+        ProjetCreateDto projetSaved = projetService.save(projetCreateDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(projetSaved);
     }
 

@@ -20,6 +20,7 @@ public interface UtilisateurMapper {
         Adresse adresse = utilisateur.getAdresse();
 
         String parcours = null, expertise = null, deplacement = null, disponibilite = null, projetTitle = null;
+        Long projetId = null;
 
         if (utilisateur instanceof Parrain parrain) {
             parcours = parrain.getParcours();
@@ -29,6 +30,7 @@ public interface UtilisateurMapper {
         } else if (utilisateur instanceof Porteur porteur) {
             disponibilite = porteur.getDisponibilite();
             projetTitle = (porteur.getProjet() != null) ? porteur.getProjet().getTitle() : null;
+            projetId = (porteur.getProjet() != null) ? porteur.getProjet().getId() : null;
         }
 
         return new UserDto(
@@ -44,7 +46,8 @@ public interface UtilisateurMapper {
                 expertise,
                 deplacement,
                 disponibilite,
-                projetTitle
+                projetTitle,
+                projetId
         );
     }
 }

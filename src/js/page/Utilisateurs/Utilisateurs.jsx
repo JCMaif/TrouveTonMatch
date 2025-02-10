@@ -3,9 +3,9 @@ import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../context/AuthContext";
 import {Link, useNavigate} from "react-router-dom";
 import "../../styles/page.scss";
-import EditButton from "@/components/common/buttons/EditButton/EditButton.jsx";
-import DeleteButton from "@/components/common/buttons/DeleteButton/DeleteButton.jsx";
-import RenewButton from "@/components/common/buttons/RenewButton/RenewButton.jsx";
+import EditButton from "../../components/common/buttons/EditButton/EditButton.jsx";
+import DeleteButton from "../../components/common/buttons/DeleteButton/DeleteButton.jsx";
+import RenewButton from "../../components/common/buttons/RenewButton/RenewButton.jsx";
 
 const Utilisateurs = () => {
   const [users, setUsers] = useState([]);

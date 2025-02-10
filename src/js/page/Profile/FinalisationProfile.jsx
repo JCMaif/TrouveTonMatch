@@ -1,47 +1,108 @@
 import { useParams, useNavigate } from "react-router-dom";
-import {useContext, useState} from "react";
-import {userService} from "../../services/services.js";
-import {AuthContext} from "../../context/AuthContext.jsx";
+import React, { useContext, useState } from "react";
+import { userService } from "../../services/services.js";
+import { AuthContext } from "../../context/AuthContext.jsx";
+import { useAuthenticatedService } from "../../hook/useAuthenticatedService.js";
 import "./FinalisationProfile.scss";
 
 const FinalisationProfile = () => {
     const { userId, role } = useParams();
     const { isAuthenticated } = useContext(AuthContext);
+    const { finaliser } = useAuthenticatedService(userService);
     const navigate = useNavigate();
+
+    console.log("userId, role : " + userId + " role : " + role);
+
     const [formData, setFormData] = useState({
         adresse: { rue: "", cpostal: "", ville: "" },
+        password: "",
         parcours: role === "PARRAIN" ? "" : undefined,
         expertise: role === "PARRAIN" ? "" : undefined,
         deplacement: role === "PARRAIN" ? "" : undefined,
         disponibilite: "",
+        id: userId,
+        role: role,
     });
 
+    const [confirmPassword, setConfirmPassword] = useState("");
+    const [passwordError, setPasswordError] = useState("");
+    const [confirmPasswordError, setConfirmPasswordError] = useState("");
+
+    const validatePassword = (password) => {
+        if (password.length < 8) return "Le mot de passe doit contenir au moins 8 caractères.";
+        if (!/[A-Z]/.test(password)) return "Le mot de passe doit contenir au moins une majuscule.";
+        if (!/\d/.test(password)) return "Le mot de passe doit contenir au moins un chiffre.";
+        return "";
+    };
+
     const handleSubmit = async (e) => {
-            e.preventDefault();
-            try {
-                const data = await userService.finaliser(userId, formData, isAuthenticated.token);
-                alert(`Finalisation de l'inscription`);
-                navigate("/");
-            } catch (err) {
-                console.error(err);
-                alert("Une erreur est survenue");
-            }
-        };
+        e.preventDefault();
+
+        const passwordValidationMessage = validatePassword(formData.password);
+        if (passwordValidationMessage) {
+            setPasswordError(passwordValidationMessage);
+            return;
+        }
+
+        if (formData.password !== confirmPassword) {
+            setConfirmPasswordError("Les mots de passe ne correspondent pas.");
+            return;
+        }
+
+        try {
+            await finaliser(userId, formData, isAuthenticated.token);
+            alert("Finalisation de l'inscription");
+            navigate('/');
+        } catch (err) {
+            console.error(err);
+            alert("Une erreur est survenue");
+        }
+    };
 
     return (
         <div>
             <h2>Finalisation du Profil</h2>
             <form onSubmit={handleSubmit} className="container">
+
+                <input
+                    type="password"
+                    placeholder="Mot de passe"
+                    value={formData.password}
+                    onChange={(e) => {
+                        const newPassword = e.target.value;
+                        setFormData({...formData, password: newPassword});
+                        setPasswordError(validatePassword(newPassword));
+                    }}
+                    required
+                />
+                {passwordError && <p className="error">{passwordError}</p>}
+
+                <input
+                    type="password"
+                    placeholder="Confirmer le mot de passe"
+                    value={confirmPassword}
+                    onChange={(e) => {
+                        setConfirmPassword(e.target.value);
+                        setConfirmPasswordError(
+                            formData.password !== e.target.value ? "Les mots de passe ne correspondent pas." : ""
+                        );
+                    }}
+                    required
+                />
+                {confirmPasswordError && <p className="error">{confirmPasswordError}</p>}
+
                 <div className="adresse">
                     <span>Adresse :</span>
-                    <input type="text"
-                           placeholder="Rue"
-                           value={formData.adresse.rue}
-                           onChange={(e) => setFormData({
-                               ...formData,
-                               adresse: { ...formData.adresse, rue: e.target.value }
-                           })}
-                           required/>
+                    <input
+                        type="text"
+                        placeholder="Rue"
+                        value={formData.adresse.rue}
+                        onChange={(e) => setFormData({
+                            ...formData,
+                            adresse: {...formData.adresse, rue: e.target.value}
+                        })}
+                        required
+                    />
                     <input
                         type="text"
                         placeholder="Code Postal"
@@ -71,13 +132,15 @@ const FinalisationProfile = () => {
                             placeholder="Parcours"
                             value={formData.parcours}
                             onChange={(e) => setFormData({...formData, parcours: e.target.value})}
-                            required/>
+                            required
+                        />
                         <input
                             type="text"
                             placeholder="Expertise"
                             value={formData.expertise}
                             onChange={(e) => setFormData({...formData, expertise: e.target.value})}
-                            required/>
+                            required
+                        />
                         <input
                             type="text"
                             placeholder="Déplacement"
@@ -96,6 +159,7 @@ const FinalisationProfile = () => {
 
                 <button type="submit">Finaliser</button>
             </form>
+            <pre className="styleguide-state-preview">{JSON.stringify({formData}, null, 2)}</pre>
         </div>
     );
 };

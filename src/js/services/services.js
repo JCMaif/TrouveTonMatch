@@ -3,8 +3,25 @@ import { apiRequest } from "./apiRequest";
 import { API_BASE_URL } from "../config/config";
 
 export const plateformeService = createService("plateforme");
-export const projetService = createService("projet");
 export const enumService = createService("enum");
+
+export const projetService = {
+    ...createService("projet"),
+
+    create: async ( data, token) => {
+        const url = `${API_BASE_URL}/projet`;
+        return await apiRequest(url, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`,
+                },
+                body: JSON.stringify(data),
+            },
+            token);
+    },
+};
+
 
 export const userService = {
   ...createService("user"),
@@ -45,9 +62,9 @@ export const userService = {
     },
 
     finaliser: async (userId, data, token) => {
-      const url = `${API_BASE_URL}/user/${userId}/finaliser`;
+      const url = `${API_BASE_URL}/user/${userId}/complete-profile`;
       return await apiRequest(url, {
-          method: "PATCH",
+          method: "POST",
           headers: {
               "Content-Type": "application/json",
               Authorization: `Bearer ${token}`,

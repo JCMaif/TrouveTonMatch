@@ -4,7 +4,7 @@
     font-weight: bold;
   }
   
-  .input, input[type="text"], input[type="password"], input[type="email"] {
+  .input, input[type="text"], input[type="password"], input[type="email"], input[type="date"] {
     border: 1px solid #ccc;
     width: 100%;
     padding: 10px;

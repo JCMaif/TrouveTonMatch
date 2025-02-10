@@ -1,13 +1,7 @@
 package org.simplon.TrouveTonMatch.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import jakarta.persistence.*;
+import lombok.*;
 
 import java.time.LocalDate;
 
@@ -16,6 +10,7 @@ import java.time.LocalDate;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class Projet {
 
     @Id
@@ -24,4 +19,7 @@ public class Projet {
     private LocalDate startingDate;
     private String title;
     private String description;
+
+    @OneToOne(mappedBy = "projet", cascade = CascadeType.ALL)
+    private Porteur porteur;
 }

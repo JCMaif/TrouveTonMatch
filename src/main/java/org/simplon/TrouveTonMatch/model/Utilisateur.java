@@ -28,6 +28,15 @@ public class Utilisateur implements UserDetails {
     private String username;
 
     @Column(nullable = false)
+    private String firstname;
+
+    @Column(nullable = false)
+    private String lastname;
+
+    @Column(name = "profile_picture")
+    private String profilePicture;
+
+    @Column(nullable = false)
     private String password;
 
     @Column(nullable = false, unique = true)

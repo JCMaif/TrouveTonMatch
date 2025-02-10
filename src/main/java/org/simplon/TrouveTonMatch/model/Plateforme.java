@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @Entity
 @Getter
 @Setter
@@ -24,4 +26,7 @@ public class Plateforme{
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "adresse_id", referencedColumnName = "id")
     private Adresse adresse;
+
+    @OneToMany(mappedBy = "plateforme")
+    private List<Utilisateur> utilisateurs;
 }

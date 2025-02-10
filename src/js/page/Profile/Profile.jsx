@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, Link } from "react-router-dom";
 import EditButton from "../../components/common/buttons/EditButton/EditButton";
 import DeleteButton from "../../components/common/buttons/DeleteButton/DeleteButton.jsx";
 import { userService } from "../../services/services.js";
@@ -67,34 +67,50 @@ const Profile = () => {
             <>
               <p><strong>Parcours :</strong> {userDetails.parcours ?? "Non renseigné"}</p>
               <p><strong>Expertise :</strong> {userDetails.expertise ?? "Non renseignée"}</p>
-              <p><strong>Déplacements :</strong> {userDetails.deplacements ?? "Non renseignés"}</p>
-              <p><strong>Disponibilités :</strong> {userDetails.disponibilitesParrain ?? "Non renseignées"}</p>
+              <p><strong>Déplacements :</strong> {userDetails.deplacement ?? "Non renseignés"}</p>
+              <p><strong>Disponibilités :</strong> {userDetails.disponibilite ?? "Non renseignées"}</p>
             </>
         );
       case "PORTEUR":
         return (
             <>
-              <p><strong>Disponibilités :</strong> {userDetails.disponibilitesPorteur ?? "Non renseignées"}</p>
-              <p><strong>Projet :</strong> {userDetails.projetName ?? "Non renseigné"}</p>
+                <p><strong>Disponibilités :</strong> {userDetails.disponibilite ?? "Non renseignées"}</p>
+                <p>
+                    <strong>Projet :</strong>{" "}
+                    {userDetails.projetTitle ? (
+                        <span
+                            className="projet-link"
+                            onClick={() => navigate(`/projet/${userDetails.projetId}`)}
+                            style={{color: "blue", cursor: "pointer", textDecoration: "underline"}}
+                        >
+                {userDetails.projetTitle}
+              </span>
+                    ) : (
+                        <Link to="/creer-projet" className="create-project-link">
+                            Créer un projet
+                        </Link>
+                    )}
+                </p>
             </>
         );
-      default:
-        return null;
+        default:
+            return null;
     }
   };
 
-  if (loading) return <p>Chargement des informations utilisateur...</p>;
-  if (error) return <p className="error-message">{error}</p>;
-  if (!userDetails) return <p>Aucune information utilisateur disponible.</p>;
+    if (loading) return <p>Chargement des informations utilisateur...</p>;
+    if (error) return <p className="error-message">{error}</p>;
+    if (!userDetails) return <p>Aucune information utilisateur disponible.</p>;
 
-  return (
-      <div className="container">
-        <h1>Profil de l'utilisateur</h1>
-        <div className="profile-details">
-          <p><strong>Nom d'utilisateur :</strong> {userDetails.username}</p>
-          <p><strong>Rôle :</strong> {userDetails.role}</p>
+    return (
+        <div className="container">
+            <h1>Profil de l'utilisateur</h1>
+            <div className="profile-details">
+                <p><strong>Nom d'utilisateur :</strong> {userDetails.username}</p>
+                <p><strong>Rôle :</strong> {userDetails.role}</p>
 
-          {/* Informations de contact visibles pour ADMIN, STAFF ou l'utilisateur connecté */}
+
+                {/* Informations de contact visibles pour ADMIN, STAFF ou l'utilisateur connecté */}
           {(isAuthenticated.role === "ADMIN" ||
               isAuthenticated.role === "STAFF" ||
               isAuthenticated.id === userDetails.id) && renderContactInfo()}
@@ -103,10 +119,13 @@ const Profile = () => {
           {renderSpecificFields()}
 
           {/* Actions disponibles */}
-          {isAuthenticated.role === "ADMIN" && (
-              <DeleteButton onClick={() => handleDeleteUser(userDetails.id)} />
+          {isAuthenticated.role === "ADMIN" || isAuthenticated.role === "STAFF" && (
+             <>
+                 <DeleteButton onClick={() => handleDeleteUser(userDetails.id)} />
+             </>
+
           )}
-          {(isAuthenticated.id === userDetails.id || isAuthenticated.role === "ADMIN") && (
+          {(isAuthenticated.id === userDetails.id || isAuthenticated.role === "ADMIN" || isAuthenticated.role === "STAFF") && (
               <EditButton onClick={handleEditUser} />
           )}
         </div>

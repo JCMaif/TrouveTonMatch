@@ -7,6 +7,7 @@ import org.simplon.TrouveTonMatch.exception.UserNotFoundException;
 import org.simplon.TrouveTonMatch.exception.UsernameAlreadyExistsException;
 import org.simplon.TrouveTonMatch.mapper.UtilisateurMapper;
 import org.simplon.TrouveTonMatch.model.*;
+import org.simplon.TrouveTonMatch.repository.AdresseRepository;
 import org.simplon.TrouveTonMatch.repository.UserRepository;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -24,12 +25,14 @@ public class UserService {
     private final BCryptPasswordEncoder passwordEncoder;
     private final UtilisateurMapper utilisateurMapper;
     private static final String DEFAULT_PASSWORD = "password321";
+    private final AdresseRepository adresseRepository;
 
-    public UserService(UserRepository userRepository, PlateformeService plateformeService, BCryptPasswordEncoder passwordEncoder, UtilisateurMapper utilisateurMapper) {
+    public UserService(UserRepository userRepository, PlateformeService plateformeService, BCryptPasswordEncoder passwordEncoder, UtilisateurMapper utilisateurMapper, AdresseRepository adresseRepository) {
         this.userRepository = userRepository;
         this.plateformeService = plateformeService;
         this.passwordEncoder = passwordEncoder;
         this.utilisateurMapper = utilisateurMapper;
+        this.adresseRepository = adresseRepository;
     }
 
     public List<UserDto> getAllUsers() {
@@ -102,6 +105,94 @@ public class UserService {
         userRepository.save(user);
     }
 
+    public Utilisateur updateProfile(Long id, UserEditDto dto) {
+        Utilisateur user = userRepository.findById(id).orElseThrow(UserNotFoundException::new);
 
+        if (dto.addresseId() != null) {
+            Adresse adresse = adresseRepository.findById(dto.addresseId()).orElseThrow(EntityNotFoundException::new);
+            user.setAdresse(adresse);
+        }
+
+        if (dto.rue() != null || dto.cpostal() != null || dto.ville() != null) {
+            Adresse adresse = user.getAdresse();
+            if (adresse == null) {
+                adresse = new Adresse();
+                user.setAdresse(adresse);
+            }
+            if (dto.rue() != null) {
+                adresse.setRue(dto.rue());
+            }
+            if (dto.cpostal() != null) {
+                adresse.setCpostal(dto.cpostal());
+            }
+            if (dto.ville() != null) {
+                adresse.setVille(dto.ville());
+            }
+            adresseRepository.save(adresse);
+        }
+
+        if (dto.password() != null) {
+            updatePassword(dto.id(), dto.password());
+        }
+
+        if (user instanceof Parrain) {
+            Parrain parrain = (Parrain) user;
+            if (dto.disponibilite() != null) {
+                parrain.setDisponibilite(dto.disponibilite());
+            }
+            if (dto.parcours() != null) {
+                parrain.setParcours(dto.parcours());
+            }
+            if (dto.expertise() != null) {
+                parrain.setExpertise(dto.expertise());
+            }
+            if (dto.deplacement() != null) {
+                parrain.setDeplacement(dto.deplacement());
+            }
+        } else if (user instanceof Porteur) {
+            Porteur porteur = (Porteur) user;
+            if (dto.disponibilite() != null) {
+                porteur.setDisponibilite(dto.disponibilite());
+            }
+        }
+        return userRepository.save(user);
+    }
+
+    @Transactional
+    public void completeProfile(Long userId, UserEditDto userEditDto) {
+        Utilisateur user = userRepository.findById(userId)
+                .orElseThrow(UserNotFoundException::new);
+
+        if (Boolean.TRUE.equals(user.getEnabled())) {
+            throw new IllegalStateException("Le profil est déjà complété.");
+        }
+
+        if (userEditDto.password() != null && !userEditDto.password().isBlank()) {
+            user.setPassword(passwordEncoder.encode(userEditDto.password()));
+        } else {
+            throw new IllegalArgumentException("Le mot de passe ne peut pas être vide.");
+        }
+
+        Adresse adresse = (user.getAdresse() != null) ? user.getAdresse() : new Adresse();
+        adresse.setRue(userEditDto.rue());
+        adresse.setCpostal(userEditDto.cpostal());
+        adresse.setVille(userEditDto.ville());
+        user.setAdresse(adresse);
+
+        if (user instanceof Porteur porteur) {
+            porteur.setDisponibilite(userEditDto.disponibilite());
+        } else if (user instanceof Parrain parrain) {
+            parrain.setParcours(userEditDto.parcours());
+            parrain.setExpertise(userEditDto.expertise());
+            parrain.setDeplacement(userEditDto.deplacement());
+            parrain.setDisponibilite(userEditDto.disponibilite());
+        } else {
+            throw new IllegalStateException("Rôle inconnu.");
+        }
+
+        user.setEnabled(true);
+
+        userRepository.save(user);
+    }
 
 }

@@ -1,10 +1,35 @@
-import React, { useContext } from "react";
+import React, {useContext, useEffect, useState} from "react";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
+import {plateformeService} from "../../services/services.js";
 
 const Nav = () => {
   const { isAuthenticated, logout } = useContext(AuthContext);
   const { username, role, id, plateformeId, enabled } = isAuthenticated;
+  const [ plateformeNom, setPlateformeNom ] = useState("");
+
+  useEffect(() => {
+      const fetchPlateformeNom = async () => {
+          if (plateformeId) {
+              try {
+                  const response = await plateformeService.findById(plateformeId, isAuthenticated.token);
+                  setPlateformeNom(response.nom);
+              } catch (err) {
+                  console.log(err);
+                  setPlateformeNom("Inconnu")
+              }
+          }
+      }
+      fetchPlateformeNom();
+  }, [plateformeId, isAuthenticated.token]);
+
+    if (!isAuthenticated) {
+        return (
+            <li>
+                <Link to="/login" className="Nav-link">Login</Link>
+            </li>
+        );
+    }
 
   if (isAuthenticated && role === "ADMIN") {
     return (
@@ -37,9 +62,9 @@ const Nav = () => {
         <li>
           <Link to={`/profil/${id}`} className="Nav-link">Mon espace</Link>
         </li>
-        <li>
-        <span>Plateforme : {plateformeId}</span>
-        </li>
+        {/*<li>*/}
+        {/*<span>Plateforme : {plateformeNom}</span>*/}
+        {/*</li>*/}
       </>
     );
   }
@@ -52,9 +77,9 @@ const Nav = () => {
               <li>
                   <Link to={`/profil/${id}`} className="Nav-link">Mon espace</Link>
               </li>
-              <li>
-                  <span>Plateforme : {plateformeId}</span>
-              </li>
+              {/*<li>*/}
+              {/*    <span>Plateforme : {plateformeNom}</span>*/}
+              {/*</li>*/}
           </>
       );
     }

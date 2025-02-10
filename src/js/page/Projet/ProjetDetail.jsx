@@ -33,7 +33,8 @@ const ProjetDetails = () => {
     return (
         <div className="container">
             <h1>{projet.title}</h1>
-            <p><strong>Starting Date:</strong> {new Date(projet.startingDate).toLocaleDateString()}</p>
+            <p><strong>Porteur : </strong> {projet.porteur.username}</p>
+            <p><strong>Date de lancement:</strong> {new Date(projet.startingDate).toLocaleDateString()}</p>
             <p><strong>Description:</strong> {projet.description}</p>
         </div>
     );

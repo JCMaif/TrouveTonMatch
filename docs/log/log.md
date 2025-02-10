@@ -56,4 +56,21 @@
 ## Vendredi 06/12/24
 - route utilisateurs en front
 
+## Vendredi 07/12/24
+- rencontre avec le client
+  - faire simple au niveau des nav
+  - parrains : photo, nom, prénom, zone géographique, bio, mes projets matchés, nombre max de projets qu'il se sent d'accompagner. Quand ce nombre est atteint, il disparait de la liste. Moyenne 4 projets maw par parrain mais c'est variable selon leur statut (retraité, etc)
+  - n'a pas la possibilité de refuser un match, c'est un bénévole. On doit pouvoir revenir en arrière rapidement sur ce choix.
+  - a possibilité de se mettre en retrait du site si trop de projets suivis
+  - finalement, le premier critère est géographique. Le domaine d'activité ou l'expertise ne sont pas utiles
+- zone de mise en service de documents par la plateforme, dispo pour tous 
+- les porteurs doivent pouvoir identifier les parrains par leur photo ou leur nom, il serait intéressant de présenter les parrains d'abord géographiquement, puis par nombre de projets déjà suivis
+- les demandes de match, accords et refus sont notifiés à la plateforme
+- ajouter une fonctionnalité pour que le porteur puisse ajouter ses interactions avec le parrain : 
+  - type d'échange : en personne, au téléphone, par messagerie
+  - date
+  - durée
+  - sujets couverts
+  - 
+
 
