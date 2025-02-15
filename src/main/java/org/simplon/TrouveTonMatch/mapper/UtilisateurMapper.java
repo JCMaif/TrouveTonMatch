@@ -18,6 +18,9 @@ public interface UtilisateurMapper {
         Long plateformeId = utilisateur.getPlateforme() != null ? utilisateur.getPlateforme().getId() : null;
         String plateformeName = utilisateur.getPlateforme() != null ? utilisateur.getPlateforme().getNom() : null;
         Adresse adresse = utilisateur.getAdresse();
+        String firstname = utilisateur.getFirstname();
+        String lastname = utilisateur.getLastname();
+        String profilePicture = utilisateur.getProfilePicture();
 
         String parcours = null, expertise = null, deplacement = null, disponibilite = null, projetTitle = null;
         Long projetId = null;
@@ -37,6 +40,9 @@ public interface UtilisateurMapper {
                 utilisateur.getUsername(),
                 utilisateur.getRole(),
                 utilisateur.getId(),
+                utilisateur.getFirstname(),
+                utilisateur.getLastname(),
+                utilisateur.getProfilePicture(),
                 plateformeId,
                 plateformeName,
                 utilisateur.getEmail(),

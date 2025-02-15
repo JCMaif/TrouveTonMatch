@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { userService } from "../../services/services";
 import '../../styles/page.scss';
 import RenewButton from "../../components/common/buttons/RenewButton/RenewButton.jsx";
+import {API_BASE_URL} from "@/config/config.js";
 
 const Parrain = () => {
   const [users, setUsers] = useState([]);
@@ -37,7 +38,7 @@ const Parrain = () => {
       <table>
         <thead>
           <tr>
-            <th>Username</th>
+            <th></th>
             {isAuthenticated.role === "ADMIN" || isAuthenticated.role === "STAFF" &&(
             <th>Renouveller activation</th>
             )}
@@ -48,13 +49,19 @@ const Parrain = () => {
             {users.map((user) => (
               <tr key={user.id}>
                 <td onClick={() => handleUserClick(user.id)}>
-                  {user.username}
+                  <div className="profile-picture-wrapper-petit">
+                    <div className="profile-picture-container-petit">
+                      <img className="pictureProfilePetit" src={`${API_BASE_URL}/uploads/${user.profilePicture}`}
+                           alt="avatar"/>
+                    </div>
+                   {user.firstName} {user.lastName}
+                  </div>
                 </td>
                 <td>
-                  {isAuthenticated.role === "ADMIN" || isAuthenticated.role === "STAFF" &&(
-                   <span>
+                  {isAuthenticated.role === "ADMIN" || isAuthenticated.role === "STAFF" && (
+                      <span>
                       {(!user.enabled) && (
-                        <RenewButton onClick={() => handleRenewActivationCode(user.id)}/>
+                          <RenewButton onClick={() => handleRenewActivationCode(user.id)}/>
                       )}
                    </span>
                   )}

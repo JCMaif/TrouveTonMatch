@@ -34,7 +34,8 @@ public class SecurityConfig {
                         .requestMatchers(
                                 "/auth/**",
                                 "/public/documentation/**",
-                                "/enum/**"
+                                "/enum/**",
+                                "/uploads/**"
                         ).permitAll()
                         .requestMatchers(
                                 "/user/**",

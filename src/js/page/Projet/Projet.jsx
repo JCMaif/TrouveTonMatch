@@ -40,7 +40,7 @@ const Projets = () => {
                 {projets.map((projet) => (
                     <tr key={projet.id} onClick={() => handleClick(projet.id)}>
                         <td>{projet.title}</td>
-                        <td>{projet.porteur.username}</td>
+                        <td>{projet.porteur.firstname}  {projet.porteur.lastname}</td>
                     </tr>
                 ))}
                 </tbody>

@@ -6,9 +6,12 @@ import { userService } from "../../services/services.js";
 import { useAuthenticatedService } from "../../hook/useAuthenticatedService.js";
 import { AuthContext } from "../../context/AuthContext";
 import "../../styles/page.scss";
+import Avatar from "../../components/avatar/Avatar.jsx";
+import { API_BASE_URL} from "../../config/config.js";
 
 const Profile = () => {
   const { userId } = useParams();
+  const [userImage, setUserImage] = useState("https://via.placeholder.com/200");
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [userDetails, setUserDetails] = useState(null);
@@ -19,9 +22,11 @@ const Profile = () => {
   useEffect(() => {
     const fetchUserDetails = async () => {
       setError(null);
+      setLoading(true);
       try {
         const response = await findById(userId);
         setUserDetails(response);
+        console.log(response);
       } catch {
         setError("Impossible de charger les informations utilisateur.");
       } finally {
@@ -33,6 +38,13 @@ const Profile = () => {
 
   const handleEditUser = () => navigate(`/profil/edit/${userId}`);
 
+  const handleUpdateImage = (newImage) => {
+      setUserDetails((prevDetails) => ({
+          ...prevDetails,
+          profilePicture: newImage,
+      }));
+  };
+
   const handleDeleteUser = async (id) => {
     if (window.confirm("Êtes-vous sûr de vouloir supprimer cet utilisateur ?")) {
       try {
@@ -42,8 +54,8 @@ const Profile = () => {
       } catch {
         setError("La suppression a échoué.");
       }
-    }
-  };
+}
+};
 
   const renderContactInfo = () => (
       <>
@@ -105,8 +117,13 @@ const Profile = () => {
     return (
         <div className="container">
             <h1>Profil de l'utilisateur</h1>
+            <div className="profile-picture-wrapper">
+                <div className="profile-picture-container">
+                    <img className="pictureProfileGrand" src={`${API_BASE_URL}/uploads/${userDetails.profilePicture}`} alt="avatar"/>
+                </div>
+            </div>
             <div className="profile-details">
-                <p><strong>Nom d'utilisateur :</strong> {userDetails.username}</p>
+                <p><strong>Nom d'utilisateur :</strong> {userDetails.firstName} {userDetails.lastName}</p>
                 <p><strong>Rôle :</strong> {userDetails.role}</p>
 
 

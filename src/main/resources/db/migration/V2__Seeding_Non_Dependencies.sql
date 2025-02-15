@@ -15,50 +15,50 @@ VALUES
 -- Insertion des utilisateurs
 INSERT INTO utilisateur (username, firstname, lastname, profile_picture, password, email, role, adresse_id, enabled, plateforme_id)
 VALUES
-    ('admin', 'John', 'Doe', 'profiles/1_profile.png',
+    ('admin', 'John', 'Doe', '1_profile.jpg',
      '$2a$10$5emptuO4dTsTCkllTOgBleDscsbHazzcdsEBZAOCXDFf1jWYKF.4e', 'admin@example.com', 'ADMIN', NULL, true, null),
 
-    ('porteur1', 'Jean', 'Bonbeurre', 'profiles/2_profile.png',
+    ('porteur1', 'Jean', 'Bonbeurre', '2_profile.jpg',
      '$2a$10$a.cYNFmTCbQaz.WbSQfc6.2/OlZNaZgFuRDzMUGsbD3nqzc6O5Lfu', 'porteur1@example.com', 'PORTEUR', 1, true,
      (SELECT id FROM plateforme WHERE nom = 'Initiative Deux-Sèvres')),
 
-    ('porteur2', 'Claire', 'Chaussette', 'profiles/3_profile.png',
+    ('porteur2', 'Claire', 'Chaussette', '3_profile.jpg',
      '$2a$10$a.cYNFmTCbQaz.WbSQfc6.2/OlZNaZgFuRDzMUGsbD3nqzc6O5Lfu', 'porteur2@example.com', 'PORTEUR', NULL, true,
      (SELECT id FROM plateforme WHERE nom = 'Initiative Deux-Sèvres')),
 
-    ('porteur3', 'Guy', 'Tariste', 'profiles/4_profile.png',
+    ('porteur3', 'Guy', 'Tariste', '4_profile.jpg',
      '$2a$10$a.cYNFmTCbQaz.WbSQfc6.2/OlZNaZgFuRDzMUGsbD3nqzc6O5Lfu', 'porteur3@example.com', 'PORTEUR', null, true,
      (SELECT id FROM plateforme WHERE nom = 'Initiative Deux-Sèvres')),
 
-    ('porteur4', 'Alain', 'Térieur', 'profiles/5_profile.png',
+    ('porteur4', 'Alain', 'Térieur', '5_profile.jpg',
      '$2a$10$a.cYNFmTCbQaz.WbSQfc6.2/OlZNaZgFuRDzMUGsbD3nqzc6O5Lfu', 'porteur4@example.com', 'PORTEUR', null, true,
      (SELECT id FROM plateforme WHERE nom = 'Initiative Vienne')),
 
-    ('porteur5', 'Emma', 'Grenade', 'profiles/6_profile.png',
+    ('porteur5', 'Emma', 'Grenade', '6_profile.jpg',
      '$2a$10$a.cYNFmTCbQaz.WbSQfc6.2/OlZNaZgFuRDzMUGsbD3nqzc6O5Lfu', 'porteur5@example.com', 'PORTEUR', null, true,
      (SELECT id FROM plateforme WHERE nom = 'Initiative Charentes')),
 
-    ('porteur6', 'Tom', 'Atoo', 'profiles/7_profile.png',
+    ('porteur6', 'Tom', 'Atoo', '7_profile.jpg',
      '$2a$10$a.cYNFmTCbQaz.WbSQfc6.2/OlZNaZgFuRDzMUGsbD3nqzc6O5Lfu', 'porteur6@example.com', 'PORTEUR', null, true,
      (SELECT id FROM plateforme WHERE nom = 'Initiative Charentes')),
 
-    ('parrain1', 'Sarah', 'Peille', 'profiles/8_profile.png',
+    ('parrain1', 'Sarah', 'Tatouille', '8_profile.jpg',
      '$2a$10$v/8OtTdd7TccTQd71CmG9e3U0XxOTa4rLNwd0ng447fnF37cP/3Xe', 'parrain1@example.com', 'PARRAIN', 2, true,
      (SELECT id FROM plateforme WHERE nom = 'Initiative Deux-Sèvres')),
 
-    ('parrain2', 'Jacques', 'Pot', 'profiles/9_profile.png',
+    ('parrain2', 'Jacques', 'Pot', '9_profile.jpg',
      '$2a$10$v/8OtTdd7TccTQd71CmG9e3U0XxOTa4rLNwd0ng447fnF37cP/3Xe', 'parrain2@example.com', 'PARRAIN', NULL, false,
      (SELECT id FROM plateforme WHERE nom = 'Initiative Deux-Sèvres')),
 
-    ('plateforme1', 'Paul', 'Ochon', 'profiles/10_profile.png',
+    ('plateforme1', 'Paul', 'Ochon', '10_profile.jpg',
      '$2a$10$Pv2LaKuZljzFWk2OcgwbV.mbpdmUgUJlhG5ts6Calx0w//q90H70a', 'staff@initiativegironde.fr', 'STAFF', 3, true,
      (SELECT id FROM plateforme WHERE nom = 'Initiative Deux-Sèvres')),
 
-    ('plateforme2', 'Lorraine', 'Ipsum', 'profiles/11_profile.png',
+    ('plateforme2', 'Lorraine', 'Ipsum', '11_profile.jpg',
      '$2a$10$Pv2LaKuZljzFWk2OcgwbV.mbpdmUgUJlhG5ts6Calx0w//q90H70a', 'staff@initiativevienne.fr', 'STAFF', NULL, true,
      (SELECT id FROM plateforme WHERE nom = 'Initiative Vienne')),
 
-    ('plateforme3', 'Elvira', 'Moto', 'profiles/12_profile.png',
+    ('plateforme3', 'Elvira', 'Moto', '12_profile.jpg',
      '$2a$10$Pv2LaKuZljzFWk2OcgwbV.mbpdmUgUJlhG5ts6Calx0w//q90H70a', 'staff@initiativecharentes.fr', 'STAFF', NULL, true,
      (SELECT id FROM plateforme WHERE nom = 'Initiative Charentes'));
 
