@@ -6,8 +6,9 @@ import { userService } from "../../services/services.js";
 import { useAuthenticatedService } from "../../hook/useAuthenticatedService.js";
 import { AuthContext } from "../../context/AuthContext";
 import "../../styles/page.scss";
-import Avatar from "../../components/avatar/Avatar.jsx";
+import '../../index.scss';
 import { API_BASE_URL} from "../../config/config.js";
+import { FaRegUser } from "react-icons/fa";
 
 const Profile = () => {
   const { userId } = useParams();
@@ -119,7 +120,15 @@ const Profile = () => {
             <h1>Profil de l'utilisateur</h1>
             <div className="profile-picture-wrapper">
                 <div className="profile-picture-container">
-                    <img className="pictureProfileGrand" src={`${API_BASE_URL}/uploads/${userDetails.profilePicture}`} alt="avatar"/>
+                    {userDetails?.profilePicture ? (
+                    <img
+                        className="pictureProfileGrand"
+                        src={`${API_BASE_URL}/uploads/${userDetails.profilePicture}`}
+                        alt="image utilisateur"
+                    />
+                        ) : (
+                            <FaRegUser size={150} color="#ccc" />
+                        )}
                 </div>
             </div>
             <div className="profile-details">

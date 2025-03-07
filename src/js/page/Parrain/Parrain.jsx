@@ -3,8 +3,10 @@ import { AuthContext } from "../../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { userService } from "../../services/services";
 import '../../styles/page.scss';
+import '../../index.scss';
 import RenewButton from "../../components/common/buttons/RenewButton/RenewButton.jsx";
-import {API_BASE_URL} from "@/config/config.js";
+import {API_BASE_URL} from "../../config/config.js";
+import {FaRegUser} from "react-icons/fa";
 
 const Parrain = () => {
   const [users, setUsers] = useState([]);
@@ -51,8 +53,15 @@ const Parrain = () => {
                 <td onClick={() => handleUserClick(user.id)}>
                   <div className="profile-picture-wrapper-petit">
                     <div className="profile-picture-container-petit">
-                      <img className="pictureProfilePetit" src={`${API_BASE_URL}/uploads/${user.profilePicture}`}
-                           alt="avatar"/>
+                      {user?.profilePicture ? (
+                          <img
+                              className="pictureProfilePetit"
+                              src={`${API_BASE_URL}/uploads/${user.profilePicture}`}
+                              alt="image utilisateur"
+                          />
+                      ) : (
+                          <FaRegUser size={50} color="#ccc" />
+                      )}
                     </div>
                    {user.firstName} {user.lastName}
                   </div>

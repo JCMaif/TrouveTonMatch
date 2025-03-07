@@ -56,7 +56,7 @@
 ## Vendredi 06/12/24
 - route utilisateurs en front
 
-## Vendredi 07/12/24
+## Vendredi 07/02/25
 - rencontre avec le client
   - faire simple au niveau des nav
   - parrains : photo, nom, prénom, zone géographique, bio, mes projets matchés, nombre max de projets qu'il se sent d'accompagner. Quand ce nombre est atteint, il disparait de la liste. Moyenne 4 projets maw par parrain mais c'est variable selon leur statut (retraité, etc)

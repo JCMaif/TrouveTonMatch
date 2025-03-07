@@ -4,7 +4,7 @@ import { useAuthenticatedService } from "../../hook/useAuthenticatedService.js";
 import { userService } from "../../services/services.js";
 import { AuthContext } from "../../context/AuthContext.jsx";
 import { EditableField } from "../../components/common/InputField/EditableField.jsx";
-import { FaEdit } from "react-icons/fa";
+import { FaEdit, FaRegUser } from "react-icons/fa";
 import DeleteButton from "../../components/common/buttons/DeleteButton/DeleteButton.jsx";
 import {API_BASE_URL} from "../../config/config.js";
 
@@ -81,11 +81,15 @@ const EditProfile = () => {
             <h1>Modifier le profil</h1>
             <div className="profile-picture-wrapper">
                 <div className="profile-picture-container">
-                    <img
-                        className="pictureProfileGrand"
-                        src={`${API_BASE_URL}/uploads/${userDetails.profilePicture}`}
-                        alt="Avatar de l'utilisateur"
-                    />
+                    {userDetails?.profilePicture ? (
+                        <img
+                            className="pictureProfileGrand"
+                            src={`${API_BASE_URL}/uploads/${userDetails.profilePicture}`}
+                            alt="image utilisateur"
+                        />
+                    ) : (
+                        <FaRegUser size={150} color="#ccc" />
+                    )}
                     <label htmlFor="upload-image" className="edit-icon">
                         <FaEdit aria-label="Modifier l'image de profil" tabIndex="0" role="button"/>
                     </label>

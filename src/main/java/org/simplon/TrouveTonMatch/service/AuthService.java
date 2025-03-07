@@ -1,12 +1,9 @@
 package org.simplon.TrouveTonMatch.service;
 
-import org.simplon.TrouveTonMatch.dtos.SignupDto;
-import org.simplon.TrouveTonMatch.model.Utilisateur;
 import org.simplon.TrouveTonMatch.repository.UserRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
