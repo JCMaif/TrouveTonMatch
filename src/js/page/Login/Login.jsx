@@ -51,12 +51,12 @@ const Login = () => {
 
 
   return (
-    <div className="login-container">
+    <div className="login-container" aria-label="page de connexion">
       <div>
         <h1>Login</h1>
-        {error && <p className="error-message">{error}</p>}
+        {error && <p className="error-message" aria-live="assertive" aria-atomic="true">{error}</p>}
 
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} aria-label="formulaire de connexion">
           <InputField
             type="text"
             placeholder="Username"
@@ -65,7 +65,14 @@ const Login = () => {
             name="username"
             id="username"
             mandatory
+            aria-required="true"
+            aria-describedby="username-error"
           />
+          {!username && error && (
+              <span id="username-error" className="error">
+              Username is required.
+            </span>
+          )}
           <InputField
             type="password"
             placeholder="Password"
@@ -74,11 +81,19 @@ const Login = () => {
             name="password"
             id="password"
             mandatory
+            aria-required="true"
+            aria-describedby="password-error"
           />
+          {!password && error && (
+              <span id="password-error" className="error">
+              Password is required.
+            </span>
+          )}
           <Checkbox
             checked={rememberMe}
             onChange={() => setRememberMe(!rememberMe)}
             label="Remember me"
+            id="remember-me"
           />
           <SubmitButton text="Login" />
         </form>

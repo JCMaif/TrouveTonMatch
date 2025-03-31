@@ -82,7 +82,7 @@ VALUES
     ((SELECT id FROM utilisateur WHERE username = 'porteur6'), null, null);
 
 -- Insertion des parrains
-INSERT INTO parrain (id, parcours, expertise, deplacement, disponibilite)
+INSERT INTO parrain (id, parcours, expertise, deplacement, disponibilite, max_projects, is_active)
 VALUES
-    ((SELECT id FROM utilisateur WHERE username = 'parrain1'), 'Ingénieur en informatique', 'Cloud et DevOps', 'Régional', 'Temps partiel'),
-    ((SELECT id FROM utilisateur WHERE username = 'parrain2'), 'Buiseness Angel', 'Recherche de financement', 'Régional', 'Temps partiel');
+    ((SELECT id FROM utilisateur WHERE username = 'parrain1'), 'Ingénieur en informatique', 'Cloud et DevOps', 'Régional', 'Temps partiel',5, true),
+    ((SELECT id FROM utilisateur WHERE username = 'parrain2'), 'Buiseness Angel', 'Recherche de financement', 'Régional', 'Temps partiel', 4, true);

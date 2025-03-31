@@ -18,12 +18,12 @@ const Layout = () => {
   }, [username, navigate]);
 
   return (
-    <div className="layout">
-      <Header />
-      <main className="content">
+    <div className="layout" role="main" aria-label="Page principale">
+      <Header aria-label="Bandeau de navigation"/>
+      <main className="content" aria-label="Contenu principal">
         <Outlet />
       </main>
-     <Footer />
+     <Footer aria-label="Pied de page"/>
     </div>
   );
 };

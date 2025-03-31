@@ -8,12 +8,15 @@ import org.simplon.TrouveTonMatch.exception.UsernameAlreadyExistsException;
 import org.simplon.TrouveTonMatch.mapper.UtilisateurMapper;
 import org.simplon.TrouveTonMatch.model.*;
 import org.simplon.TrouveTonMatch.repository.AdresseRepository;
+import org.simplon.TrouveTonMatch.repository.ProjetRepository;
 import org.simplon.TrouveTonMatch.repository.UserRepository;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+
+import static java.lang.Integer.parseInt;
 
 @Service
 public class UserService {
@@ -24,13 +27,15 @@ public class UserService {
     private final UtilisateurMapper utilisateurMapper;
     private static final String DEFAULT_PASSWORD = "password321";
     private final AdresseRepository adresseRepository;
+    private final ProjetRepository projetRepository;
 
-    public UserService(UserRepository userRepository, PlateformeService plateformeService, BCryptPasswordEncoder passwordEncoder, UtilisateurMapper utilisateurMapper, AdresseRepository adresseRepository) {
+    public UserService(UserRepository userRepository, PlateformeService plateformeService, BCryptPasswordEncoder passwordEncoder, UtilisateurMapper utilisateurMapper, AdresseRepository adresseRepository, ProjetRepository projetRepository) {
         this.userRepository = userRepository;
         this.plateformeService = plateformeService;
         this.passwordEncoder = passwordEncoder;
         this.utilisateurMapper = utilisateurMapper;
         this.adresseRepository = adresseRepository;
+        this.projetRepository = projetRepository;
     }
 
     public List<UserDto> getAllUsers() {
@@ -147,6 +152,12 @@ public class UserService {
             if (dto.deplacement() != null) {
                 parrain.setDeplacement(dto.deplacement());
             }
+           if (dto.maxProjects() != null) {
+               parrain.setMaxProjects(dto.maxProjects());
+           }
+           if (dto.isActive() != null) {
+               parrain.setIsActive(dto.isActive());
+           }
         } else if (user instanceof Porteur) {
             Porteur porteur = (Porteur) user;
             if (dto.disponibilite() != null) {
@@ -184,6 +195,8 @@ public class UserService {
             parrain.setExpertise(userEditDto.expertise());
             parrain.setDeplacement(userEditDto.deplacement());
             parrain.setDisponibilite(userEditDto.disponibilite());
+            parrain.setMaxProjects(userEditDto.maxProjects());
+            parrain.setIsActive(true);
         } else {
             throw new IllegalStateException("Rôle inconnu.");
         }
@@ -193,4 +206,21 @@ public class UserService {
         userRepository.save(user);
     }
 
+    public void assignParrainToProjet(Long projetId, Long parrainId) {
+        Projet projet = projetRepository.findById(projetId).orElseThrow(EntityNotFoundException::new);
+        Parrain parrain = (Parrain) userRepository.findById(parrainId).orElseThrow(EntityNotFoundException::new);
+        if(parrain.getProjetsSuivis().size() >= parrain.getMaxProjects()){
+            parrain.setIsActive(false);
+            userRepository.save(parrain);
+            throw new IllegalStateException("Le parrain a atteint son maximum de projets en accompagnement");
+        }
+        projet.setParrain(parrain);
+        projetRepository.save(projet);
+    }
+
+    public void toggleParrainActive(Long parrainId) {
+        Parrain parrain = (Parrain) userRepository.findById(parrainId).orElseThrow(EntityNotFoundException::new);
+        parrain.setIsActive(!parrain.getIsActive());
+        userRepository.save(parrain);
+    }
 }

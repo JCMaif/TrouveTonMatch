@@ -23,13 +23,15 @@ public interface UtilisateurMapper {
         String profilePicture = utilisateur.getProfilePicture();
 
         String parcours = null, expertise = null, deplacement = null, disponibilite = null, projetTitle = null;
-        Long projetId = null;
+        Long projetId = null; Integer maxProjects = null; Boolean isActive=true;
 
         if (utilisateur instanceof Parrain parrain) {
             parcours = parrain.getParcours();
             expertise = parrain.getExpertise();
             deplacement = parrain.getDeplacement();
             disponibilite = parrain.getDisponibilite();
+            maxProjects = parrain.getMaxProjects();
+            isActive = parrain.getIsActive();
         } else if (utilisateur instanceof Porteur porteur) {
             disponibilite = porteur.getDisponibilite();
             projetTitle = (porteur.getProjet() != null) ? porteur.getProjet().getTitle() : null;
@@ -53,7 +55,9 @@ public interface UtilisateurMapper {
                 deplacement,
                 disponibilite,
                 projetTitle,
-                projetId
+                projetId,
+                maxProjects,
+                isActive
         );
     }
 }

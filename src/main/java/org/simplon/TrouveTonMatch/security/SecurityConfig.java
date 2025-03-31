@@ -39,6 +39,7 @@ public class SecurityConfig {
                         ).permitAll()
                         .requestMatchers(
                                 "/user/**",
+                                "/parrains/**",
                                 "/projet/**",
                                 "/plateforme/**"
                         ).authenticated()

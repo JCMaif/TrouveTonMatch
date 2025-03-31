@@ -10,5 +10,7 @@ public record UserEditDto(
         String deplacement,
         String rue,
         String cpostal,
-        String ville
+        String ville,
+        Integer maxProjects,
+        Boolean isActive
 ) {}

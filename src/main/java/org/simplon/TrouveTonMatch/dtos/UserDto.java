@@ -19,6 +19,8 @@ public record UserDto(
         String deplacement,
         String disponibilite,
         String projetTitle,
-        Long projetId
+        Long projetId,
+        Integer maxProjects,
+        Boolean isActive
 ) {
 }

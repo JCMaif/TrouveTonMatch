@@ -1,5 +1,6 @@
 package org.simplon.TrouveTonMatch.repository;
 
+import org.simplon.TrouveTonMatch.model.Parrain;
 import org.simplon.TrouveTonMatch.model.UserRole;
 import org.simplon.TrouveTonMatch.model.Utilisateur;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -22,5 +23,7 @@ public interface UserRepository extends JpaRepository<Utilisateur, Long> {
 
     @Query("SELECT u FROM Utilisateur u WHERE u.role = :role AND u.plateforme.id = :plateformeId")
     List<Utilisateur> findByRoleAndPlateformeId(@Param("role") UserRole role, @Param("plateformeId") Long plateformeId);
+
+    List<Parrain> findByIsActiveTrue();
 }
 

@@ -1,24 +1,65 @@
-import React from "react";
+import React, {useRef, useEffect, useState} from "react";
 import "./Header.scss";
 import Nav from "../../components/Nav/Nav";
 import Logout from "../../components/Logout/Logout";
 
 const Header = () => {
-  return (
-    <header className="header">
-      <div className="logo" title="Initiative Deux-Sèvres">
-        <img src="/logo.png" alt="logo" />
-      </div>
-      <nav className="nav">
-        <ul>
-          <Nav />
-        </ul>
-      </nav>
-      <div className="user-info">
-        <Logout />
-      </div>
-    </header>
-  );
+    const menuRef = useRef(null);
+    const buttonRef = useRef(null);
+    const [menuOpen, setMenuOpen] = useState(false);
+
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (
+                menuRef.current &&
+                !menuRef.current.contains(event.target) &&
+                buttonRef.current &&
+                !buttonRef.current.contains(event.target)
+            ) {
+                setMenuOpen(false);
+            }
+        };
+
+        document.addEventListener("mousedown", handleClickOutside);
+
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, []);
+
+    return (
+        <header className="header">
+            <div className="logo" title="Initiative Deux-Sèvres">
+                <img src="/logo.png" alt="logo"/>
+            </div>
+
+            <button
+                ref={buttonRef}
+                className="menu-button"
+                aria-label="Ouvrir le menu"
+                aria-expanded={menuOpen}
+                aria-controls="nav-menu"
+                onClick={() => setMenuOpen((prev) => !prev)}
+            >
+                &#9776;
+            </button>
+
+            <nav
+                className={`nav ${menuOpen ? "open" : ""}`}
+                ref={menuRef}
+                id="nav-menu"
+                role="navigation"
+                aria-label="Menu principal"
+            >
+                <ul>
+                    <Nav/>
+                </ul>
+            </nav>
+
+            <Logout/>
+
+        </header>
+    );
 };
 
 export default Header;

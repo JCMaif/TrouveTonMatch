@@ -4,7 +4,7 @@ import { AuthContext } from "../../context/AuthContext";
 import {plateformeService} from "../../services/services.js";
 
 const Nav = () => {
-  const { isAuthenticated, logout } = useContext(AuthContext);
+  const { isAuthenticated} = useContext(AuthContext);
   const { username, role, id, plateformeId, enabled } = isAuthenticated;
   const [ plateformeNom, setPlateformeNom ] = useState("");
 

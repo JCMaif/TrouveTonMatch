@@ -71,6 +71,72 @@
   - date
   - durée
   - sujets couverts
-  - 
 
+## Vendredi 07/03/25
+
+### Fait
+- login
+- logout
+
+#### connexion en tant que Parrain
+  - Affichage liste des projets de ma plateforme
+  - Mon espace :
+    - Mon profile, modifiable
+    - Ma photo de profile, modifiable 
+#### connexion en tant que Porteur
+- Affichage liste des projets de ma plateforme
+- Mon espace :
+  - Mon profile, modifiable
+  - Ma photo de profile, modifiable
+  - Créer un projet si je n'en ai pas
+  - Afficher mon projet si j'en ai un
+- Affichage liste des parrains de ma plateforme
+  - Affichage des détails filtrés d'un parrain
+#### connexion en tant que Plateforme
+- Affichage liste des parrains de ma plateforme
+  - Bouton pour renouveler le code d'activation (contrôle sur l'état du compte)
+- Affichage du détail d'un parrain
+  - Possibilité de le modifier ou supprimer
+- Affichage liste des porteurs de ma plateforme
+  - Bouton pour renouveler le code d'activation (contrôle sur l'état du compte)
+- Affichage du détail d'un porteur
+  - Possibilité de le modifier ou supprimer
+- Affichage de la liste des projets de ma plateforme
+  - Affichage d'un projet en détail
+- Affichage de la liste des matchs (à faire)
+
+### A faire
+- Rendre le header et la nav responsive [x]
+- Modifier les balises html pour remplacer les div par des balises sémantiques[]
+- Ajouter les labels, arial, tab index []
+- Porteur : peut modifier mon projet []
+- Porteur : peut supprimer mon projet []
+- Porteur : peut choisir un parrain []
+- Parrain : peut saisir une distance de déplacement []
+- Parrain : peut mettre son profile en retrait ou en avant de la liste des parrains []
+- Plateforme : peut mettre le profile d'un parrain en retrait ou en avant []
+- Parrain : peut choisir le nombre de projets max qu'il souhaite accompagner [x]
+- Plateforme : peut mettre des documents en ligne pour téléchargement => centre de documentation []
+- Tous : peut télécharger un document depuis le centre de documentation []
+- Porteur : peut saisir un compte-rendu d'accompagnement : []
+  - date, heure de l'échange
+  - Moyen de l'échange : appel téléphonique ou visio, messagerie, visite
+  - Sujets de l'échange
+  - Résumé de l'échange
+  - Actions à mener avec date de livraison
+  - Prochain rendez-vous prévu
+  - Laisser texte libre pour le résumé et les actions à mener, avec petite modale d'aide à la rédaction ?
+- Parrain et plateforme : consulter les comptes-rendus associés au projet []
+- Porteur : consulter/modifier les comptes-rendus []
+- Notifications : 
+  - Quand un porteur choisi un parrain :
+    - notification au parrain []
+    - feedback au porteur []
+    - notification à la plateforme []
+  - Quand un porteur saisit un compte-rendu :
+    - notification au parrain et à la plateforme []
+  - Quand un parrain se met en retrait/en avant :
+    - notification à la plateforme []
+  - Quand un porteur crée un projet []
+    - notification à la plateforme []
 

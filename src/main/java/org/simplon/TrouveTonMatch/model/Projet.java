@@ -1,7 +1,11 @@
 package org.simplon.TrouveTonMatch.model;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.LocalDate;
 
@@ -22,4 +26,8 @@ public class Projet {
 
     @OneToOne(mappedBy = "projet", cascade = CascadeType.ALL)
     private Porteur porteur;
+
+    @ManyToOne
+    @JoinColumn(name = "parrain_id")
+    private Parrain parrain;
 }
