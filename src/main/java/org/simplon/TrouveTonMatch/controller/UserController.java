@@ -8,11 +8,13 @@ import org.simplon.TrouveTonMatch.security.SecurityUtils;
 import org.simplon.TrouveTonMatch.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -39,12 +41,11 @@ public class UserController {
         if (users.isEmpty()) {
             return ResponseEntity.noContent().build();
         }
-
         return ResponseEntity.ok(users);
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'STAFF')")
     public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
         userService.deleteUser(id);
         return ResponseEntity.noContent().build();
@@ -61,7 +62,7 @@ public class UserController {
     }
 
     @PatchMapping("/{id}")
-    @PreAuthorize("isAuthenticated()")
+    @PreAuthorize("hasAnyRole('ADMIN', 'STAFF') or @userService.userCanEditOrDelete(#id)")
     public ResponseEntity<Utilisateur> editUserProfile(@PathVariable Long id, @RequestBody UserEditDto userDto) {
         try {
             Utilisateur updatedUser = userService.updateProfile(id, userDto);
@@ -89,23 +90,32 @@ public class UserController {
         if (users.isEmpty()) {
             return ResponseEntity.noContent().build();
         }
-
         return ResponseEntity.ok(users);
     }
 
-
     @PostMapping("/signup")
+    @PreAuthorize("hasAnyRole('ADMIN', 'STAFF')")
     public ResponseEntity<SignupDto> createUser(@RequestBody SignupDto signupDto) {
         SignupDto createdUser = userService.signUp(signupDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdUser);
     }
 
-    @PostMapping("/{userId}/complete-profile")
-    public ResponseEntity<Void> completeProfile(
+    @PutMapping("/{userId}/complete-profile")
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<Map<String, String>> completeProfile(
             @PathVariable Long userId,
             @RequestBody UserEditDto userEditDto
     ) {
         userService.completeProfile(userId, userEditDto);
-        return ResponseEntity.ok().build();
+        Map<String, String> response = new HashMap<>();
+        response.put("message", "Profil complété avec succès.");
+
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/parrains/disponibles")
+    public ResponseEntity<List<UserDto>> findParrainsDisponibles() {
+        Long plateformeId = securityUtils.getAuthenticatedUserPlateformeId();
+        return ResponseEntity.ok(userService.findParrainsDisponibles(plateformeId));
     }
 }

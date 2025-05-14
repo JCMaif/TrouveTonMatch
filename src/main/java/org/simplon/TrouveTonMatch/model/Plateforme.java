@@ -13,7 +13,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Plateforme{
+public class Plateforme {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,4 +29,8 @@ public class Plateforme{
 
     @OneToMany(mappedBy = "plateforme")
     private List<Utilisateur> utilisateurs;
+
+    public Long getPlateformeId() {
+        return this.id;
+    }
 }

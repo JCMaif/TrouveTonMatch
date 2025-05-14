@@ -5,8 +5,8 @@ const EditableField = ({ label, field, value, editedFields, handleFieldChange })
     const inputRef = useRef(null);
 
     const handleEditClick = () => {
-        handleFieldChange(field, value); // Active l'édition
-        setTimeout(() => inputRef.current?.focus(), 0); // Met le focus sur l'input
+        handleFieldChange(field, value);
+        setTimeout(() => inputRef.current?.focus(), 0);
     };
 
     return (

@@ -42,6 +42,18 @@ export const projetService = {
             body: JSON.stringify(data),
         }, token);
     },
+
+    affecterParrain: async (projetId, parrainId, token) => {
+        const url = `${API_BASE_URL}/projet/${projetId}/affecter-parrain`;
+        return await apiRequest(url, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify({ parrainId }),
+        }, token);
+    },
 };
 
 export const userService = {
@@ -76,7 +88,7 @@ export const userService = {
     finaliser: async (userId, data, token) => {
         const url = `${API_BASE_URL}/user/${userId}/complete-profile`;
         return await apiRequest(url, {
-            method: "POST",
+            method: "PUT",
             headers: {
                 "Content-Type": "application/json",
                 Authorization: `Bearer ${token}`,
@@ -95,6 +107,11 @@ export const userService = {
             body: JSON.stringify(data),
         }, token);
     },
+    findParrainsDisponibles: async (token) => {
+        const url = `${API_BASE_URL}/user/parrains/disponibles`;
+        return await apiRequest(url, { method: "GET" }, token);
+    },
+
 };
 
 

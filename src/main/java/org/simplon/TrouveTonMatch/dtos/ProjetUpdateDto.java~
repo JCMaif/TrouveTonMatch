@@ -2,7 +2,6 @@ package org.simplon.TrouveTonMatch.dtos;
 
 import lombok.Builder;
 import lombok.Value;
-import org.simplon.TrouveTonMatch.model.Parrain;
 import org.simplon.TrouveTonMatch.model.Porteur;
 
 import java.io.Serializable;
@@ -20,5 +19,4 @@ public class ProjetDto implements Serializable {
     String description;
     Porteur porteur;
     Long plateformeId;
-    ParrainDto parrain;
 }

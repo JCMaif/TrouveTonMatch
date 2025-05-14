@@ -1,5 +1,7 @@
 package org.simplon.TrouveTonMatch.dtos;
 
+import org.simplon.TrouveTonMatch.model.UserRole;
+
 public record UserEditDto(
         Long id,
         String password,
@@ -12,5 +14,6 @@ public record UserEditDto(
         String cpostal,
         String ville,
         Integer maxProjects,
-        Boolean isActive
+        Boolean isActive,
+        UserRole role
 ) {}

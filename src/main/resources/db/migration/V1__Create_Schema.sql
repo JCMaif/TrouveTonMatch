@@ -57,14 +57,16 @@ CREATE TABLE projet
     title         VARCHAR(255),
     description   VARCHAR(255),
     parrain_id    BIGINT,
+    porteur_id    BIGINT UNIQUE,
     CONSTRAINT pk_projet PRIMARY KEY (id),
-    CONSTRAINT fk_projet_on_parrain FOREIGN KEY (parrain_id) REFERENCES parrain
+    CONSTRAINT fk_projet_on_parrain FOREIGN KEY (parrain_id) REFERENCES parrain (id),
+    CONSTRAINT fk_projet_on_porteur FOREIGN KEY (porteur_id) REFERENCES utilisateur (id)
 );
 CREATE TABLE porteur
 (
     id            BIGINT NOT NULL,
     disponibilite VARCHAR(255),
-    projet_id     BIGINT,
+    projet_id     BIGINT UNIQUE,
     CONSTRAINT pk_porteur PRIMARY KEY (id),
     CONSTRAINT fk_porteur_on_id FOREIGN KEY (id) REFERENCES utilisateur (id),
     CONSTRAINT fk_porteur_on_projet FOREIGN KEY (projet_id) REFERENCES projet (id)

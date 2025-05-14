@@ -78,6 +78,9 @@
 - login
 - logout
 
+## Vendredi 04/04/25
+- websocket
+
 #### connexion en tant que Parrain
   - Affichage liste des projets de ma plateforme
   - Mon espace :
@@ -107,14 +110,14 @@
 
 ### A faire
 - Rendre le header et la nav responsive [x]
-- Modifier les balises html pour remplacer les div par des balises sémantiques[]
-- Ajouter les labels, arial, tab index []
-- Porteur : peut modifier mon projet []
-- Porteur : peut supprimer mon projet []
-- Porteur : peut choisir un parrain []
+- Modifier les balises html pour remplacer les div par des balises sémantiques[x]
+- Ajouter les labels, arial, tab index [x]
+- Porteur : peut modifier mon projet [x]
+- Porteur : peut supprimer mon projet [] Non, suppression par Admin
+- Porteur : peut choisir un parrain [x]
 - Parrain : peut saisir une distance de déplacement []
-- Parrain : peut mettre son profile en retrait ou en avant de la liste des parrains []
-- Plateforme : peut mettre le profile d'un parrain en retrait ou en avant []
+- Parrain : peut mettre son profile en retrait ou en avant de la liste des parrains [x]
+- Plateforme : peut mettre le profile d'un parrain en retrait ou en avant [x]
 - Parrain : peut choisir le nombre de projets max qu'il souhaite accompagner [x]
 - Plateforme : peut mettre des documents en ligne pour téléchargement => centre de documentation []
 - Tous : peut télécharger un document depuis le centre de documentation []

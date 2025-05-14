@@ -1,5 +1,6 @@
 package org.simplon.TrouveTonMatch.model;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
 import lombok.AllArgsConstructor;
@@ -22,8 +23,9 @@ public class Parrain extends Utilisateur{
     private String deplacement;
     private String disponibilite;
 
+    @Column(name = "max_projects")
     private Integer maxProjects;
-    private Boolean isActive = true;
+    private Boolean isActive = false;
 
     @OneToMany(mappedBy = "parrain")
     private List<Projet> projetsSuivis;

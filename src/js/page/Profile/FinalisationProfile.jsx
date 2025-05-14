@@ -11,14 +11,13 @@ const FinalisationProfile = () => {
     const { finaliser } = useAuthenticatedService(userService);
     const navigate = useNavigate();
 
-    console.log("userId, role : " + userId + " role : " + role);
-
     const [formData, setFormData] = useState({
         adresse: { rue: "", cpostal: "", ville: "" },
         password: "",
         parcours: role === "PARRAIN" ? "" : undefined,
         expertise: role === "PARRAIN" ? "" : undefined,
         deplacement: role === "PARRAIN" ? "" : undefined,
+        maxProjects: role === "PARRAIN" ? "" : undefined,
         disponibilite: "",
         id: userId,
         role: role,
@@ -50,7 +49,11 @@ const FinalisationProfile = () => {
         }
 
         try {
-            await finaliser(userId, formData, isAuthenticated.token);
+            console.log("Données envoyées :", formData);
+            await finaliser(userId, {
+                ...formData,
+                adresse: JSON.stringify(formData.adresse)
+            }, isAuthenticated.token);
             alert("Finalisation de l'inscription");
             navigate('/');
         } catch (err) {
@@ -64,6 +67,7 @@ const FinalisationProfile = () => {
             <h2>Finalisation du Profil</h2>
             <form onSubmit={handleSubmit} className="container">
 
+                <label htmlFor="password"><strong>Changez de mot de passe : </strong></label>
                 <input
                     type="password"
                     placeholder="Mot de passe"
@@ -75,8 +79,8 @@ const FinalisationProfile = () => {
                     }}
                     required
                 />
-                {passwordError && <p className="error">{passwordError}</p>}
-
+                {passwordError && <p className="error-message">{passwordError}</p>}
+                <label htmlFor="password"><strong>Confirmez le mot de passe : </strong></label>
                 <input
                     type="password"
                     placeholder="Confirmer le mot de passe"
@@ -89,7 +93,7 @@ const FinalisationProfile = () => {
                     }}
                     required
                 />
-                {confirmPasswordError && <p className="error">{confirmPasswordError}</p>}
+                {confirmPasswordError && <p className="error-message">{confirmPasswordError}</p>}
 
                 <div className="adresse">
                     <span>Adresse :</span>
@@ -147,6 +151,16 @@ const FinalisationProfile = () => {
                             value={formData.deplacement}
                             onChange={(e) => setFormData({...formData, deplacement: e.target.value})}
                         />
+                        <div className="input-max-projets">
+                            <label htmlFor="max-projects"><strong>Nombre max de projets :</strong></label>
+                            <input
+                                type="number"
+                                id="max-projects"
+                                value={formData.maxProjects}
+                                onChange={(e) => setFormData({...formData, maxProjects: e.target.value})}
+                                aria-label="Modifier le maximum admissible de projets suivis"
+                            />
+                        </div>
                     </>
                 )}
 

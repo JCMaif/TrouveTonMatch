@@ -1,5 +1,6 @@
 package org.simplon.TrouveTonMatch.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -24,10 +25,13 @@ public class Projet {
     private String title;
     private String description;
 
-    @OneToOne(mappedBy = "projet", cascade = CascadeType.ALL)
+    @OneToOne
+    @JoinColumn(name = "porteur_id", nullable = false)
+    @JsonIgnore
     private Porteur porteur;
 
     @ManyToOne
     @JoinColumn(name = "parrain_id")
+    @JsonIgnore
     private Parrain parrain;
 }

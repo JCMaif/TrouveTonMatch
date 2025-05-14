@@ -1,32 +1,37 @@
-import { useState, useEffect, useContext } from 'react';
-import { AuthContext } from "../../context/AuthContext";
-import { useNavigate } from "react-router-dom";
-import { userService } from '../../services/services';
+import {useState, useEffect, useContext} from 'react';
+import {AuthContext} from "../../context/AuthContext";
+import {Link, useNavigate} from "react-router-dom";
+import {userService} from '../../services/services';
 import '../../styles/page.scss';
 import RenewButton from "../../components/common/buttons/RenewButton/RenewButton.jsx";
-import { API_BASE_URL } from "../../config/config.js";
-import { FaRegUser } from "react-icons/fa";
+import {API_BASE_URL} from "../../config/config.js";
+import {FaRegUser} from "react-icons/fa";
 
-const UserList = ({ role, title }) => {
+const UserList = ({role, title}) => {
     const [users, setUsers] = useState([]);
     const [error, setError] = useState('');
-    const { isAuthenticated } = useContext(AuthContext);
+    const {isAuthenticated} = useContext(AuthContext);
     const navigate = useNavigate();
+
 
     useEffect(() => {
         if (!isAuthenticated?.token) return;
 
         const fetchUsers = async () => {
             try {
-                const data = await userService.getUsersByRole(role, isAuthenticated.token);
+                let data = await userService.getUsersByRole(role, isAuthenticated.token);
+                if (isAuthenticated.role === "PORTEUR" && role === "PARRAIN") {
+                    data = data.filter(user => user.isActive);
+                }
                 setUsers(data);
+                console.log("data filtré utilisateurs : ", data);
             } catch (err) {
                 setError(`Échec de la récupération des ${title}.`);
             }
         };
 
         fetchUsers();
-    }, [isAuthenticated?.token, role]);
+    }, [isAuthenticated?.token, role, isAuthenticated.role, title]);
 
     const handleUserClick = (userId) => {
         navigate(`/profil/${userId}`);
@@ -36,18 +41,32 @@ const UserList = ({ role, title }) => {
         console.log("TODO : gérer le renouvellement du code d'activation");
     }
 
+    const canCreateUser = isAuthenticated.role === "ADMIN" || isAuthenticated.role === "STAFF";
+
+
     return (
         <div className="container">
             <h1>{title}</h1>
             {error && <p className="error-message">{error}</p>}
+            {canCreateUser && (
+                <li className='create-user_link'>
+                    <Link to={`/signup/${role}`} className="Nav-link">Créer un {role}</Link>
+                </li>
+            )}
+
             <table>
                 <thead>
                 <tr>
                     <th>{title}</th>
-                    {(isAuthenticated?.role === "ADMIN" || isAuthenticated?.role === "STAFF") && (
+                    {canCreateUser && (
                         <>
                             <th>Renouveler activation</th>
-                            {role === "PARRAIN" && <th>Visibilité</th>}
+                            {role === "PARRAIN" && (
+                                <>
+                                    <th>Visibilité</th>
+                                    <th>Projets suivis/ max</th>
+                                </>
+                            )}
                         </>
                     )}
                 </tr>
@@ -65,7 +84,7 @@ const UserList = ({ role, title }) => {
                                             alt="Avatar utilisateur"
                                         />
                                     ) : (
-                                        <FaRegUser size={50} color="#ccc" />
+                                        <FaRegUser size={50} color="#ccc"/>
                                     )}
                                 </div>
                                 {user.firstName} {user.lastName}
@@ -75,11 +94,14 @@ const UserList = ({ role, title }) => {
                             <>
                                 <td>
                                     {!user.enabled && (
-                                        <RenewButton onClick={() => handleRenewActivationCode(user.id)} />
+                                        <RenewButton onClick={() => handleRenewActivationCode(user.id)}/>
                                     )}
                                 </td>
                                 {role === "PARRAIN" && (
-                                    <td>{user.isActive ? "Visible" : "En retrait"}</td>
+                                    <>
+                                        <td>{user.isActive ? "Visible" : "En retrait"}</td>
+                                        <td>{user.nbrProjetsAffectes} / {user.maxProjects}</td>
+                                    </>
                                 )}
                             </>
                         )}

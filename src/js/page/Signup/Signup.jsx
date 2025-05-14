@@ -1,40 +1,45 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import InputField from "../../components/common/InputField/InputField.jsx";
-import useValidatedState from "../../hook/use-validated-state.js";
-import { useAuthenticatedService } from "../../hook/useAuthenticatedService.js";
 import { userService } from "../../services/services.js";
-import Combobox from "../../components/common/Combobox/Combobox.jsx";
+import { useAuthenticatedService } from "../../hook/useAuthenticatedService.js";
+import { AuthContext } from "@/context/AuthContext.jsx";
 
-const Signup = () => {
+const Signup = ({ role }) => {
     const initialState = {
         username: "",
         password: "test",
         email: "",
-        role: "",
+        role: role,
+        plateforme: null,
+        firstname: "",
+        lastname: "",
     };
 
-    const { state, errors, setState, validate } = useValidatedState(initialState);
-    const [roleOptions, setRoleOptions] = useState([]);
-    const { getRoles, create } = useAuthenticatedService(userService);
+    const { isAuthenticated } = useContext(AuthContext);
+    const { create } = useAuthenticatedService(userService);
+    const [state, setState] = useState(initialState);
     const [isSubmitting, setIsSubmitting] = useState(false);
 
-
     useEffect(() => {
-        const fetchRoles = async () => {
-            try {
-                const data = await getRoles();
-                setRoleOptions(data);
-            } catch (err) {
-                console.error("Failed to fetch roles:", err.response?.data || err.message);
-            }
-        };
-        fetchRoles();
-    }, []);
+        if (isAuthenticated.role === "STAFF") {
+            setState(prevState => ({
+                ...prevState,
+                plateforme: {id:isAuthenticated.plateformeId}
+            }));
+        }
+    }, [isAuthenticated]);
+
+    const handleChange = (name, value) => {
+        setState(prevState => ({
+            ...prevState,
+            [name]: value
+        }));
+    };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        if (!state.username || !state.email || !state.role ) {
+        if (!state.username || !state.email) {
             alert("Veuillez remplir tous les champs.");
             return;
         }
@@ -48,6 +53,9 @@ const Signup = () => {
                 password: state.password,
                 role: state.role,
                 enabled: false,
+                plateforme: state.plateforme,
+                firstname: state.firstname,
+                lastname: state.lastname
             });
             alert("Utilisateur créé avec succès !");
             setState(initialState);
@@ -61,14 +69,14 @@ const Signup = () => {
 
     return (
         <div className="container">
-            <h2>Création d'utilisateur</h2>
+            <h2>Création d&#39;un {role}</h2>
             <form onSubmit={handleSubmit}>
                 <InputField
                     type="text"
                     id="username"
                     placeholder="Nom d'utilisateur"
                     value={state.username}
-                    onChange={(username) => setState({ ...state, username })}
+                    onChange={(value) => handleChange("username", value)}
                     name="username"
                     mandatory
                 />
@@ -77,24 +85,34 @@ const Signup = () => {
                     id="email"
                     placeholder="Email"
                     value={state.email}
-                    onChange={(email) => setState({ ...state, email })}
+                    onChange={(value) => handleChange("email", value)}
                     name="email"
                     mandatory
                 />
-                <Combobox
-                    value={state.role}
-                    id="role"
-                    label="Rôle"
-                    options={roleOptions}
-                    onChange={(role) => setState({ ...state, role })}
+                <InputField
+                    type="text"
+                    id="firstname"
+                    placeholder="Prénom"
+                    value={state.firstname}
+                    onChange={(value) => handleChange("firstname", value)}
+                    name="firstname"
+                    mandatory
                 />
-
+                <InputField
+                    type="text"
+                    id="lastname"
+                    placeholder="Nom de famille"
+                    value={state.lastname}
+                    onChange={(value) => handleChange("lastname", value)}
+                    name="lastname"
+                    mandatory
+                />
                 <button type="reset" onClick={() => setState(initialState)}>Annuler</button>
                 <button type="submit" disabled={isSubmitting}>
                     {isSubmitting ? "Création..." : "Créer"}
                 </button>
 
-                <pre className="styleguide-state-preview">{JSON.stringify({ state }, null, 2)}</pre>
+                <pre className="styleguide-state-preview">{JSON.stringify(state, null, 2)}</pre>
             </form>
         </div>
     );

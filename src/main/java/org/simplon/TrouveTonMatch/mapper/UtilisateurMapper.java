@@ -6,11 +6,12 @@ import org.simplon.TrouveTonMatch.model.Adresse;
 import org.simplon.TrouveTonMatch.model.Parrain;
 import org.simplon.TrouveTonMatch.model.Porteur;
 import org.simplon.TrouveTonMatch.model.Utilisateur;
+import org.simplon.TrouveTonMatch.repository.ProjetRepository;
 
 @Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE, componentModel = MappingConstants.ComponentModel.SPRING)
 public interface UtilisateurMapper {
 
-    default UserDto toDto(Utilisateur utilisateur) {
+    default UserDto toDto(Utilisateur utilisateur, @Context ProjetRepository projetRepository) {
         if (utilisateur == null) {
             return null;
         }
@@ -23,7 +24,10 @@ public interface UtilisateurMapper {
         String profilePicture = utilisateur.getProfilePicture();
 
         String parcours = null, expertise = null, deplacement = null, disponibilite = null, projetTitle = null;
-        Long projetId = null; Integer maxProjects = null; Boolean isActive=true;
+        Long projetId = null;
+        Integer maxProjects = null;
+        Boolean isActive = true;
+        Integer nbProjetsAffectes = null;
 
         if (utilisateur instanceof Parrain parrain) {
             parcours = parrain.getParcours();
@@ -32,6 +36,12 @@ public interface UtilisateurMapper {
             disponibilite = parrain.getDisponibilite();
             maxProjects = parrain.getMaxProjects();
             isActive = parrain.getIsActive();
+            nbProjetsAffectes = projetRepository.countByParrain(parrain);
+
+            if(nbProjetsAffectes >= maxProjects){
+                isActive = false;
+            }
+
         } else if (utilisateur instanceof Porteur porteur) {
             disponibilite = porteur.getDisponibilite();
             projetTitle = (porteur.getProjet() != null) ? porteur.getProjet().getTitle() : null;
@@ -57,7 +67,10 @@ public interface UtilisateurMapper {
                 projetTitle,
                 projetId,
                 maxProjects,
-                isActive
+                isActive,
+                nbProjetsAffectes
         );
     }
+
+    Utilisateur toEntity(UserDto utilisateurDto);
 }

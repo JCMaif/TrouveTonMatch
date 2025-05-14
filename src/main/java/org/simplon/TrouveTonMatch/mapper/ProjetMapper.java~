@@ -10,11 +10,7 @@ import org.simplon.TrouveTonMatch.model.Parrain;
 import org.simplon.TrouveTonMatch.model.Porteur;
 import org.simplon.TrouveTonMatch.model.Projet;
 
-@Mapper(
-        unmappedTargetPolicy = ReportingPolicy.IGNORE,
-        componentModel = MappingConstants.ComponentModel.SPRING,
-        uses = {ParrainMapper.class}
-)
+@Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE, componentModel = MappingConstants.ComponentModel.SPRING)
 public interface ProjetMapper {
 
     ProjetDto toDto(Projet projet);

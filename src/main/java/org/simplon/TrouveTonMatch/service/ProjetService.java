@@ -1,12 +1,14 @@
 package org.simplon.TrouveTonMatch.service;
 
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import org.simplon.TrouveTonMatch.dtos.ProjetCreateDto;
 import org.simplon.TrouveTonMatch.dtos.ProjetDto;
+import org.simplon.TrouveTonMatch.dtos.ProjetUpdateDto;
 import org.simplon.TrouveTonMatch.mapper.ProjetMapper;
+import org.simplon.TrouveTonMatch.model.Parrain;
 import org.simplon.TrouveTonMatch.model.Porteur;
 import org.simplon.TrouveTonMatch.model.Projet;
-import org.simplon.TrouveTonMatch.model.Utilisateur;
 import org.simplon.TrouveTonMatch.repository.ProjetRepository;
 import org.simplon.TrouveTonMatch.repository.UserRepository;
 import org.simplon.TrouveTonMatch.security.SecurityUtils;
@@ -20,17 +22,15 @@ public class ProjetService {
     private final ProjetRepository projetRepository;
     private final SecurityUtils securityUtils;
     private final ProjetMapper projetMapper;
+    private final UserService userService;
     private final UserRepository userRepository;
 
-    public ProjetService(ProjetRepository projetRepository, SecurityUtils securityUtils, ProjetMapper projetMapper, UserRepository userRepository) {
+    public ProjetService(ProjetRepository projetRepository, SecurityUtils securityUtils, ProjetMapper projetMapper, UserService userService, UserRepository userRepository) {
         this.projetRepository = projetRepository;
         this.securityUtils = securityUtils;
         this.projetMapper = projetMapper;
+        this.userService = userService;
         this.userRepository = userRepository;
-    }
-
-    public List<Projet> findAll() {
-        return projetRepository.findAll();
     }
 
     public List<ProjetDto> findAllByPlateformeId() {
@@ -49,16 +49,16 @@ public class ProjetService {
     }
 
     public ProjetCreateDto save(ProjetCreateDto projetCreateDto) {
-        Projet projetToSave = projetMapper.toEntity(projetCreateDto);
-
-        Utilisateur utilisateur = userRepository.findById(projetCreateDto.porteurId())
-                .orElseThrow(() -> new EntityNotFoundException("Utilisateur non trouvé avec l'ID: " + projetCreateDto.porteurId()));
-
-        if (!(utilisateur instanceof Porteur porteur)) {
-            throw new IllegalArgumentException("L'utilisateur avec l'ID " + projetCreateDto.porteurId() + " n'est pas un Porteur.");
+        if (projetRepository.existsByPorteurId(projetCreateDto.porteurId())) {
+            throw new IllegalArgumentException("Ce porteur a déjà un projet.");
         }
 
-        projetToSave.setPorteur(porteur);
+        Porteur porteur = userRepository.findById(projetCreateDto.porteurId())
+                .filter(Porteur.class::isInstance)
+                .map(Porteur.class::cast)
+                .orElseThrow(() -> new IllegalArgumentException("L'ID du porteur est invalide"));
+
+        Projet projetToSave = projetMapper.toEntity(projetCreateDto, porteur);
         Projet projetSaved = projetRepository.save(projetToSave);
 
         return projetMapper.toCreateDto(projetSaved);
@@ -69,5 +69,29 @@ public class ProjetService {
             throw new EntityNotFoundException("Ce projet n'existe pas");
         }
         projetRepository.deleteById(id);
+    }
+
+    public ProjetUpdateDto update(Long id, ProjetUpdateDto projetUpdateDto) {
+
+        Projet projetToUpdate = findById(id);
+        projetToUpdate.setTitle(projetUpdateDto.getTitle());
+        projetToUpdate.setDescription(projetUpdateDto.getDescription());
+        return projetMapper.toUpdateDto(projetRepository.save(projetToUpdate));
+    }
+
+    public boolean userCanEdit(Long projetId) {
+        return projetRepository.findById(projetId)
+                .map(Projet::getPorteur)
+                .map(porteur -> userService.userCanEditOrDelete(porteur.getId()))
+                .orElse(false);
+    }
+
+    @Transactional
+    public ProjetDto affecterParrain(Long projetId, Long parrainId) {
+        Projet projet = projetRepository.findById(projetId).orElseThrow(EntityNotFoundException::new);
+        Parrain parrain = (Parrain) userRepository.findById(parrainId).orElseThrow(EntityNotFoundException::new);
+        projet.setParrain(parrain);
+        userService.verifierChargeParrain(parrain);
+        return projetMapper.toDto(projetRepository.save(projet));
     }
 }

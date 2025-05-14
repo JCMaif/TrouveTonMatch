@@ -1,10 +1,7 @@
 package org.simplon.TrouveTonMatch.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import jakarta.persistence.Entity;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,9 +16,7 @@ public class Porteur extends Utilisateur{
 
     private String disponibilite;
 
-    @OneToOne()
-    @JoinColumn(name = "projet_id", nullable = true)
-    @JsonIgnore
+    @OneToOne(mappedBy = "porteur", cascade = CascadeType.ALL)
     private Projet projet;
 
 }

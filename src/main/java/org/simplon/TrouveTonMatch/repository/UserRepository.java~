@@ -24,9 +24,8 @@ public interface UserRepository extends JpaRepository<Utilisateur, Long> {
     @Query("SELECT u FROM Utilisateur u WHERE u.role = :role AND u.plateforme.id = :plateformeId")
     List<Utilisateur> findByRoleAndPlateformeId(@Param("role") UserRole role, @Param("plateformeId") Long plateformeId);
 
-    @Query("SELECT p FROM Parrain p WHERE p.isActive = true AND p.plateforme.id = :plateformeId")
-    List<Parrain> findParrainsActifsByPlateformeId(@Param("plateformeId") Long plateformeId);
-
+    @Query("SELECT p FROM Parrain p WHERE p.isActive = true")
+    List<Parrain> findByIsActiveTrue();
 
     Optional<Utilisateur> findById(Long id);
 

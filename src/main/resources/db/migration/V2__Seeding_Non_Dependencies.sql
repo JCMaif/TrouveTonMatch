@@ -63,13 +63,13 @@ VALUES
      (SELECT id FROM plateforme WHERE nom = 'Initiative Charentes'));
 
 -- Insertion des projets
-INSERT INTO projet (starting_date, title, description)
+INSERT INTO projet (starting_date, title, description, porteur_id)
 VALUES
-    ('2025-01-01', 'Projet Innovant', 'Un projet innovant pour changer le monde.'),
-    ('2025-01-04', 'La pierre philosophale', 'Un projet qui vous couvrira d''or.'),
-    ('2025-01-06', 'Projet bancale', 'Un projet porté par des gens pas sûr d''eux.'),
-    ('2025-01-11', 'Mission Mars', 'Allons-y avant Elon.'),
-    ('2025-01-19', 'J''ai un', 'Inspiré par Jean-Michel AMoitié.');
+    ('2025-01-01', 'Projet Innovant', 'Un projet innovant pour changer le monde.', 2),
+    ('2025-01-04', 'La pierre philosophale', 'Un projet qui vous couvrira d''or.',4),
+    ('2025-01-06', 'Projet bancale', 'Un projet porté par des gens pas sûr d''eux.', 5),
+    ('2025-01-11', 'Mission Mars', 'Allons-y avant Elon.', 6),
+    ('2025-01-19', 'J''ai un', 'Inspiré par Jean-Michel AMoitié.',3);
 
 -- Insertion des porteurs
 INSERT INTO porteur (id, disponibilite, projet_id)
@@ -84,5 +84,5 @@ VALUES
 -- Insertion des parrains
 INSERT INTO parrain (id, parcours, expertise, deplacement, disponibilite, max_projects, is_active)
 VALUES
-    ((SELECT id FROM utilisateur WHERE username = 'parrain1'), 'Ingénieur en informatique', 'Cloud et DevOps', 'Régional', 'Temps partiel',5, true),
+    ((SELECT id FROM utilisateur WHERE username = 'parrain1'), 'Ingénieur en informatique', 'Cloud et DevOps', 'Régional', 'Temps partiel',3, true),
     ((SELECT id FROM utilisateur WHERE username = 'parrain2'), 'Buiseness Angel', 'Recherche de financement', 'Régional', 'Temps partiel', 4, true);

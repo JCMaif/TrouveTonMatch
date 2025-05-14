@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-unused-vars
 import React, { useContext, useEffect, useState } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import EditButton from "../../components/common/buttons/EditButton/EditButton";
@@ -51,6 +52,7 @@ const UserProfile = ({ isEditing }) => {
             navigate(`/profil/${userId}`);
         } catch (err) {
             setError("Échec du téléchargement de l'image.");
+            console.error("Error uploading profile image:", err);
         }
     };
 
@@ -109,6 +111,7 @@ const UserProfile = ({ isEditing }) => {
                         <p><strong>Déplacements :</strong> {userDetails.deplacement ?? "Non renseignés"}</p>
                         <p><strong>Disponibilités :</strong> {userDetails.disponibilite ?? "Non renseignées"}</p>
                         <p><strong>Nombre max de projets :</strong> {userDetails.maxProjects ?? "Non renseigné"}</p>
+                        <p><strong>Projets suivis : </strong>{userDetails.nbrProjetsAffectes ?? "Aucun"}</p>
                     </>
                 );
             case "PORTEUR":

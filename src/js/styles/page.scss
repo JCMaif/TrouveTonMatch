@@ -30,11 +30,13 @@ body {
   table {
     width: 100%;
     border-collapse: collapse;
+    align-content: center;
+    align-items: center;
   }
   
   th, td {
     padding: 10px;
-    text-align: left;
+    text-align: center;
   }
   
   th {
@@ -84,6 +86,19 @@ body {
     font-size: 12px;
     color: gray;
     margin-bottom: 5px;
+  }
+  .title-container {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+  }
+
+  .form-project-update {
+    max-width: 450px;
+  }
+
+  .form-starting-date {
+    display: flex;
   }
 
   @media (max-width: 768px) {

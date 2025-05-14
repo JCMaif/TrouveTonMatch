@@ -44,7 +44,7 @@ const Login = () => {
         console.error("Aucun token reçu après la connexion.");
       }
     } catch (err) {
-      console.error("Erreur dans la soumission du formulaire de connexion : ", err);
+      console.error("Username or password incorrect : ", err);
       setError(err.message);
     }
   };

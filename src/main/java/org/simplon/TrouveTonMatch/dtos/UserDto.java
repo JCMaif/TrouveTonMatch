@@ -21,6 +21,7 @@ public record UserDto(
         String projetTitle,
         Long projetId,
         Integer maxProjects,
-        Boolean isActive
+        Boolean isActive,
+        Integer nbrProjetsAffectes
 ) {
 }

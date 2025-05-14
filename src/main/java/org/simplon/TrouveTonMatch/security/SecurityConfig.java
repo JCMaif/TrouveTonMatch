@@ -2,6 +2,7 @@ package org.simplon.TrouveTonMatch.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
@@ -35,7 +36,8 @@ public class SecurityConfig {
                                 "/auth/**",
                                 "/public/documentation/**",
                                 "/enum/**",
-                                "/uploads/**"
+                                "/uploads/**",
+                                "/messages/**"
                         ).permitAll()
                         .requestMatchers(
                                 "/user/**",
@@ -43,6 +45,9 @@ public class SecurityConfig {
                                 "/projet/**",
                                 "/plateforme/**"
                         ).authenticated()
+                        .requestMatchers(HttpMethod.POST, "/user/**", "/projet/**").hasAnyRole("ADMIN", "STAFF", "PORTEUR")
+                        .requestMatchers(HttpMethod.PUT, "/user/**", "/projet/**").hasAnyRole("ADMIN", "STAFF", "PORTEUR")
+                        .requestMatchers(HttpMethod.DELETE, "/user/**", "/projet/**").hasAnyRole("ADMIN", "STAFF")
                         .requestMatchers("/admin/**").hasRole("ADMIN")
                         .anyRequest().authenticated())
                 .addFilterAfter(jwtFilter, UsernamePasswordAuthenticationFilter.class)

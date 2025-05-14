@@ -3,33 +3,32 @@ package org.simplon.TrouveTonMatch.service;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.simplon.TrouveTonMatch.dtos.*;
-import org.simplon.TrouveTonMatch.exception.UserNotFoundException;
 import org.simplon.TrouveTonMatch.exception.UsernameAlreadyExistsException;
+import org.simplon.TrouveTonMatch.exception.UserNotFoundException;
 import org.simplon.TrouveTonMatch.mapper.UtilisateurMapper;
 import org.simplon.TrouveTonMatch.model.*;
 import org.simplon.TrouveTonMatch.repository.AdresseRepository;
 import org.simplon.TrouveTonMatch.repository.ProjetRepository;
 import org.simplon.TrouveTonMatch.repository.UserRepository;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
-
-import static java.lang.Integer.parseInt;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService {
 
     private final UserRepository userRepository;
     private final PlateformeService plateformeService;
-    private final BCryptPasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
     private final UtilisateurMapper utilisateurMapper;
     private static final String DEFAULT_PASSWORD = "password321";
     private final AdresseRepository adresseRepository;
     private final ProjetRepository projetRepository;
 
-    public UserService(UserRepository userRepository, PlateformeService plateformeService, BCryptPasswordEncoder passwordEncoder, UtilisateurMapper utilisateurMapper, AdresseRepository adresseRepository, ProjetRepository projetRepository) {
+    public UserService(UserRepository userRepository, PlateformeService plateformeService, PasswordEncoder passwordEncoder, UtilisateurMapper utilisateurMapper, AdresseRepository adresseRepository, ProjetRepository projetRepository) {
         this.userRepository = userRepository;
         this.plateformeService = plateformeService;
         this.passwordEncoder = passwordEncoder;
@@ -38,15 +37,10 @@ public class UserService {
         this.projetRepository = projetRepository;
     }
 
-    public List<UserDto> getAllUsers() {
-        return userRepository.findAll().stream()
-                .map(utilisateurMapper::toDto).toList();
-    }
-
     public List<UserDto> getAllUsersByPlateforme(Long plateformeId) {
         return userRepository.findByPlateformeId(plateformeId)
                 .stream()
-                .map(utilisateurMapper::toDto)
+                .map(u -> utilisateurMapper.toDto(u, projetRepository))
                 .toList();
     }
 
@@ -57,48 +51,67 @@ public class UserService {
         userRepository.deleteById(id);
     }
 
-    public Optional<UserDto> findByUsername(String username) {
-        Utilisateur user = userRepository.findByUsername(username);
-        if (user == null) {
-            throw new EntityNotFoundException("Utilisateur non trouvé avec le username : " + username);
-        }
-        return Optional.ofNullable(utilisateurMapper.toDto(user));
-    }
-
     public List<UserDto> getUsersByRoleAndPlateforme(UserRole role, Long plateformeId) {
         return userRepository.findByRoleAndPlateformeId(role, plateformeId).stream()
-                .map(utilisateurMapper::toDto)
+                .map(u -> utilisateurMapper.toDto(u, projetRepository))
                 .toList();
     }
 
     public UserDto findById(Long id) {
-        return utilisateurMapper.toDto((userRepository.findById(id).orElseThrow()));
+        Utilisateur utilisateur = userRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Utilisateur non trouvé avec l'id " + id));
+        return utilisateurMapper.toDto(utilisateur, projetRepository);
     }
 
+
     public SignupDto signUp(SignupDto data) {
-        if (findByUsername(data.getUsername()).isPresent()) {
-            throw new UsernameAlreadyExistsException("User already exists");
+        if (userRepository.existsByUsername(data.getUsername())) {
+            throw new UsernameAlreadyExistsException(data.getUsername());
         }
 
         String encryptedPassword = passwordEncoder.encode(DEFAULT_PASSWORD);
+        Plateforme plateforme = (data.getPlateformeId() != null)
+                ? plateformeService.findById(data.getPlateformeId())
+                : null;
 
-        Utilisateur user = Utilisateur.builder()
-                .username(data.getUsername())
-                .password(encryptedPassword)
-                .email(data.getEmail())
-                .role(data.getRole())
-                .enabled(false)
-                .plateforme(data.getPlateforme())
-                .build();
+        Utilisateur user;
+
+        switch (data.getRole()) {
+            case PARRAIN:
+                user = new Parrain();
+                break;
+            case PORTEUR:
+                user = new Porteur();
+                break;
+            case STAFF:
+                user = new Utilisateur();
+                break;
+            default:
+                throw new IllegalArgumentException("Rôle inconnu : " + data.getRole());
+        }
+
+        user.setUsername(data.getUsername());
+        user.setPassword(encryptedPassword);
+        user.setEmail(data.getEmail());
+        user.setRole(data.getRole());
+        user.setFirstname(data.getFirstname());
+        user.setLastname(data.getLastname());
+        user.setEnabled(false);
+
+        if (data.getRole() != UserRole.STAFF && data.getPlateformeId() != null) {
+            user.setPlateforme(plateforme);
+        }
 
         userRepository.save(user);
 
         return new SignupDto(
                 user.getUsername(),
                 null,
-                user.getEmail(),
                 user.getRole(),
-                user.getPlateforme()
+                user.getEmail(),
+                user.getPlateforme() != null ? user.getPlateforme().getPlateformeId() : null,
+                user.getFirstname(),
+                user.getLastname()
         );
     }
 
@@ -109,6 +122,7 @@ public class UserService {
     }
 
     public Utilisateur updateProfile(Long id, UserEditDto dto) {
+
         Utilisateur user = userRepository.findById(id).orElseThrow(UserNotFoundException::new);
 
         if (dto.addresseId() != null) {
@@ -152,12 +166,12 @@ public class UserService {
             if (dto.deplacement() != null) {
                 parrain.setDeplacement(dto.deplacement());
             }
-           if (dto.maxProjects() != null) {
-               parrain.setMaxProjects(dto.maxProjects());
-           }
-           if (dto.isActive() != null) {
-               parrain.setIsActive(dto.isActive());
-           }
+            if (dto.maxProjects() != null) {
+                parrain.setMaxProjects(dto.maxProjects());
+            }
+            if (dto.isActive() != null) {
+                parrain.setIsActive(dto.isActive());
+            }
         } else if (user instanceof Porteur) {
             Porteur porteur = (Porteur) user;
             if (dto.disponibilite() != null) {
@@ -190,6 +204,7 @@ public class UserService {
 
         if (user instanceof Porteur porteur) {
             porteur.setDisponibilite(userEditDto.disponibilite());
+            porteur.setRole(userEditDto.role());
         } else if (user instanceof Parrain parrain) {
             parrain.setParcours(userEditDto.parcours());
             parrain.setExpertise(userEditDto.expertise());
@@ -197,6 +212,8 @@ public class UserService {
             parrain.setDisponibilite(userEditDto.disponibilite());
             parrain.setMaxProjects(userEditDto.maxProjects());
             parrain.setIsActive(true);
+            parrain.setRole(userEditDto.role());
+            parrain.setMaxProjects(userEditDto.maxProjects());
         } else {
             throw new IllegalStateException("Rôle inconnu.");
         }
@@ -206,21 +223,44 @@ public class UserService {
         userRepository.save(user);
     }
 
-    public void assignParrainToProjet(Long projetId, Long parrainId) {
-        Projet projet = projetRepository.findById(projetId).orElseThrow(EntityNotFoundException::new);
-        Parrain parrain = (Parrain) userRepository.findById(parrainId).orElseThrow(EntityNotFoundException::new);
-        if(parrain.getProjetsSuivis().size() >= parrain.getMaxProjects()){
-            parrain.setIsActive(false);
-            userRepository.save(parrain);
-            throw new IllegalStateException("Le parrain a atteint son maximum de projets en accompagnement");
-        }
-        projet.setParrain(parrain);
-        projetRepository.save(projet);
-    }
-
     public void toggleParrainActive(Long parrainId) {
         Parrain parrain = (Parrain) userRepository.findById(parrainId).orElseThrow(EntityNotFoundException::new);
         parrain.setIsActive(!parrain.getIsActive());
         userRepository.save(parrain);
+    }
+
+    public List<UserDto> findParrainsDisponibles(Long plateformeId) {
+        return userRepository.findParrainsActifsByPlateformeId(plateformeId)
+                .stream()
+                .map(u -> utilisateurMapper.toDto(u, projetRepository))
+                .collect(Collectors.toList());
+    }
+
+
+    public Utilisateur getCurrentUser() {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        if (principal instanceof Utilisateur userDetails) {
+            return userRepository.findByUsername(userDetails.getUsername());
+        } else {
+            throw new RuntimeException("Utilisateur non authentifié");
+        }
+    }
+
+    public boolean userCanEditOrDelete(Long userId) {
+        Utilisateur currentUser = getCurrentUser();
+
+        return currentUser.getAuthorities().contains(UserRole.ADMIN) &&
+                currentUser.getAuthorities().contains(UserRole.STAFF) &&
+                currentUser.getId().equals(userId);
+    }
+
+    public void verifierChargeParrain(Parrain parrain) {
+        int nombreProjets = projetRepository.countByParrain(parrain);
+        if (nombreProjets > parrain.getMaxProjects()) {
+            parrain.setIsActive(false);
+            userRepository.save(parrain);
+            throw new IllegalStateException("Le Parrain a atteint le nombre maximum de projets affectés.");
+        }
     }
 }

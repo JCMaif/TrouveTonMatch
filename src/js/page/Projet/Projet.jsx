@@ -15,6 +15,7 @@ const Projets = () => {
             try {
                 const data = await findAll();
                 setProjets(data);
+                console.log("projets : ", data);
             } catch (err) {
                 setError("Failed to fetch projects");
             }
@@ -34,13 +35,15 @@ const Projets = () => {
                 <tr>
                     <th>Titre</th>
                     <th>Porteur</th>
+                    <th>Parrain</th>
                 </tr>
                 </thead>
                 <tbody>
                 {projets.map((projet) => (
                     <tr key={projet.id} onClick={() => handleClick(projet.id)}>
                         <td>{projet.title}</td>
-                        <td>{projet.porteur.firstname}  {projet.porteur.lastname}</td>
+                        <td>{projet.porteur.firstame}  {projet.porteur.lastname}</td>
+                        <td>{projet.parrain?.firstName}  {projet.parrain?.lastName}</td>
                     </tr>
                 ))}
                 </tbody>
