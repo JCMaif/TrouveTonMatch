@@ -49,7 +49,7 @@ const UserList = ({role, title}) => {
             <h1>{title}</h1>
             {error && <p className="error-message">{error}</p>}
             {canCreateUser && (
-                <li className='create-user_link'>
+                <li className='create-entity'>
                     <Link to={`/signup/${role}`} className="Nav-link">Créer un {role}</Link>
                 </li>
             )}

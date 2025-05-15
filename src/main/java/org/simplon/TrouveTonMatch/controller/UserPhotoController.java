@@ -12,7 +12,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -24,12 +23,12 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/uploads")
 @PreAuthorize("isAuthenticated()")
-public class FileController {
+public class UserPhotoController {
 
     private final UserRepository userRepository;
     private final Path profileUploadDir = Paths.get("uploads/profiles");
 
-    public FileController(UserRepository userRepository) {
+    public UserPhotoController(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 

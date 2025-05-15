@@ -1,7 +1,7 @@
 import { apiRequest } from "./apiRequest";
 import { API_BASE_URL } from "../config/config";
 
-export const documentService = {
+export const userPhotoService = {
     uploadProfileImage,
 };
 

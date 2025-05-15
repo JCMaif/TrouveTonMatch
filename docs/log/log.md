@@ -119,8 +119,8 @@
 - Parrain : peut mettre son profile en retrait ou en avant de la liste des parrains [x]
 - Plateforme : peut mettre le profile d'un parrain en retrait ou en avant [x]
 - Parrain : peut choisir le nombre de projets max qu'il souhaite accompagner [x]
-- Plateforme : peut mettre des documents en ligne pour téléchargement => centre de documentation []
-- Tous : peut télécharger un document depuis le centre de documentation []
+- Plateforme : peut mettre des documents en ligne pour téléchargement => centre de documentation [x]
+- Tous : peut télécharger un document depuis le centre de documentation [x]
 - Porteur : peut saisir un compte-rendu d'accompagnement : []
   - date, heure de l'échange
   - Moyen de l'échange : appel téléphonique ou visio, messagerie, visite

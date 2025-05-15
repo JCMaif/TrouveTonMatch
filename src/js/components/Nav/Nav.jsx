@@ -23,84 +23,81 @@ const Nav = () => {
       fetchPlateformeNom();
   }, [plateformeId, isAuthenticated.token]);
 
-    if (!isAuthenticated) {
-        return (
-            <li>
-                <Link to="/login" className="Nav-link">Login</Link>
-            </li>
-        );
-    }
 
   if (isAuthenticated && role === "ADMIN") {
     return (
-      <>
-        <li>
-          <Link to="/utilisateurs" className="Nav-link">Utilisateurs</Link>
-        </li>
-        <li>
-          <Link to="/projets" className="Nav-link">Projets</Link>
-        </li>
-        <li>
-          <Link to="/matches" className="Nav-link">Matches</Link>
-        </li>
-        <li>
-          <Link to="/plateformes" className="Nav-link">Plateformes</Link>
-        </li>
-      </>
+        <>
+            <li>
+                <Link to="/utilisateurs" className="Nav-link">Utilisateurs</Link>
+            </li>
+            <li>
+                <Link to="/projets" className="Nav-link">Projets</Link>
+            </li>
+            <li>
+                <Link to="/matches" className="Nav-link">Matches</Link>
+            </li>
+            <li>
+                <Link to="/plateformes" className="Nav-link">Plateformes</Link>
+            </li>
+            <li>
+                <Link to="/documents" className="Nav-link">Bibliothèque</Link>
+            </li>
+        </>
     );
   }
 
     if (isAuthenticated && role === "PORTEUR") {
-    return (
-      <>
-        <li>
-          <Link to="/projets" className="Nav-link">Projets</Link>
-        </li>
-        <li>
-          <Link to="/parrains" className="Nav-link">Parrains</Link>
-        </li>
-        <li>
-          <Link to={`/profil/${id}`} className="Nav-link">Mon espace</Link>
-        </li>
-        {/*<li>*/}
-        {/*<span>Plateforme : {plateformeNom}</span>*/}
-        {/*</li>*/}
-      </>
+        return (
+            <>
+                <li>
+                <Link to="/projets" className="Nav-link">Projets</Link>
+            </li>
+            <li>
+                <Link to="/parrains" className="Nav-link">Parrains</Link>
+            </li>
+            <li>
+                <Link to={`/profil/${id}`} className="Nav-link">Mon espace</Link>
+            </li>
+            <li>
+                <Link to="/documents" className="Nav-link">Bibliothèque</Link>
+            </li>
+        </>
     );
-  }
+    }
     if (isAuthenticated && role === "PARRAIN") {
-      return (
-          <>
-              <li>
+        return (
+            <>
+            <li>
                   <Link to="/projets" className="Nav-link">Projets</Link>
               </li>
               <li>
                   <Link to={`/profil/${id}`} className="Nav-link">Mon espace</Link>
               </li>
-              {/*<li>*/}
-              {/*    <span>Plateforme : {plateformeNom}</span>*/}
-              {/*</li>*/}
+              <li>
+                  <Link to="/documents" className="Nav-link">Bibliothèque</Link>
+              </li>
           </>
       );
     }
     if (isAuthenticated && role === "STAFF") {
         return (
-      <>
-         <li>
-          <Link to="/parrains" className="Nav-link">Parrains</Link>
-        </li>
-        <li>
-          <Link to="/porteurs" className="Nav-link">Porteurs</Link>
-        </li>
-        <li>
-          <Link to="/projets" className="Nav-link">Projets</Link>
-        </li>
-        <li>
-          <Link to="/matches" className="Nav-link">Matches</Link>
-        </li>
-      </>
-    );
-  }
+            <>
+            <li>
+                    <Link to="/parrains" className="Nav-link">Parrains</Link>
+                </li>
+                <li>
+                    <Link to="/porteurs" className="Nav-link">Porteurs</Link>
+                </li>
+                <li>
+                    <Link to="/projets" className="Nav-link">Projets</Link>
+                </li>
+                <li>
+                    <Link to="/documents" className="Nav-link">Bibliothèque</Link>
+                </li>
+            </>
+        );
+    }
+  
   if (!isAuthenticated) {
     return (
       <li>

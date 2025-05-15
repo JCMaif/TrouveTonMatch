@@ -43,11 +43,13 @@ public class SecurityConfig {
                                 "/user/**",
                                 "/parrains/**",
                                 "/projet/**",
-                                "/plateforme/**"
+                                "/plateforme/**",
+                                "/documents/**"
                         ).authenticated()
                         .requestMatchers(HttpMethod.POST, "/user/**", "/projet/**").hasAnyRole("ADMIN", "STAFF", "PORTEUR")
                         .requestMatchers(HttpMethod.PUT, "/user/**", "/projet/**").hasAnyRole("ADMIN", "STAFF", "PORTEUR")
                         .requestMatchers(HttpMethod.DELETE, "/user/**", "/projet/**").hasAnyRole("ADMIN", "STAFF")
+                        .requestMatchers(HttpMethod.POST, "/documents/**").hasAnyRole("ADMIN", "STAFF")
                         .requestMatchers("/admin/**").hasRole("ADMIN")
                         .anyRequest().authenticated())
                 .addFilterAfter(jwtFilter, UsernamePasswordAuthenticationFilter.class)

@@ -1,3 +1,5 @@
+@use "variables.scss" as *;
+
 html, body {
   height: 100%;
   margin: 0;
@@ -67,7 +69,7 @@ body {
     margin-top: 10px;
   }
 
-  .create-user_link {
+  .create-entity {
     text-decoration: none;
     display: block;
     text-align: right;
@@ -96,6 +98,8 @@ body {
   .form-project-update {
     max-width: 450px;
   }
+
+
 
   .form-starting-date {
     display: flex;

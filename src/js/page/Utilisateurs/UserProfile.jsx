@@ -4,7 +4,7 @@ import { useParams, useNavigate, Link } from "react-router-dom";
 import EditButton from "../../components/common/buttons/EditButton/EditButton";
 import DeleteButton from "../../components/common/buttons/DeleteButton/DeleteButton.jsx";
 import { userService } from "../../services/services.js";
-import { documentService } from "../../services/documentService";
+import { userPhotoService } from "../../services/userPhotoService.js";
 import { useAuthenticatedService } from "../../hook/useAuthenticatedService.js";
 import { AuthContext } from "../../context/AuthContext";
 import { EditableField } from "../../components/common/InputField/EditableField.jsx";
@@ -48,7 +48,7 @@ const UserProfile = ({ isEditing }) => {
         const file = event.target.files[0];
         if (!file) return;
         try {
-            await documentService.uploadProfileImage(userId, file, isAuthenticated.token);
+            await userPhotoService.uploadProfileImage(userId, file, isAuthenticated.token);
             navigate(`/profil/${userId}`);
         } catch (err) {
             setError("Échec du téléchargement de l'image.");
@@ -133,7 +133,7 @@ const UserProfile = ({ isEditing }) => {
                                     {userDetails.projetTitle}
                                 </a>
                             ) : (
-                                <Link to="/creer-projet" className="create-project-link" aria-label="Créer un projet">
+                                <Link to="/creer-projet" className="create-entity" aria-label="Créer un projet">
                                     Créer un projet
                                 </Link>
                             )}

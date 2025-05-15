@@ -29,6 +29,19 @@ const createService = (resourcePath) => {
 export const plateformeService = createService("plateforme");
 export const enumService = createService("enum");
 
+export const documentService = {
+    ...createService("documents"),
+    create: async (formData, token) =>
+        await apiRequest(
+            `${API_BASE_URL}/documents`,
+            {
+                method: "POST",
+                body: formData,
+            },
+            token
+        ),
+};
+
 export const projetService = {
     ...createService("projet"),
     create: async (data, token) => {

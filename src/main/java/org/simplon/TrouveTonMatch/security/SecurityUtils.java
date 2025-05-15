@@ -39,4 +39,28 @@ public class SecurityUtils {
 
         return plateformeId;
     }
+
+    public Long getAuthenticatedUserId() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if (authentication == null) {
+            System.out.println("❌ Authentication is null");
+            return null;
+        }
+
+        System.out.println("✅ Authentication: " + authentication);
+
+        if (authentication.getCredentials() == null) {
+            System.out.println("❌ Credentials (token) is null");
+            return null;
+        }
+
+        String token = authentication.getCredentials().toString();
+        System.out.println("✅ Extracted Token: " + token);
+
+        Long userId = jwtService.extractUserId(token);
+        System.out.println("✅ Extracted userId: " + userId);
+
+        return userId;
+    }
 }

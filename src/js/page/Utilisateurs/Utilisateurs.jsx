@@ -60,7 +60,7 @@ const Utilisateurs = () => {
         <h1>Utilisateurs</h1>
         {error && <p className="error-message">{error}</p>}
         {isAuthenticated.role === 'ADMIN' && (
-            <li className='create-user_link'>
+            <li className='create-entity'>
               <Link to="/signup" className="Nav-link">Créer un utilisateur</Link>
             </li>
         )}

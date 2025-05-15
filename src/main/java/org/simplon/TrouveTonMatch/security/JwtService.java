@@ -85,6 +85,17 @@ public class JwtService {
             throw new RuntimeException("Error while extracting plateformeId from JWT", e);
         }
     }
+    public Long extractUserId(String token) {
+        try {
+            Algorithm algorithm = Algorithm.HMAC256(secret);
+            DecodedJWT decodedJWT = JWT.require(algorithm)
+                    .build()
+                    .verify(token);
+            return decodedJWT.getClaim("id").asLong();
+        } catch (Exception e) {
+            throw new RuntimeException("Error while extracting userId from JWT", e);
+        }
+    }
 
     private Instant genAccessTokenExpirationDate() {
         return LocalDateTime.now()
