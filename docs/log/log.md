@@ -123,12 +123,12 @@
 - Tous : peut télécharger un document depuis le centre de documentation [x]
 - Porteur : peut saisir un compte-rendu d'accompagnement : []
   - date, heure de l'échange
-  - Moyen de l'échange : appel téléphonique ou visio, messagerie, visite
+  - Moyen de l'échange :  (aide par infobulle : appel téléphonique, visio, messagerie, visite)
   - Sujets de l'échange
   - Résumé de l'échange
   - Actions à mener avec date de livraison
   - Prochain rendez-vous prévu
-  - Laisser texte libre pour le résumé et les actions à mener, avec petite modale d'aide à la rédaction ?
+  - Laisser texte libre pour le résumé et les actions à mener, avec petite infobulle d'aide à la rédaction ?
 - Parrain et plateforme : consulter les comptes-rendus associés au projet []
 - Porteur : consulter/modifier les comptes-rendus []
 - Notifications : 

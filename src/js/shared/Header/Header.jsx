@@ -1,4 +1,5 @@
 import React, {useRef, useEffect, useState} from "react";
+import { useNavigate } from "react-router-dom";
 import "./Header.scss";
 import Nav from "../../components/Nav/Nav";
 import Logout from "../../components/Logout/Logout";
@@ -7,6 +8,8 @@ const Header = () => {
     const menuRef = useRef(null);
     const buttonRef = useRef(null);
     const [menuOpen, setMenuOpen] = useState(false);
+    const navigate = useNavigate();
+    const navigateToHome = () => navigate("/");
 
     useEffect(() => {
         const handleClickOutside = (event) => {
@@ -20,6 +23,8 @@ const Header = () => {
             }
         };
 
+
+
         document.addEventListener("mousedown", handleClickOutside);
 
         return () => {
@@ -29,7 +34,7 @@ const Header = () => {
 
     return (
         <header className="header">
-            <div className="logo" title="Initiative Deux-Sèvres">
+            <div className="logo" title="Initiative Deux-Sèvres" onClick={navigateToHome}>
                 <img src="/logo.png" alt="logo"/>
             </div>
 
