@@ -3,7 +3,7 @@ import react from '@vitejs/plugin-react';
 
 export default defineConfig({
   plugins: [react()],
-  root: '.', // La racine du projet Vite (dossier racine de votre projet)
+  root: '.', // La racine du projet Vite
   base: '/', // Chemin de base pour servir les fichiers
   resolve: {
     alias: {
@@ -11,7 +11,7 @@ export default defineConfig({
     },
   },
   build: {
-    outDir: 'src/main/resources/static', // Output du build pour Spring Boot
+    outDir: 'dist', // Output du build pour Spring Boot
     emptyOutDir: true,
   },
 });

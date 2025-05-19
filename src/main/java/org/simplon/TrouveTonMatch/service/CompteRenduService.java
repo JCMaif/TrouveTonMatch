@@ -61,7 +61,8 @@ public class CompteRenduService {
     }
 
     public List<CompteRenduDto> findAllCompteRendu() {
-        return compteRenduMapper.toDto(compteRenduRepository.findAll());
+//        return compteRenduMapper.toDto(compteRenduRepository.findAll());
+        return null;
     }
 
 }
