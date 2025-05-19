@@ -1,7 +1,7 @@
 # Étape 1 : Build du frontend avec Vite
 FROM node:20 AS frontend-build
 
-WORKDIR /app
+WORKDIR /app-builder
 
 # Copie des fichiers nécessaires pour Vite
 COPY vite.config.js package*.json ./
@@ -20,7 +20,7 @@ WORKDIR /app
 COPY . .
 
 # Copie les fichiers build du frontend dans les ressources statiques
-COPY --from=frontend-build /app/dist ./src/main/resources/static
+COPY --from=frontend-build /app-builder/dist ./src/main/resources/static
 
 # Build du JAR avec Maven
 RUN ./mvnw clean package -DskipTests
