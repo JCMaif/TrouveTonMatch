@@ -17,6 +17,7 @@ import UserProfile from "./page/Utilisateurs/UserProfile.jsx";
 import ProjetForm from "./page/Projet/ProjetForm.jsx";
 import Bibliotheque from "./page/Bibliotheque/Bibliotheque.jsx";
 import Upload from "./page/Bibliotheque/Upload.jsx";
+import CompteRenduForm from "@/components/CompteRendu/CompteRenduForm.jsx";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
@@ -36,6 +37,7 @@ createRoot(document.getElementById("root")).render(
             <Route path="/plateformes" element={<Plateforme />} />
             <Route path="/documents" element={<Bibliotheque />} />
             <Route path="/upload" element={<Upload />} />
+            <Route path="/compte-rendu" element={<CompteRenduForm />} />
             <Route path="/plateforme/:id" element={<PlateformeDetails />} />
             <Route path="/profil/:userId" element={<UserProfile isEditing={false} />} />
             <Route path="/profil/edit/:userId" element={<UserProfile isEditing={true} />} />

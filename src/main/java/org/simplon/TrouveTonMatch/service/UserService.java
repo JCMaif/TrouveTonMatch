@@ -2,6 +2,8 @@ package org.simplon.TrouveTonMatch.service;
 
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
+import lombok.extern.slf4j.Slf4j;
+
 import org.simplon.TrouveTonMatch.dtos.*;
 import org.simplon.TrouveTonMatch.exception.UsernameAlreadyExistsException;
 import org.simplon.TrouveTonMatch.exception.UserNotFoundException;
@@ -17,6 +19,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 public class UserService {
 
@@ -250,8 +253,8 @@ public class UserService {
     public boolean userCanEditOrDelete(Long userId) {
         Utilisateur currentUser = getCurrentUser();
 
-        return currentUser.getAuthorities().contains(UserRole.ADMIN) &&
-                currentUser.getAuthorities().contains(UserRole.STAFF) &&
+        return currentUser.getAuthorities().contains(UserRole.ADMIN) ||
+                currentUser.getAuthorities().contains(UserRole.STAFF) ||
                 currentUser.getId().equals(userId);
     }
 

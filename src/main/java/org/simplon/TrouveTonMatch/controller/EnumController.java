@@ -1,5 +1,6 @@
 package org.simplon.TrouveTonMatch.controller;
 
+import org.simplon.TrouveTonMatch.model.MoyenEchange;
 import org.simplon.TrouveTonMatch.model.UserRole;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,6 +17,13 @@ public class EnumController {
     public List<String> getRoles() {
 
         return Arrays.stream(UserRole.values())
+                .map(Enum::name)
+                .toList();
+    }
+
+    @GetMapping("/moyens")
+    public List<String> getMoyens() {
+        return Arrays.stream(MoyenEchange.values())
                 .map(Enum::name)
                 .toList();
     }

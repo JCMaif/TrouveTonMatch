@@ -23,7 +23,11 @@ const createService = (resourcePath) => {
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(data),
             }, token),
-    };
+        findByName: async (name, token) => {
+        return await apiRequest(`${resourceUrl}/${name}`, { method: "GET" }, token)
+        }
+    }
+
 };
 
 export const plateformeService = createService("plateforme");
@@ -127,4 +131,5 @@ export const userService = {
 
 };
 
+export const compteRenduService = createService("compte-rendu");
 

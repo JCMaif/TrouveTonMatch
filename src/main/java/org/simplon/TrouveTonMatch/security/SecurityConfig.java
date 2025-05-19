@@ -37,19 +37,22 @@ public class SecurityConfig {
                                 "/public/documentation/**",
                                 "/enum/**",
                                 "/uploads/**",
-                                "/messages/**"
+                                "/messages/**",
+                                "/enum/**"
                         ).permitAll()
                         .requestMatchers(
                                 "/user/**",
                                 "/parrains/**",
                                 "/projet/**",
                                 "/plateforme/**",
-                                "/documents/**"
+                                "/documents/**",
+                                "/compte-rendu"
                         ).authenticated()
                         .requestMatchers(HttpMethod.POST, "/user/**", "/projet/**").hasAnyRole("ADMIN", "STAFF", "PORTEUR")
                         .requestMatchers(HttpMethod.PUT, "/user/**", "/projet/**").hasAnyRole("ADMIN", "STAFF", "PORTEUR")
                         .requestMatchers(HttpMethod.DELETE, "/user/**", "/projet/**").hasAnyRole("ADMIN", "STAFF")
                         .requestMatchers(HttpMethod.POST, "/documents/**").hasAnyRole("ADMIN", "STAFF")
+                        .requestMatchers(HttpMethod.POST, "/compte-rendu").hasRole("PORTEUR")
                         .requestMatchers("/admin/**").hasRole("ADMIN")
                         .anyRequest().authenticated())
                 .addFilterAfter(jwtFilter, UsernamePasswordAuthenticationFilter.class)
