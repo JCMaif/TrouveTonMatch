@@ -7,6 +7,7 @@ WORKDIR /app-builder
 COPY vite.config.js package*.json ./
 COPY src/js ./src/js
 COPY public ./public
+COPY index.html ./index.html
 
 # Installation des dépendances et build
 RUN npm install && npm run build
