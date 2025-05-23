@@ -14,10 +14,10 @@ jobs:
 
       - name: Build Docker image
         run: |
-          docker build -t trouvetonmatch .
+          docker compose build -t trouvetonmatch .
 
       - name: Push to NAS DS224+
         run: |
-          sshpass -p "${{ secrets.NAS_PASSWORD }}" ssh ${{ secrets.NAS_USER }}@${{ secrets.NAS }} "docker stop my-app || true"
-          sshpass -p "${{ secrets.NAS_PASSWORD }}" scp -r . ${{ secrets.NAS_USER }}@${{ secrets.NAS }}:/volume1/docker/my-app
-          sshpass -p "${{ secrets.NAS_PASSWORD }}" ssh ${{ secrets.NAS_USER }}@${{ secrets.NASP }} "cd /volume1/docker/my-app && docker-compose up -d --build"
+          sshpass -p "${{ secrets.NAS_PASSWORD }}" ssh ${{ secrets.NAS_USER }}@${{ secrets.NAS }} "docker stop trouvetonmatch || true"
+          sshpass -p "${{ secrets.NAS_PASSWORD }}" scp -r . ${{ secrets.NAS_USER }}@${{ secrets.NAS }}:/volume1/docker/trouvetonmatch
+          sshpass -p "${{ secrets.NAS_PASSWORD }}" ssh ${{ secrets.NAS_USER }}@${{ secrets.NASP }} "cd /volume1/docker/trouvetonmatch && docker-compose up -d --build"
