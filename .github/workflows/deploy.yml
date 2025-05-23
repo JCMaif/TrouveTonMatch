@@ -19,6 +19,9 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y sshpass
+      - name: Test SSH connection
+        run: |
+          sshpass -p "${{ secrets.NAS_PASSWORD }}" ssh -o StrictHostKeyChecking=no ${{ secrets.NAS_USER }}@${{ secrets.NAS }} "echo SSH OK"
       - name: Push to NAS DS224+
         run: |
           sshpass -p "${{ secrets.NAS_PASSWORD }}" ssh ${{ secrets.NAS_USER }}@${{ secrets.NAS }} "docker stop trouvetonmatch || true"
