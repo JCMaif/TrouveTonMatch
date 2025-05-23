@@ -15,11 +15,9 @@ import java.time.ZoneId;
 @Service
 public class JwtService {
 
-    @Value("${spring.security.jwt.secret}")
-    private String secret;
+    private final String secret = "${SPRING_SECURITY_JWT_SECRET}";
 
-    @Value("${spring.security.jwt.expiration}")
-    private long expiration;
+    private final long expiration = 7;
 
 
     public String generateToken(Utilisateur user) {

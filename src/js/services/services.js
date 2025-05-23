@@ -44,6 +44,13 @@ export const documentService = {
             },
             token
         ),
+    getDocumentById: async (id, token) =>
+        await apiRequest(
+            `${API_BASE_URL}/documents/${id}`,
+            { method: "GET"
+            },
+            token
+        ),
 };
 
 export const projetService = {

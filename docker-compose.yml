@@ -1,30 +1,51 @@
-version: '3.8'
-
 services:
-    app:
-      build:
-        context: .
-        dockerfile: Dockerfile
-      depends_on:
-        - db
-      ports:
-        - "9876:8080"
-      environment:
-        SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/match
-        SPRING_DATASOURCE_USERNAME: postgres
-        SPRING_DATASOURCE_PASSWORD: postgres
-        SPRING_JPA_HIBERNATE_DDL_AUTO: update
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
+    ports:
+      - "3000:80"
+    environment:
+      - API_URL=backend:8080
+    networks:
+      - app-network
 
-    db:
-      image: postgres:15
-      container_name: pg_db
-      restart: always
-      environment:
-        POSTGRES_DB: match
-        POSTGRES_USER: postgres
-        POSTGRES_PASSWORD: postgres
-      volumes:
-        - pgdata:/var/lib/postgresql/data
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile.backend
+    depends_on:
+      - db
+    volumes:
+      - uploads:/app/uploads
+    environment:
+      - SPRING_PROFILES_ACTIVE=${SPRING_PROFILES_ACTIVE}
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/match
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=postgres
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+    env_file:
+      - .env
+    networks:
+      - app-network
+
+  db:
+    image: postgres:15
+    container_name: pg_db
+    restart: always
+    environment:
+      POSTGRES_DB: match
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - app-network
 
 volumes:
   pgdata:
+  uploads:
+
+networks:
+  app-network:
+    driver: bridge

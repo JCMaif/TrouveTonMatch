@@ -1,0 +1,35 @@
+# Build de l'application Spring Boot
+FROM eclipse-temurin:17-jdk-alpine AS backend-build
+
+WORKDIR /app
+
+# Copier le fichier pom.xml et télécharger les dépendances
+COPY pom.xml mvnw .
+COPY .mvn .mvn
+RUN ./mvnw dependency:go-offline
+
+# Copie du code backend
+COPY src/main ./src/main
+COPY uploads ./uploads
+
+# Build du JAR avec Maven
+RUN ./mvnw package -DskipTests
+
+# Étape finale : Image du backend
+FROM eclipse-temurin:17-jdk-alpine
+
+WORKDIR /app
+
+# Copie du JAR généré
+COPY --from=backend-build /app/target/*.jar app.jar
+
+# Copie du dossier uploads
+COPY --from=backend-build /app/uploads ./uploads
+
+# Configuration des permissions pour le dossier uploads
+RUN chmod -R 777 /app/uploads/
+
+EXPOSE 8080
+
+# Lancement de l'application
+ENTRYPOINT ["java", "-jar", "app.jar"]

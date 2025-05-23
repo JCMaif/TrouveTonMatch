@@ -1,6 +1,15 @@
 spring:
   application:
     name: TrouveTonMatch
+  profiles:
+    active: ${SPRING_PROFILES_ACTIVE:dev}
+
+---
+
+spring:
+  config:
+    activate:
+      on-profile: dev
   datasource:
     driverClassName: org.postgresql.Driver
     url: jdbc:postgresql://localhost:5432/match?currentSchema=public
@@ -10,17 +19,13 @@ spring:
     show-sql: true
     hibernate:
       ddl-auto: none
-  data:
-    mongodb:
-      uri: mongodb://localhost:27017/messagerie
-
   security:
     jwt:
-      secret: a656f4f87edae419df63fc317ed353be1f17f43efd6ab60b9d10110fa25ab746
+      secret: ${SPRING_SECURITY_JWT_SECRET}
       expiration: 7  # jours
   web:
     resources:
-      static-locations: classpath:/static/,file:./uploads
+      static-locations: classpath:/static/,file:./uploads:rw
   flyway:
     validate-on-migrate: true
     baseline-on-migrate: true
@@ -30,7 +35,6 @@ server:
   servlet:
     context-path: /api
 
-
 springdoc:
   api-docs:
     path: /public/documentation/api-docs
@@ -38,3 +42,41 @@ springdoc:
     path: /public/documentation/swagger-ui.html
 
 debug: true
+
+---
+
+spring:
+  config:
+    activate:
+      on-profile: prod
+  datasource:
+    driverClassName: org.postgresql.Driver
+    url: ${SPRING_DATASOURCE_URL}
+    username: ${SPRING_DATASOURCE_USERNAME}
+    password: ${SPRING_DATASOURCE_PASSWORD}
+  jpa:
+    show-sql: false
+    hibernate:
+      ddl-auto: none
+  security:
+    jwt:
+      secret: ${SPRING_SECURITY_JWT_SECRET}
+  web:
+    resources:
+      static-locations: classpath:/static/,file:./uploads:rw
+  flyway:
+    validate-on-migrate: true
+    baseline-on-migrate: true
+    enabled: true
+server:
+  port: 8080
+  servlet:
+    context-path: /api
+
+springdoc:
+  api-docs:
+    path: /public/documentation/api-docs
+  swagger-ui:
+    path: /public/documentation/swagger-ui.html
+
+debug: false

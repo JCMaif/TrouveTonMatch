@@ -5,6 +5,7 @@ import {Link, useNavigate} from "react-router-dom";
 import { useAuthenticatedService } from "../../hook/useAuthenticatedService.js";
 import DeleteButton from "../../components/common/buttons/DeleteButton/DeleteButton.jsx";
 import DownloadButton from "../../components/common/buttons/DownloadButton/DownloadButton.jsx";
+import {API_BASE_URL} from "@/config/config.js";
 
 
 const Bibliotheque = () => {
@@ -13,7 +14,7 @@ const Bibliotheque = () => {
     const [userMap, setUserMap] = useState({});
     const [error, setError] = useState(null);
     const navigate = useNavigate();
-    const { findAll } = useAuthenticatedService(documentService);
+    const { findAll,getDocumentById} = useAuthenticatedService(documentService);
 
     const userCanCRUD = isAuthenticated && (
         isAuthenticated.role === "ADMIN" ||
@@ -52,7 +53,27 @@ const Bibliotheque = () => {
     }, []);
 
     const handleClick = (id) => {
-        window.open(`/uploads/${id}`, "_blank");
+        const token = isAuthenticated.token;
+        const fetchDocument = async () => {
+            try {
+                const doc = await getDocumentById(id, token);
+                const blob = await doc.blob();
+                console.log("document : ", doc);
+                const file = window.URL.createObjectURL(blob);
+                window.location.assign(file);
+                // window.open(`${API_BASE_URL}/uploads/${doc.path}`, '_blank');
+                // const a = document.createElement("a");
+                // a.href = file;
+                // a.download = "document.pdf";
+                // document.body.appendChild(a);
+                // a.click();
+                // document.body.removeChild(a);
+
+            }catch {
+                setError("Échec du chargement du document");
+            }
+        }
+        fetchDocument();
     };
 
     const handleDeleteDocument = async (id) => {
@@ -94,7 +115,7 @@ const Bibliotheque = () => {
                         <td>{doc.type}</td>
                         <td>{new Date(doc.uploadedAt).toLocaleString()}</td>
                         <td>{userMap[doc.uploadedBy] || "—"}</td>
-                        <td><DownloadButton onClick={() => handleClick(doc.path)} />
+                        <td><DownloadButton onClick={() => handleClick(doc.id)} />
                             {userCanCRUD && (
                                 <DeleteButton onClick={() => handleDeleteDocument(doc.id)} aria-label="Supprimer le document" />
                             )}

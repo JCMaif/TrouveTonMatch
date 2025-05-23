@@ -2,7 +2,7 @@ import React, { useContext, useState, useEffect } from "react";
 import InputField from "../../components/common/InputField/InputField.jsx";
 import { userService } from "../../services/services.js";
 import { useAuthenticatedService } from "../../hook/useAuthenticatedService.js";
-import { AuthContext } from "@/context/AuthContext.jsx";
+import { AuthContext } from "../../context/AuthContext.jsx";
 
 const Signup = ({ role }) => {
     const initialState = {
