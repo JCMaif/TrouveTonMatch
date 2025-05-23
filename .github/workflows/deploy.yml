@@ -3,7 +3,7 @@ name: Deploy to NAS DS224+
 on:
   push:
     branches:
-      - main 
+      - main
 
 jobs:
   deploy:
@@ -14,10 +14,10 @@ jobs:
 
       - name: Build Docker image
         run: |
-          docker compose build -t trouvetonmatch .
+          docker compose build
 
       - name: Push to NAS DS224+
         run: |
           sshpass -p "${{ secrets.NAS_PASSWORD }}" ssh ${{ secrets.NAS_USER }}@${{ secrets.NAS }} "docker stop trouvetonmatch || true"
-          sshpass -p "${{ secrets.NAS_PASSWORD }}" scp -r . ${{ secrets.NAS_USER }}@${{ secrets.NAS }}:/volume1/docker/trouvetonmatch
-          sshpass -p "${{ secrets.NAS_PASSWORD }}" ssh ${{ secrets.NAS_USER }}@${{ secrets.NASP }} "cd /volume1/docker/trouvetonmatch && docker-compose up -d --build"
+          rsync -avz -e "sshpass -p '${{ secrets.NAS_PASSWORD }}' ssh" . ${{ secrets.NAS_USER }}@${{ secrets.NAS }}:/volume1/docker/trouvetonmatch
+          sshpass -p "${{ secrets.NAS_PASSWORD }}" ssh ${{ secrets.NAS_USER }}@${{ secrets.NAS }} "[[ -f /volume1/docker/trouvetonmatch/docker-compose.yml ]] && cd /volume1/docker/trouvetonmatch && docker-compose up -d --build"
