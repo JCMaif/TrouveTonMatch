@@ -1,0 +1,23 @@
+name: Deploy to NAS DS224+
+
+on:
+  push:
+    branches:
+      - main 
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Build Docker image
+        run: |
+          docker build -t trouvetonmatch .
+
+      - name: Push to NAS DS224+
+        run: |
+          sshpass -p "${{ secrets.NAS_PASSWORD }}" ssh ${{ secrets.NAS_USER }}@${{ secrets.NAS }} "docker stop my-app || true"
+          sshpass -p "${{ secrets.NAS_PASSWORD }}" scp -r . ${{ secrets.NAS_USER }}@${{ secrets.NAS }}:/volume1/docker/my-app
+          sshpass -p "${{ secrets.NAS_PASSWORD }}" ssh ${{ secrets.NAS_USER }}@${{ secrets.NASP }} "cd /volume1/docker/my-app && docker-compose up -d --build"
