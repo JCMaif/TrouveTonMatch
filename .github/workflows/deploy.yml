@@ -73,6 +73,8 @@ jobs:
           key: ${{ secrets.DEPLOY_SSH_KEY }}
           script: |
             cd ${{env.FOLDER}}
+            echo SPRING_SECURITY_JWT_SECRET=${{ secrets.SPRING_SECURITY_JWT_SECRET }} >> .env
             export PATH=$PATH:/usr/local/bin
+            docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_TOKEN }}
             docker-compose pull
             docker-compose up -d
