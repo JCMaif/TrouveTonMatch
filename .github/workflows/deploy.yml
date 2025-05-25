@@ -39,7 +39,7 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
       - name: Build Docker image
-        run: docker compose build --no-cache
+        run: docker compose build
       - name: List Docker images
         run: docker images
       - name: Check available images

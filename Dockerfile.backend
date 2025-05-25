@@ -15,7 +15,7 @@ COPY uploads ./uploads
 
 # Build du JAR avec Maven
 RUN ./mvnw package -DskipTests
-
+RUN ls -al /app
 # Étape finale : Image du backend
 FROM eclipse-temurin:17-jdk-alpine
 
