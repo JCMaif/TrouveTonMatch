@@ -1,6 +1,6 @@
 services:
   frontend:
-    image: trouvetonmatch-frontend:latest
+    image: iousco/trouvetonmatch-frontend:latest
     build:
       context: .
       dockerfile: Dockerfile.frontend
@@ -12,7 +12,7 @@ services:
       - app-network
 
   backend:
-    image: trouvetonmatch-backend:latest
+    image: iousco/trouvetonmatch-backend:latest
     build:
       context: .
       dockerfile: Dockerfile.backend
