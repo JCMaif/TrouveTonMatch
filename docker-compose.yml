@@ -1,9 +1,9 @@
 services:
   frontend:
     image: trouvetonmatch-frontend:latest
-#    build:
-#      context: .
-#      dockerfile: Dockerfile.frontend
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
     ports:
       - "3000:80"
     environment:
@@ -13,9 +13,9 @@ services:
 
   backend:
     image: trouvetonmatch-backend:latest
-#    build:
-#      context: .
-#      dockerfile: Dockerfile.backend
+    build:
+      context: .
+      dockerfile: Dockerfile.backend
     depends_on:
       - db
     volumes:

@@ -42,8 +42,7 @@ jobs:
         run: docker compose build --no-cache
       - name: List Docker images
         run: docker images
-      - name: Check available images
-        run: docker images
+
       - name: Push Docker images
         run: |
           docker tag trouvetonmatch-backend:latest ${{ secrets.DOCKERHUB_USERNAME }}/${{env.IMAGE}}-backend:${{env.VERSION}}
