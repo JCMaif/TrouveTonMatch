@@ -4,26 +4,66 @@ on:
   push:
     branches:
       - main
+permissions:
+  contents: write
+  packages: write
+
+env:
+  FOLDER: /volume1/docker/trouvetonmatch
+  IMAGE: trouvetonmatch
+  VERSION: 0.0.1
 
 jobs:
-  deploy:
+  create-folder:
+    name: create folder
+    runs-on: ubuntu-latest
+    steps:
+      - name: run step create folder
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.NAS }}
+          username: ${{ secrets.NAS_USER }}
+          key: ${{ secrets.DEPLOY_SSH_KEY }}
+          script: |
+            sudo mkdir -p ${{env.FOLDER}}
+            sudo ls -al ${{env.FOLDER}}
+
+  build-push-dockerhub:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
-
-      - name: Build Docker image
-        run: |
-          docker compose build
-      - name: Install sshpass
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y sshpass
-      - name: Test SSH connection
-        run: |
-          sshpass -p "${{ secrets.NAS_PASSWORD }}" ssh -o StrictHostKeyChecking=no ${{ secrets.NAS_USER }}@${{ secrets.NAS }} "echo SSH OK"
-      - name: Push to NAS DS224+
-        run: |
-          sshpass -p "${{ secrets.NAS_PASSWORD }}" ssh ${{ secrets.NAS_USER }}@${{ secrets.NAS }} "docker stop trouvetonmatch || true"
-          rsync -avz -e "sshpass -p '${{ secrets.NAS_PASSWORD }}' ssh" . ${{ secrets.NAS_USER }}@${{ secrets.NAS }}:/volume1/docker/trouvetonmatch
-          sshpass -p "${{ secrets.NAS_PASSWORD }}" ssh ${{ secrets.NAS_USER }}@${{ secrets.NAS }} "[[ -f /volume1/docker/trouvetonmatch/docker-compose.yml ]] && cd /volume1/docker/trouvetonmatch && docker-compose up -d --build"
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Build and push Docker images
+        uses: docker/build-push-action@v6
+        with:
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{env.IMAGE}}:${{env.VERSION}}
+    
+  run-container:
+    name: run container
+    runs-on: ubuntu-latest
+    needs: [create-folder, build-push-dockerhub]
+    steps:
+      - name: copy docker-compose to ssh
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.NAS }}
+          username: ${{ secrets.NAS_USER }}
+          key: ${{ secrets.DEPLOY_SSH_KEY }}
+          source: "docker-compose.yml"
+          target: ${{env.FOLDER}}
+      - name: run container
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.NAS }}
+          username: ${{ secrets.NAS_USER }}
+          key: ${{ secrets.DEPLOY_SSH_KEY }}
+          script: |
+            cd ${{env.FOLDER}}
+            docker compose pull
+            docker compose up -d
