@@ -39,10 +39,14 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
       - name: Build Docker image
-        run: docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/${{env.IMAGE}}:${{env.VERSION}} .
+        run: docker compose build
 
-      - name: Push Docker image
-        run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/${{env.IMAGE}}:${{env.VERSION}}
+      - name: Push Docker images
+        run: |
+          docker tag trouvetonmatch-backend:latest ${{ secrets.DOCKERHUB_USERNAME }}/${{env.IMAGE}}-backend:${{env.VERSION}}
+          docker tag trouvetonmatch-frontend:latest ${{ secrets.DOCKERHUB_USERNAME }}/${{env.IMAGE}}-frontend:${{env.VERSION}}
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/${{env.IMAGE}}-backend:${{env.VERSION}}
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/${{env.IMAGE}}-frontend:${{env.VERSION}}
     
   run-container:
     name: run container
