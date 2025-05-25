@@ -10,7 +10,7 @@ RUN chmod +x mvnw
 RUN ./mvnw dependency:go-offline -DskipTests
 
 # Copie du code backend
-COPY src/main ./src/main
+COPY src ./src
 COPY uploads ./uploads
 
 # Build du JAR avec Maven
