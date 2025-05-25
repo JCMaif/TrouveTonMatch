@@ -73,5 +73,6 @@ jobs:
           key: ${{ secrets.DEPLOY_SSH_KEY }}
           script: |
             cd ${{env.FOLDER}}
+            export PATH=$PATH:/usr/local/bin
             docker compose pull
             docker compose up -d
