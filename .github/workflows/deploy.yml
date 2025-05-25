@@ -25,8 +25,8 @@ jobs:
           username: ${{ secrets.NAS_USER }}
           key: ${{ secrets.DEPLOY_SSH_KEY }}
           script: |
-            sudo mkdir -p ${{env.FOLDER}}
-            sudo ls -al ${{env.FOLDER}}
+            mkdir -p ${{env.FOLDER}}
+            ls -al ${{env.FOLDER}}
 
   build-push-dockerhub:
     runs-on: ubuntu-latest
