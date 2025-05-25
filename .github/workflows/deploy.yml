@@ -76,5 +76,6 @@ jobs:
             echo SPRING_SECURITY_JWT_SECRET=${{ secrets.SPRING_SECURITY_JWT_SECRET }} >> .env
             export PATH=$PATH:/usr/local/bin
             docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_TOKEN }}
-            docker-compose pull
+            docker-compose pull ${{ secrets.DOCKERHUB_USERNAME }}/${{env.IMAGE}}-backend:${{env.VERSION}}
+            docker-compose pull ${{ secrets.DOCKERHUB_USERNAME }}/${{env.IMAGE}}-frontend:${{env.VERSION}}
             docker-compose up -d
