@@ -63,7 +63,7 @@ jobs:
           host: ${{ secrets.NAS }}
           username: ${{ secrets.NAS_USER }}
           key: ${{ secrets.DEPLOY_SSH_KEY }}
-          source: "docker-compose.yml", ".env"
+          source: "docker-compose.yml, .env"
           target: ${{env.FOLDER}}
       - name: run container
         uses: appleboy/ssh-action@master
@@ -73,5 +73,5 @@ jobs:
           key: ${{ secrets.DEPLOY_SSH_KEY }}
           script: |
             cd ${{env.FOLDER}}
-            docker compose pull
-            docker compose up -d
+            docker-compose pull
+            docker-compose up -d
