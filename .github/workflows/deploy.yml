@@ -73,5 +73,5 @@ jobs:
           key: ${{ secrets.DEPLOY_SSH_KEY }}
           script: |
             cd ${{env.FOLDER}}
-            docker-compose pull
-            docker-compose up -d
+            docker compose pull
+            docker compose up -d
