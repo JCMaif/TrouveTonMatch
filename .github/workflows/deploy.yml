@@ -74,5 +74,5 @@ jobs:
           script: |
             cd ${{env.FOLDER}}
             export PATH=$PATH:/usr/local/bin
-            docker compose pull
-            docker compose up -d
+            docker-compose pull
+            docker-compose up -d
