@@ -40,7 +40,7 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
       - name: Build Docker image
         working-directory: ${{ github.workspace }}
-        run: docker compose -f docker-compose.build.yml build
+        run: docker compose -f docker-compose-build.yml build
       - name: List Docker images
         run: docker images
       - name: Check available images
