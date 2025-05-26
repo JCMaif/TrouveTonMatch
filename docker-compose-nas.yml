@@ -1,6 +1,6 @@
 services:
   frontend:
-    image: jc1932/trouvetonmatch-frontend:0.0.1
+    image: iousco/trouvetonmatch-frontend:0.0.1
     ports:
       - "3000:80"
     environment:
@@ -9,7 +9,7 @@ services:
       - app-network
 
   backend:
-    image: jc1932/trouvetonmatch-backend:0.0.1
+    image: iousco/trouvetonmatch-backend:0.0.1
     depends_on:
       - db
     volumes:
