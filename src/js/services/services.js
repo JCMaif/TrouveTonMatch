@@ -44,13 +44,17 @@ export const documentService = {
             },
             token
         ),
-    getDocumentById: async (id, token) =>
-        await apiRequest(
-            `${API_BASE_URL}/documents/${id}`,
-            { method: "GET"
-            },
-            token
-        ),
+    getDocumentById: async (id, token) => {
+        const headers = {};
+        if (token) {
+            headers["Authorization"] = `Bearer ${token}`;
+        }
+
+        return await fetch(`${API_BASE_URL}/documents/${id}`, {
+            method: "GET",
+            headers,
+        });
+    }
 };
 
 export const projetService = {

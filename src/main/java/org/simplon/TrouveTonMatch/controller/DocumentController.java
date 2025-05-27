@@ -1,6 +1,9 @@
 package org.simplon.TrouveTonMatch.controller;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.net.MalformedURLException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.security.Principal;
@@ -47,30 +50,9 @@ public class DocumentController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Resource> downloadDocument(@PathVariable Long id) {
-        Document document = documentService.findById(id);
-        System.out.println("Document trouvé : " + document);
-        System.out.println("Chemin du fichier : " + document.getPath());
-        if (document == null) {
-            return ResponseEntity.notFound().build();
-        }
-
-        try {
-            Path filePath = Paths.get("uploads/" + document.getPath());
-            Resource fileResource = new UrlResource(filePath.toUri());
-            System.out.println("Fichier lisible : " + fileResource.isReadable());
-
-            if (!fileResource.exists() || !fileResource.isReadable()) {
-                return ResponseEntity.badRequest().build();
-            }
-
-            return ResponseEntity.ok()
-                    .contentType(MediaType.APPLICATION_OCTET_STREAM)
-                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + document.getName())
-                    .body(fileResource);
-        } catch (MalformedURLException e) {
-            return ResponseEntity.badRequest().build();
-        }
+        return documentService.prepareDocumentDownload(id);
     }
+
 
     @DeleteMapping("/{id}")
     @PreAuthorize("hasAnyRole('ADMIN', 'STAFF' )")

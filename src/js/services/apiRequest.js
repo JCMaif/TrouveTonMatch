@@ -1,11 +1,10 @@
-export const apiRequest = async (endpoint, options = {}, token = null) => {
+export const apiRequest = async (endpoint, options = {}, token = null, responseType = "json") => {
   const headers = { ...options.headers };
 
   if (token) {
     headers["Authorization"] = `Bearer ${token}`;
   }
 
-  // Ne pas définir le Content-Type si le corps est une instance de FormData
   if (!(options.body instanceof FormData)) {
     headers["Content-Type"] = "application/json";
   }
@@ -21,11 +20,19 @@ export const apiRequest = async (endpoint, options = {}, token = null) => {
 
     if (response.status === 204) return null;
 
-    const contentType = response.headers.get("content-type");
-    if (contentType && contentType.includes("application/json")) {
-      return await response.json();
-    } else {
-      return await response.text();
+    switch (responseType) {
+      case "blob":
+        return await response.blob();
+      case "text":
+        return await response.text();
+      case "json":
+      default:
+        const contentType = response.headers.get("content-type");
+        if (contentType && contentType.includes("application/json")) {
+          return await response.json();
+        } else {
+          return await response.text();
+        }
     }
   } catch (err) {
     console.error("API request failed:", err);

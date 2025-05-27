@@ -5,7 +5,6 @@ import {Link, useNavigate} from "react-router-dom";
 import { useAuthenticatedService } from "../../hook/useAuthenticatedService.js";
 import DeleteButton from "../../components/common/buttons/DeleteButton/DeleteButton.jsx";
 import DownloadButton from "../../components/common/buttons/DownloadButton/DownloadButton.jsx";
-import {API_BASE_URL} from "@/config/config.js";
 
 
 const Bibliotheque = () => {
@@ -52,29 +51,40 @@ const Bibliotheque = () => {
         fetchDocuments();
     }, []);
 
-    const handleClick = (id) => {
-        const token = isAuthenticated.token;
-        const fetchDocument = async () => {
-            try {
-                const doc = await getDocumentById(id, token);
-                const blob = await doc.blob();
-                console.log("document : ", doc);
-                const file = window.URL.createObjectURL(blob);
-                window.location.assign(file);
-                // window.open(`${API_BASE_URL}/uploads/${doc.path}`, '_blank');
-                // const a = document.createElement("a");
-                // a.href = file;
-                // a.download = "document.pdf";
-                // document.body.appendChild(a);
-                // a.click();
-                // document.body.removeChild(a);
+    const handleClick = async (id) => {
+        setError(null);
+        try {
+            const response = await documentService.getDocumentById(id, isAuthenticated.token)
 
-            }catch {
-                setError("Échec du chargement du document");
+            if (!response.ok) throw new Error("Téléchargement échoué");
+
+            const disposition = response.headers.get("Content-Disposition");
+            console.log("disposition :", disposition);
+            let fileName = "document";
+            if (disposition) {
+                const match = disposition.match(/filename\*?=(?:UTF-8''|")?([^";\n]+)/i);
+                if (match && match[1]) {
+                    fileName = decodeURIComponent(match[1]);
+                }
             }
+
+            const blob = await response.blob();
+            const url = window.URL.createObjectURL(blob);
+
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = fileName;
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+
+            window.URL.revokeObjectURL(url);
+        } catch (e) {
+            console.error(e);
+            setError("Échec du chargement du document");
         }
-        fetchDocument();
     };
+
 
     const handleDeleteDocument = async (id) => {
         if (window.confirm("Supprimer ce document ?")) {

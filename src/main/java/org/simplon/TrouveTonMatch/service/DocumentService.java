@@ -1,7 +1,9 @@
 package org.simplon.TrouveTonMatch.service;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -17,6 +19,11 @@ import org.simplon.TrouveTonMatch.model.Document;
 import org.simplon.TrouveTonMatch.model.DocumentMapper;
 import org.simplon.TrouveTonMatch.repository.DocumentRepository;
 import org.simplon.TrouveTonMatch.security.SecurityUtils;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -105,5 +112,41 @@ public class DocumentService {
         } catch (IOException e) {
             throw new RuntimeException("Error when saving a file", e);
         }
+    }
+
+    public ResponseEntity<Resource> prepareDocumentDownload(Long id) {
+        Document document = findById(id);
+        if (document == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        try {
+            Path filePath = Paths.get("uploads/" + document.getPath());
+            Resource fileResource = new UrlResource(filePath.toUri());
+
+            if (!fileResource.exists() || !fileResource.isReadable()) {
+                return ResponseEntity.badRequest().build();
+            }
+
+            String contentType = Files.probeContentType(filePath);
+            if (contentType == null) {
+                contentType = "application/octet-stream";
+            }
+
+            String fileName = extractFileName(document.getPath());
+
+            return ResponseEntity.ok()
+                    .contentType(MediaType.parseMediaType(contentType))
+                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + fileName + "\"")
+                    .body(fileResource);
+
+        } catch (IOException e) {
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    private String extractFileName(String path) {
+        if (path == null) return "document";
+        return path.substring(path.lastIndexOf("/") + 1);
     }
 }
