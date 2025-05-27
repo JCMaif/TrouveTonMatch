@@ -15,8 +15,10 @@ import java.util.Objects;
 import java.util.UUID;
 
 import org.simplon.TrouveTonMatch.dtos.DocumentDto;
+import org.simplon.TrouveTonMatch.model.CompteRendu;
 import org.simplon.TrouveTonMatch.model.Document;
 import org.simplon.TrouveTonMatch.model.DocumentMapper;
+import org.simplon.TrouveTonMatch.repository.CompteRenduRepository;
 import org.simplon.TrouveTonMatch.repository.DocumentRepository;
 import org.simplon.TrouveTonMatch.security.SecurityUtils;
 import org.springframework.core.io.Resource;
@@ -36,11 +38,14 @@ public class DocumentService {
     private final DocumentMapper documentMapper;
     private final SecurityUtils securityUtils;
     private final Path UPLOAD_DIR = Paths.get("uploads/docs");
+    private final CompteRenduRepository compteRenduRepository;
 
-    public DocumentService(DocumentRepository documentRepository, DocumentMapper documentMapper, SecurityUtils securityUtils) {
+    public DocumentService(DocumentRepository documentRepository, DocumentMapper documentMapper, SecurityUtils securityUtils,
+            CompteRenduRepository compteRenduRepository) {
         this.documentRepository = documentRepository;
         this.documentMapper = documentMapper;
         this.securityUtils = securityUtils;
+        this.compteRenduRepository = compteRenduRepository;
     }
 
     public List<DocumentDto> findAll() {

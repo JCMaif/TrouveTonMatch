@@ -60,6 +60,10 @@ public class CompteRenduService {
         return compteRenduMapper.toDto(compteRendu);
     }
 
+    /*
+    * Les compte-rendus peuvent être lus par le porteur du projet, le parrain associé, ADMIN et STAFF
+    *
+    * */
     public List<CompteRenduDto> findAllCompteRendu() {
 //        return compteRenduMapper.toDto(compteRenduRepository.findAll());
         return null;

@@ -121,7 +121,7 @@
 - Parrain : peut choisir le nombre de projets max qu'il souhaite accompagner [x]
 - Plateforme : peut mettre des documents en ligne pour téléchargement => centre de documentation [x]
 - Tous : peut télécharger un document depuis le centre de documentation [x]
-- Porteur : peut saisir un compte-rendu d'accompagnement : []
+- Porteur : peut saisir un compte-rendu d'accompagnement : [x]
   - date, heure de l'échange
   - Moyen de l'échange :  (aide par infobulle : appel téléphonique, visio, messagerie, visite)
   - Sujets de l'échange
