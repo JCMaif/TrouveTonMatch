@@ -30,6 +30,19 @@ spring:
     validate-on-migrate: true
     baseline-on-migrate: true
     enabled: true
+  mail:
+    host: ${SPRING_MAIL_HOST}
+    port: 2525
+    ssl: no
+    tls: yes
+    user: ${SPRING_MAIL_USER}
+    password: ${SPRING_MAIL_PASSWORD}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
 server:
   port: 8080
   servlet:
