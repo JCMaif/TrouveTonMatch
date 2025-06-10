@@ -143,3 +143,14 @@
   - Quand un porteur crée un projet []
     - notification à la plateforme []
 
+## 27 mai 2025
+
+Ajout du déploiement automatique : 
+* Au push sur la branche main, la CI Github Action fait automatiquement les actions suivantes :
+  * build du front et du back
+  * création des images docker correspondantes
+  * push vers mon docker hub
+  * copie des fichiers nécessaires sur mon nas
+  * lancement du docker-compose sur le nas, qui télécharge les images depuis le docker hub
+  * lancement des containers 
+  * accessibilité de l'application sur (https://ttm.jc1932.synology.me)
