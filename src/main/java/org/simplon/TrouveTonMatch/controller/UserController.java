@@ -120,7 +120,7 @@ public class UserController {
     }
 
     @GetMapping("/parrains/{porteurId}")
-    public ResponseEntity<Long> getParrainIdByPorteurId(@PathVariable Long porteurId) {
-        return ResponseEntity.ok(userService.getParrainIdByPorteurId(porteurId));
+    public ResponseEntity<ParrainDto> getParrainByPorteurId(@PathVariable Long porteurId) {
+        return ResponseEntity.ok(userService.getParrainByPorteurId(porteurId));
     }
 }

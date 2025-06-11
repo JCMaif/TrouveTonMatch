@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.simplon.TrouveTonMatch.dtos.*;
 import org.simplon.TrouveTonMatch.exception.UsernameAlreadyExistsException;
 import org.simplon.TrouveTonMatch.exception.UserNotFoundException;
+import org.simplon.TrouveTonMatch.mapper.ParrainMapper;
 import org.simplon.TrouveTonMatch.mapper.UtilisateurMapper;
 import org.simplon.TrouveTonMatch.model.*;
 import org.simplon.TrouveTonMatch.repository.AdresseRepository;
@@ -30,14 +31,16 @@ public class UserService {
     private static final String DEFAULT_PASSWORD = "password321";
     private final AdresseRepository adresseRepository;
     private final ProjetRepository projetRepository;
+    private final ParrainMapper parrainMapper;
 
-    public UserService(UserRepository userRepository, PlateformeService plateformeService, PasswordEncoder passwordEncoder, UtilisateurMapper utilisateurMapper, AdresseRepository adresseRepository, ProjetRepository projetRepository) {
+    public UserService(UserRepository userRepository, PlateformeService plateformeService, PasswordEncoder passwordEncoder, UtilisateurMapper utilisateurMapper, AdresseRepository adresseRepository, ProjetRepository projetRepository, ParrainMapper parrainMapper) {
         this.userRepository = userRepository;
         this.plateformeService = plateformeService;
         this.passwordEncoder = passwordEncoder;
         this.utilisateurMapper = utilisateurMapper;
         this.adresseRepository = adresseRepository;
         this.projetRepository = projetRepository;
+        this.parrainMapper = parrainMapper;
     }
 
     public List<UserDto> getAllUsersByPlateforme(Long plateformeId) {
@@ -239,10 +242,11 @@ public class UserService {
                 .collect(Collectors.toList());
     }
 
-    public Long getParrainIdByPorteurId(Long porteurId) {
+    public ParrainDto getParrainByPorteurId(Long porteurId) {
        Porteur porteur = (Porteur) userRepository.findById(porteurId).orElseThrow(EntityNotFoundException::new);
        if (porteur != null && porteur.getProjet() != null && porteur.getProjet().getParrain() != null) {
-           return porteur.getProjet().getParrain().getId();
+           Parrain parrain = porteur.getProjet().getParrain();
+           return parrainMapper.toDto(parrain);
        } else {
            return null;
        }
@@ -281,4 +285,6 @@ public class UserService {
         }
         return user.getRole() == UserRole.ADMIN || user.getRole() == UserRole.STAFF;
     }
+
+
 }

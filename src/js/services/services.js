@@ -140,6 +140,10 @@ export const userService = {
         const url = `${API_BASE_URL}/user/parrains/disponibles`;
         return await apiRequest(url, { method: "GET" }, token);
     },
+    findParrainByPorteurId: async (porteurId, token) => {
+        const url = `${API_BASE_URL}/user/parrains/${porteurId}`;
+        return await apiRequest(url, { method: "GET" }, token);
+    },
 
 };
 
