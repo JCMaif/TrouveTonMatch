@@ -98,3 +98,12 @@ Ce fichier .env ne figure pas dans le repository, il est à créer.
 
 Le volume `uploads` est utilisé pour stocker les fichiers uploadés par les utilisateurs.
 Le volume `pgdata` est utilisé pour stocker les données de la base de données.
+
+## API
+
+L'API utilise openapi (swagger) pour la documentation et l'essai des endpoints.
+Elle est accessible à l'adresse suivante :
+(https://ttm.jc1932.synology.me/api/public/documentation/swagger-ui/index.html)
+
+Les endpoints sont protégés par jeton JWT. Il est nécessaire de se connecter en utilisant l'endpoint suivant : auth-controller : POST /auth/login, en utilisant les informations de connexion fournies dans le paragraphe [Jeux d'utilisateurs](#jeux-dutilisateurs).
+Ensuite, il faut copier le jeton fourni en réponse (sans les ") et l'ajouter dans l'en-tête des requêtes en utilisant le bouton 'Authorize' tout en haut à droite de la page.
