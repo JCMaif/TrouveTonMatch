@@ -50,4 +50,8 @@ public class CompteRendu {
     @ManyToOne
     @JsonIgnore
     private Porteur porteur;
+
+    @ManyToOne
+    @JsonIgnore
+    private Projet projet;
 }

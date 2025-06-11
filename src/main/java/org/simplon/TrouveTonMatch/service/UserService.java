@@ -261,8 +261,8 @@ public class UserService {
     public boolean userCanEditOrDelete(Long userId) {
         Utilisateur currentUser = getCurrentUser();
 
-        return currentUser.getAuthorities().contains(UserRole.ADMIN) ||
-                currentUser.getAuthorities().contains(UserRole.STAFF) ||
+        return currentUser.getRole().equals(UserRole.ADMIN) ||
+                currentUser.getRole().equals(UserRole.STAFF) ||
                 currentUser.getId().equals(userId);
     }
 
@@ -273,5 +273,12 @@ public class UserService {
             userRepository.save(parrain);
             throw new IllegalStateException("Le Parrain a atteint le nombre maximum de projets affectés.");
         }
+    }
+
+    public boolean isAdminOrStaff(Utilisateur user) {
+        if (user == null || user.getRole() == null) {
+            return false;
+        }
+        return user.getRole() == UserRole.ADMIN || user.getRole() == UserRole.STAFF;
     }
 }

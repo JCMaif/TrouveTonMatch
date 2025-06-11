@@ -7,7 +7,9 @@ import org.simplon.TrouveTonMatch.service.CompteRenduService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -23,24 +25,41 @@ public class CompteRenduController {
     }
 
     @PostMapping
-    @PreAuthorize("hasAnyRole('ADMIN', 'STAFF') or @compteRenduService.userCanEdit(#id)")
+    @PreAuthorize("hasAnyRole('ADMIN', 'STAFF', 'PORTEUR')")
     public ResponseEntity<CompteRenduDto> create(@RequestBody CompteRenduDto compteRenduDto) {
         CompteRenduDto saved = compteRenduService.saveCompteRendu(compteRenduDto);
-        return ResponseEntity.ok().body(saved);
+        URI location = ServletUriComponentsBuilder.fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(saved.id())
+                .toUri();
+        return ResponseEntity.created(location).body(saved);
     }
 
     @GetMapping
-    @PreAuthorize("hasAnyRole('ADMIN', 'STAFF') or @compteRenduService.userCanEdit(#id)")
-    public ResponseEntity<List<CompteRenduDto>> findAll(){
+    @PreAuthorize("hasAnyRole('ADMIN', 'STAFF', 'PORTEUR', 'PARRAIN')")
+    public ResponseEntity<List<CompteRenduDto>> findAll() {
         return ResponseEntity.ok(compteRenduService.findAllCompteRendu());
     }
 
     @GetMapping("/{id}")
     @PreAuthorize("hasAnyRole('ADMIN', 'STAFF') or @compteRenduService.userCanEdit(#id)")
-    public ResponseEntity<CompteRenduDto> findById(@PathVariable Long id){
-        CompteRendu cr = compteRenduService.findById(id);
-        if (cr == null) return ResponseEntity.notFound().build();
-        return ResponseEntity.ok(compteRenduMapper.toDto(cr));
+    public ResponseEntity<CompteRenduDto> findById(@PathVariable Long id) {
+        CompteRenduDto crDto = compteRenduService.findById(id);
+        return ResponseEntity.ok(crDto);
     }
 
+    @PutMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'STAFF') or @compteRenduService.userCanEdit(#id)")
+    public ResponseEntity<CompteRenduDto> update(@PathVariable Long id, @RequestBody CompteRenduDto compteRenduDto) {
+        CompteRenduDto updated = compteRenduService.updateCompteRendu(id, compteRenduDto);
+        return ResponseEntity.ok(updated);
+    }
+
+    @DeleteMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'STAFF') or @compteRenduService.userCanEdit(#id)")
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
+        compteRenduService.deleteCompteRendu(id);
+        return ResponseEntity.noContent().build();
+    }
 }
+

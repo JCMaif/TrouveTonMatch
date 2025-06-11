@@ -9,8 +9,12 @@ CREATE TABLE compte_rendu
     actionsamener VARCHAR(2000),
     prochain_rdv  date,
     porteur_id    BIGINT,
+    projet_id     BIGINT,
     CONSTRAINT pk_compte_rendu PRIMARY KEY (id)
 );
 
 ALTER TABLE compte_rendu
     ADD CONSTRAINT FK_COMPTE_RENDU_ON_PORTEUR FOREIGN KEY (porteur_id) REFERENCES porteur (id);
+
+ALTER TABLE compte_rendu
+    ADD CONSTRAINT FK_COMPTE_RENDU_ON_PROJET FOREIGN KEY (projet_id) REFERENCES projet (id);
