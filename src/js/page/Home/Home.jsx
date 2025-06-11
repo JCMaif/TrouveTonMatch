@@ -15,6 +15,7 @@ const Home = () => {
     const {findParrainByPorteurId, findById} = useAuthenticatedService(userService);
     const {isAuthenticated} = useContext(AuthContext);
     const isAdminOrStaff = isAuthenticated?.role === "ADMIN" || isAuthenticated?.role === "STAFF";
+    const isParrain = isAuthenticated?.role === "PARRAIN";
 
     const fetchUserInfo = async (userId) => {
         if (!userId || users[userId]) {
@@ -43,15 +44,12 @@ const Home = () => {
             setLoading(true);
             try {
                 const data = await findAll();
-                console.log("compte-rendus :", data);
-                if (isAdminOrStaff && data.length > 0) {
+                if (data.length > 0) {
                     const compteRendusWithParrain = await Promise.all(
                         data.map(async cr => {
                             try {
                                 const parrain = await findParrainByPorteurId(cr.porteurId);
-                                console.log("parrain :", parrain);
                                 const porteur = await fetchUserInfo(cr.porteurId);
-                                console.log("porteur :", porteur);
                                 return {
                                     ...cr,
                                     parrainId: parrain?.id || null,
@@ -110,6 +108,8 @@ const Home = () => {
                                     <th>Parrain</th>
                                 </>
                             )}
+                            {isParrain && (
+                                <th>Porteur</th>)}
                             <th>Sujet</th>
                             <th>Echéance</th>
                         </tr>
@@ -123,6 +123,9 @@ const Home = () => {
                                         <td>{cr.porteurNom || cr.porteurId}</td>
                                         <td>{cr.parrainNom || cr.parrainId}</td>
                                     </>
+                                )}
+                                {isParrain && (
+                                    <td>{cr.porteurNom}</td>
                                 )}
                                 <td>{cr.sujets}</td>
                                 <td>{cr.prochainRdv}</td>

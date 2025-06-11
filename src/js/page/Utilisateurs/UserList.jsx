@@ -24,7 +24,6 @@ const UserList = ({role, title}) => {
                     data = data.filter(user => user.isActive);
                 }
                 setUsers(data);
-                console.log("data filtré utilisateurs : ", data);
             } catch (err) {
                 setError(`Échec de la récupération des ${title}.`);
             }

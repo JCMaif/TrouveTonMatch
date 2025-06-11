@@ -15,7 +15,6 @@ const Projets = () => {
             try {
                 const data = await findAll();
                 setProjets(data);
-                console.log("projets : ", data);
             } catch (err) {
                 setError("Failed to fetch projects");
             }

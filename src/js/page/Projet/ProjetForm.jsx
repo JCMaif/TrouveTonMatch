@@ -36,15 +36,12 @@ const ProjetForm = ({ isEditing }) => {
         isAuthenticated.role === "STAFF"
     );
 
-    console.log("can edit ? ", userCanEdit);
-    console.log("projet :", projet);
 
     useEffect(() => {
         if (projetId) {
             const fetchProjet = async () => {
                 try {
                     const data = await findById(projetId);
-                    console.log("data du projet : ", data)
                     if (!data) {
                         navigate("/creer-projet");
                     } else {
@@ -74,7 +71,6 @@ const ProjetForm = ({ isEditing }) => {
             try {
                 const parrains = await userService.findParrainsDisponibles(isAuthenticated.token);
                 setParrainsDisponibles(parrains);
-                console.log("parrains disponibles : ", parrains);
             } catch (e) {
                 console.error("Erreur chargement parrains :", e);
             }
@@ -127,6 +123,7 @@ const ProjetForm = ({ isEditing }) => {
         try {
             const updated = await projetService.affecterParrain(projetId, parrainId, isAuthenticated.token);
             setProjet(updated);
+            navigate(`/projet/${projetId}`);
         } catch (err) {
             console.error("Erreur attribution parrain :", err);
         }

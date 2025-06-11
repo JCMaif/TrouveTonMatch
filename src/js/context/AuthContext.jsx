@@ -32,7 +32,7 @@ export const AuthProvider = ({children}) => {
     try {
       //console.log("Token reçu :", jwtToken);
       const decodedToken = jwtDecode(jwtToken);
-      console.log("Decoded Token: ", decodedToken);
+      // console.log("Decoded Token: ", decodedToken);
       const currentTime = Date.now() / 1000;
 
       if (decodedToken.exp < currentTime) {
