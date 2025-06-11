@@ -118,4 +118,9 @@ public class UserController {
         Long plateformeId = securityUtils.getAuthenticatedUserPlateformeId();
         return ResponseEntity.ok(userService.findParrainsDisponibles(plateformeId));
     }
+
+    @GetMapping("/parrains/{porteurId}")
+    public ResponseEntity<Long> getParrainIdByPorteurId(@PathVariable Long porteurId) {
+        return ResponseEntity.ok(userService.getParrainIdByPorteurId(porteurId));
+    }
 }

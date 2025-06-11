@@ -34,6 +34,13 @@ password : porteur
 
 Vous pouvez tout essayer, la base de donnée sera réinitialisée à chaque démarrage de l'application.
 
+Note : Pour la création d'un compte utilisateur, son password est créé par défaut (en attendant l'activation de la fonctionnalité d'envoi de mail automatique avec jeton ou code d'accès). 
+A la première connexion, l'utilisateur doit modifier son password.
+
+<details>
+password par défaut : `password321`
+</details>
+
 ## Code source
 
 Le code source est présent sur github : (https://github.com/JCMaif/TrouveTonMatch)
@@ -54,3 +61,40 @@ Le code source est présent sur github : (https://github.com/JCMaif/TrouveTonMat
 L'application n'est pas finalisée, mais en cas de problème sur des fonctionnalités il est possible d'ouvrir une issue.
 (https://github.com/JCMaif/TrouveTonMatch/issues)
 
+## Déploiement
+
+Le projet nécessite des variables d'environnement à adapter à votre environnement de déploiement. Les variables sont :
+* DEPLOY_SSH_KEY : clé ssh pour accéder au serveur
+* NAS : adresse ip du serveur
+* NAS_USER : utilisateur pour accéder au serveur
+* DOCKERHUB_USER : utilisateur dockerhub
+* DOCKERHUB_TOKEN : token dockerhub
+* SPRING_SECURITY_JWT_SECRET : clé de chiffrement jwt
+
+Ces variables sont intégrées en tant que secrets github pour le repository. Elles sont utilisées dans le workflow de CI/CD (github actions).
+Le workflow est aussi disponible sur github : (https://github.com/JCMaif/TrouveTonMatch/blob/main/.github/workflows/deploy.yml)
+
+### Docker
+
+Le fichier docker-compose-build.yml est utilisé pour construire les images docker. 
+Le fichier docker-compose-nas.yml est utilisé pour copier les images sur le serveur.
+
+Il prend en charge un fichier .env qui contient les variables suivantes :
+* SPRING_MAIL_HOST
+* SPRING_MAIL_USER
+* SPRING_MAIL_PASSWORD
+* SPRING_PROFILES_ACTIVE
+* SPRING_DATASOURCE_URL
+* SPRING_DATASOURCE_USERNAME
+* SPRING_DATASOURCE_PASSWORD
+* SPRING_JPA_HIBERNATE_DDL_AUTO
+* POSTGRES_DB
+* POSTGRES_USER
+* POSTGRES_PASSWORD
+
+Ce fichier .env ne figure pas dans le repository, il est à créer.
+
+### Volumes
+
+Le volume `uploads` est utilisé pour stocker les fichiers uploadés par les utilisateurs.
+Le volume `pgdata` est utilisé pour stocker les données de la base de données.

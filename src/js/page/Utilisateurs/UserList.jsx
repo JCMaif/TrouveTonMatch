@@ -79,7 +79,7 @@ const UserList = ({role, title}) => {
                                 <div className="profile-picture-container-petit">
                                     {user?.profilePicture ? (
                                         <img
-                                            className="pictureProfilePetit"
+                                            className="pictureProfilePetit col-optionel"
                                             src={`${API_BASE_URL}/uploads/${user.profilePicture}`}
                                             alt="Avatar utilisateur"
                                         />

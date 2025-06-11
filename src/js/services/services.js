@@ -32,6 +32,7 @@ const createService = (resourcePath) => {
 
 export const plateformeService = createService("plateforme");
 export const enumService = createService("enum");
+export const compteRenduService = createService("compte-rendu");
 
 export const documentService = {
     ...createService("documents"),
@@ -141,6 +142,4 @@ export const userService = {
     },
 
 };
-
-export const compteRenduService = createService("compte-rendu");
 

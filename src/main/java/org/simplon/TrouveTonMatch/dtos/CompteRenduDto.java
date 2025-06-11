@@ -22,7 +22,7 @@ public record CompteRenduDto(
         String resume,
         String actionsAMener,
         LocalDate prochainRdv,
-        @NotNull Porteur porteur
+        Long porteurId
 )
         implements Serializable {
 }

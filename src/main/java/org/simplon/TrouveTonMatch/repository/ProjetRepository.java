@@ -1,6 +1,7 @@
 package org.simplon.TrouveTonMatch.repository;
 
 import org.simplon.TrouveTonMatch.model.Parrain;
+import org.simplon.TrouveTonMatch.model.Porteur;
 import org.simplon.TrouveTonMatch.model.Projet;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -25,6 +26,8 @@ public interface ProjetRepository extends JpaRepository<Projet, Long> {
     boolean existsByPorteurId(Long aLong);
 
     int countByParrain(Parrain parrain);
+
+    Projet findByPorteurId(Long porteurId);
 }
 
 

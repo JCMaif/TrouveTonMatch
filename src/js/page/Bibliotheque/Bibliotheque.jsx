@@ -111,9 +111,9 @@ const Bibliotheque = () => {
                 <thead>
                 <tr>
                     <th>Nom</th>
-                    <th>Type</th>
-                    <th>Mis en ligne le</th>
-                    <th>Mis en ligne par</th>
+                    <th className="col-optionel">Type</th>
+                    <th className="col-optionel">Mis en ligne le</th>
+                    <th className="col-optionel">Mis en ligne par</th>
                     <th>Actions</th>
 
                 </tr>
@@ -122,9 +122,9 @@ const Bibliotheque = () => {
                 {documents.map((doc) => (
                     <tr key={doc.id}>
                         <td>{doc.name}</td>
-                        <td>{doc.type}</td>
-                        <td>{new Date(doc.uploadedAt).toLocaleString()}</td>
-                        <td>{userMap[doc.uploadedBy] || "—"}</td>
+                        <td className="col-optionel">{doc.type}</td>
+                        <td className="col-optionel">{new Date(doc.uploadedAt).toLocaleString()}</td>
+                        <td className="col-optionel">{userMap[doc.uploadedBy] || "—"}</td>
                         <td><DownloadButton onClick={() => handleClick(doc.id)} />
                             {userCanCRUD && (
                                 <DeleteButton onClick={() => handleDeleteDocument(doc.id)} aria-label="Supprimer le document" />

@@ -94,4 +94,5 @@ public class ProjetService {
         userService.verifierChargeParrain(parrain);
         return projetMapper.toDto(projetRepository.save(projet));
     }
+
 }

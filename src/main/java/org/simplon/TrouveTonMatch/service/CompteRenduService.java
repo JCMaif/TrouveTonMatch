@@ -11,7 +11,6 @@ import org.simplon.TrouveTonMatch.model.Projet;
 import org.simplon.TrouveTonMatch.model.Utilisateur;
 import org.simplon.TrouveTonMatch.repository.CompteRenduRepository;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PostMapping;
 
 import jakarta.persistence.EntityNotFoundException;
 import lombok.extern.slf4j.Slf4j;
@@ -65,8 +64,22 @@ public class CompteRenduService {
     *
     * */
     public List<CompteRenduDto> findAllCompteRendu() {
-//        return compteRenduMapper.toDto(compteRenduRepository.findAll());
-        return null;
+       return compteRenduRepository.findAll().stream()
+               .map(compteRenduMapper::toDto)
+               .toList();
     }
 
+    public boolean userCanEdit(Long crId) {
+        return compteRenduRepository.findById(crId)
+                .map(CompteRendu::getPorteur)
+                .map(porteur -> userService.userCanEditOrDelete(porteur.getId()))
+                .orElse(false);
+    }
+
+    public CompteRendu findById(Long id) {
+        return compteRenduRepository.findById(id)
+                .orElseThrow(
+                        () -> new EntityNotFoundException("Compte-rendu introuvable")
+                );
+    }
 }

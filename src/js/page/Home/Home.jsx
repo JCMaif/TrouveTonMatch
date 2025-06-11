@@ -1,15 +1,14 @@
-import React, {useContext, useEffect, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import './Home.css';
-import {Link} from "react-router-dom";
-import {AuthContext} from "../../context/AuthContext.jsx";
+import {Link, useNavigate} from "react-router-dom";
 import {compteRenduService} from "../../services/services.js";
 import { useAuthenticatedService } from "../../hook/useAuthenticatedService.js";
 
 const Home = () => {
-    const {isAuthenticated} = useContext(AuthContext);
     const [compterendus, setCompterendus] = useState([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
+    const navigate = useNavigate();
     const { findAll } = useAuthenticatedService(compteRenduService);
 
     useEffect(() => {
@@ -17,23 +16,25 @@ const Home = () => {
             setError('');
             setLoading(true);
             try {
-                const compterendus = await findAll(isAuthenticated.token);
-                console.log("compte-rendus :", compterendus);
-                setCompterendus(compterendus);
+                const data = await findAll();
+                console.log("compte-rendus :", data);
+                setCompterendus(data);
             } catch (e) {
                 console.error("Erreur dans la récupération des compte-rendus : ", e);
                 setError("Erreur lors de la récupération des compte-rendus")
             } finally {
                 setLoading(false);
             }
-            fetchCR();
         }
+        fetchCR();
     }, []);
 
+    const handleClick = (id) => navigate(`/compte-rendu/${id}`);
     return (
         <>
-            <h1>Compte-rendus</h1>
             <div className="container">
+                <h1>Compte-rendus</h1>
+                {error && <p className="error-message">{error}</p>}
                 <li className="create-entity">
                     <Link to="/compte-rendu" className="Nav-link">Créer un compte rendu</Link>
                 </li>
@@ -47,7 +48,7 @@ const Home = () => {
                     </thead>
                     <tbody>
                     {compterendus.map((cr) => (
-                        <tr key={cr.id}>
+                        <tr key={cr.id} onClick={() => handleClick(cr.id)}>
                             <td>{cr.dateEchange}</td>
                             <td>{cr.sujets}</td>
                             <td>{cr.prochainRdv}</td>
@@ -55,7 +56,6 @@ const Home = () => {
                     ))}
                     </tbody>
                 </table>
-                {error && <p className="error-message">{error}</p>}
             </div>
         </>
     );

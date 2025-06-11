@@ -85,3 +85,9 @@ body {
     }
   }
 }
+@media (max-width: 500px) {
+  .container .col-optionel,
+  .container .profile-picture-wrapper-petit .profile-picture-container-petit .col-optionel {
+    display: none;
+  }
+}

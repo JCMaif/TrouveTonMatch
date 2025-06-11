@@ -239,6 +239,14 @@ public class UserService {
                 .collect(Collectors.toList());
     }
 
+    public Long getParrainIdByPorteurId(Long porteurId) {
+       Porteur porteur = (Porteur) userRepository.findById(porteurId).orElseThrow(EntityNotFoundException::new);
+       if (porteur != null && porteur.getProjet() != null && porteur.getProjet().getParrain() != null) {
+           return porteur.getProjet().getParrain().getId();
+       } else {
+           return null;
+       }
+    }
 
     public Utilisateur getCurrentUser() {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
