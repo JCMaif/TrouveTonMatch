@@ -115,7 +115,7 @@
 - Porteur : peut modifier mon projet [x]
 - Porteur : peut supprimer mon projet [] Non, suppression par Admin
 - Porteur : peut choisir un parrain [x]
-- Parrain : peut saisir une distance de déplacement []
+- Parrain : peut saisir une distance de déplacement [x]
 - Parrain : peut mettre son profile en retrait ou en avant de la liste des parrains [x]
 - Plateforme : peut mettre le profile d'un parrain en retrait ou en avant [x]
 - Parrain : peut choisir le nombre de projets max qu'il souhaite accompagner [x]
@@ -129,8 +129,8 @@
   - Actions à mener avec date de livraison
   - Prochain rendez-vous prévu
   - Laisser texte libre pour le résumé et les actions à mener, avec petite infobulle d'aide à la rédaction ?
-- Parrain et plateforme : consulter les comptes-rendus associés au projet []
-- Porteur : consulter/modifier les comptes-rendus []
+- Parrain et plateforme : consulter les comptes-rendus associés au projet [x]
+- Porteur : consulter/modifier les comptes-rendus [x]
 - Notifications : 
   - Quand un porteur choisi un parrain :
     - notification au parrain []
@@ -154,3 +154,8 @@ Ajout du déploiement automatique :
   * lancement du docker-compose sur le nas, qui télécharge les images depuis le docker hub
   * lancement des containers 
   * accessibilité de l'application sur (https://ttm.jc1932.synology.me)
+
+## 10 11 juin 2025
+* lecture des comptes-rendus par le parrain, le porteur et la plateforme
+* affichage des comptes-rendus sur le front
+

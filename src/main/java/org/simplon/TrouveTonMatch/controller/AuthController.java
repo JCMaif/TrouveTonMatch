@@ -4,15 +4,10 @@ import jakarta.annotation.security.PermitAll;
 import jakarta.validation.Valid;
 import org.simplon.TrouveTonMatch.dtos.JwtDto;
 import org.simplon.TrouveTonMatch.dtos.SignInDto;
-import org.simplon.TrouveTonMatch.dtos.SignupDto;
-import org.simplon.TrouveTonMatch.dtos.UserDto;
 import org.simplon.TrouveTonMatch.model.Utilisateur;
 import org.simplon.TrouveTonMatch.security.JwtService;
-import org.simplon.TrouveTonMatch.service.AuthService;
-import org.simplon.TrouveTonMatch.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -32,16 +27,11 @@ public class AuthController {
 
     private final AuthenticationManager authenticationManager;
 
-    private final AuthService authService;
-
     private final JwtService jwtService;
-    private final UserService userService;
 
-    public AuthController(AuthenticationManager authenticationManager, AuthService authService, JwtService jwtService, UserService userService) {
+    public AuthController(AuthenticationManager authenticationManager, JwtService jwtService) {
         this.authenticationManager = authenticationManager;
-        this.authService = authService;
         this.jwtService = jwtService;
-        this.userService = userService;
     }
 
     @PostMapping("/login")

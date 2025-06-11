@@ -16,6 +16,7 @@ const Home = () => {
     const {isAuthenticated} = useContext(AuthContext);
     const isAdminOrStaff = isAuthenticated?.role === "ADMIN" || isAuthenticated?.role === "STAFF";
     const isParrain = isAuthenticated?.role === "PARRAIN";
+    const isPorteur = isAuthenticated?.role === "PORTEUR";
 
     const fetchUserInfo = async (userId) => {
         if (!userId || users[userId]) {
@@ -38,39 +39,58 @@ const Home = () => {
         }
     };
 
+    const enrichCompteRendus = async (data) => {
+        return await Promise.all(
+            data.map(async cr => {
+                try {
+                    const parrain = await findParrainByPorteurId(cr.porteurId);
+                    const porteur = await fetchUserInfo(cr.porteurId);
+
+                    return {
+                        ...cr,
+                        parrainId: parrain?.id || null,
+                        parrainNom: parrain ? `${parrain.firstName} ${parrain.lastName}` : null,
+                        porteurNom: porteur ? `${porteur.firstName} ${porteur.lastName}` : null
+                    };
+                } catch (e) {
+                    console.error(`Erreur lors de l'enrichissement du compte-rendu ${cr.id}:`, e);
+                    return {
+                        ...cr,
+                        parrainId: null,
+                        parrainNom: null,
+                        porteurNom: null
+                    };
+                }
+            })
+        );
+    };
+
+    const filterCompteRendus = (data) => {
+        if (!isAuthenticated) return [];
+        const userRole = isAuthenticated.role;
+        switch (userRole) {
+            case "ADMIN":
+            case "STAFF":
+                return data;
+            case "PORTEUR":
+                return data.filter(cr => cr.porteurId === isAuthenticated.id);
+            case "PARRAIN":
+                return data.filter(cr => cr.parrainId === isAuthenticated.id);
+            default:
+                return [];
+        }
+    };
+
     useEffect(() => {
         const fetchCR = async () => {
             setError('');
             setLoading(true);
             try {
-                const data = await findAll();
-                if (data.length > 0) {
-                    const compteRendusWithParrain = await Promise.all(
-                        data.map(async cr => {
-                            try {
-                                const parrain = await findParrainByPorteurId(cr.porteurId);
-                                const porteur = await fetchUserInfo(cr.porteurId);
-                                return {
-                                    ...cr,
-                                    parrainId: parrain?.id || null,
-                                    parrainNom: parrain ? `${parrain.firstName} ${parrain.lastName}` : null,
-                                    porteurNom: porteur ? `${porteur.firstName} ${porteur.lastName}` : null
-                                };
-                            } catch (e) {
-                                console.error(`Erreur lors de la récupération du parrain pour le porteur ${cr.porteurId}:`, e);
-                                return {
-                                    ...cr,
-                                    parrainId: null,
-                                    parrainNom: null,
-                                    porteurNom: null
-                                };
-                            }
-                        })
-                    );
-                    setCompteRendus(compteRendusWithParrain);
-                } else {
-                    setCompteRendus(data);
-                }
+                const allData = await findAll();
+                const enrichedData = await enrichCompteRendus(allData)
+                const data = filterCompteRendus(enrichedData);
+                setCompteRendus(data);
+
             } catch (e) {
                 console.error("Erreur dans la récupération des compte-rendus : ", e);
                 setError("Erreur lors de la récupération des compte-rendus");
@@ -92,9 +112,10 @@ const Home = () => {
             <div className="container">
                 <h1>Compte-rendus</h1>
                 {error && <p className="error-message">{error}</p>}
+                {isPorteur && (
                     <li className="create-entity">
                         <Link to="/compte-rendu" className="Nav-link">Créer un compte rendu</Link>
-                    </li>
+                    </li> )}
                 {loading ? (
                     <p>Chargement en cours...</p>
                 ) : (
@@ -109,7 +130,8 @@ const Home = () => {
                                 </>
                             )}
                             {isParrain && (
-                                <th>Porteur</th>)}
+                                <th>Porteur</th>
+                            )}
                             <th>Sujet</th>
                             <th>Echéance</th>
                         </tr>
