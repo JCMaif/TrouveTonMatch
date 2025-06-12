@@ -21,13 +21,23 @@ password : plateforme
 ```sh
 username : parrain1
 password : parrain
+
+username : parrain2
+password : parrain
 ```
 </details>
 
 * Porteur
+
 <details>
 ```sh
 username : porteur1
+password : porteur
+
+username : porteur2
+password : porteur
+
+username : porteur2
 password : porteur
 ```
 </details>

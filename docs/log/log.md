@@ -159,3 +159,6 @@ Ajout du déploiement automatique :
 * lecture des comptes-rendus par le parrain, le porteur et la plateforme
 * affichage des comptes-rendus sur le front
 
+## 12 juin 2025
+* présentation du projet :
+  * C'est au parrain de créer un compte-rendu, pas au porteur

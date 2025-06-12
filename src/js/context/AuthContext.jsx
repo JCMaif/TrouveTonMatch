@@ -13,9 +13,8 @@ export const AuthProvider = ({children}) => {
     plateformeId: "",
     enabled: undefined,
   });
-  useEffect(() => {
-    initializeAuth();
-  }, []);
+
+  const [loading, setLoading] = useState(true);
 
   const saveToken = (token, rememberMe = false) => {
     const storage = rememberMe ? localStorage : sessionStorage;
@@ -103,12 +102,15 @@ export const AuthProvider = ({children}) => {
         clearToken();
       }
     }
+    setLoading(false);
   };
 
 
   useEffect(() => {
     initializeAuth();
   }, []);
+
+  if (loading) return null;
 
   return (
     <AuthContext.Provider value={{ isAuthenticated, login, logout }}>
