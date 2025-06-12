@@ -10,27 +10,27 @@ Il est possible de tester cette application selon plusieurs rôles utilisateurs 
 * Plateforme : a des droits étendus sur les autres utilisateurs, peut poster des documents, etc...
 
 <details>
-```
+
 username : plateforme1
 password : plateforme
-```
+
 </details>
 
 * Parrain
 <details>
-```
+
 username : parrain1
 password : parrain
 
 username : parrain2
 password : parrain
-```
+
 </details>
 
 * Porteur
 
 <details>
-```
+
 username : porteur1
 password : porteur
 
@@ -39,12 +39,12 @@ password : porteur
 
 username : porteur2
 password : porteur
-```
+
 </details>
 
 Vous pouvez tout essayer, la base de donnée sera réinitialisée à chaque démarrage de l'application.
 
-Note : Pour la création d'un compte utilisateur, son password est créé par défaut (en attendant l'activation de la fonctionnalité d'envoi de mail automatique avec jeton ou code d'accès). 
+Note : Pour la création d'un compte utilisateur, son password est créé par défaut (en attendant l'activation de la fonctionnalité d'envoi de mail automatique avec jeton ou code d'accès).
 A la première connexion, l'utilisateur doit modifier son password.
 
 <details>
@@ -62,7 +62,7 @@ Le code source est présent sur github : (https://github.com/JCMaif/TrouveTonMat
 * aller dans le dossier du projet (`cd TrouveTonMatch`)
 * Le back est un projet maven => `mvn clean install`
 * Installer les dépendances du front => `npm install`
-* lancer le back : `mvn spring-boot:run` - par défaut démarre sur le port 8080, modifiable dans le fichier application.yml 
+* lancer le back : `mvn spring-boot:run` - par défaut démarre sur le port 8080, modifiable dans le fichier application.yml
 * lancer le front : `npm run dev`
 * accéder à (http://localhost:5173) - port modifiable en éditant le fichier `vite.config.js`
 
@@ -86,7 +86,7 @@ Le workflow est aussi disponible sur github : (https://github.com/JCMaif/TrouveT
 
 ### Docker
 
-Le fichier docker-compose-build.yml est utilisé pour construire les images docker. 
+Le fichier docker-compose-build.yml est utilisé pour construire les images docker.
 Le fichier docker-compose-nas.yml est utilisé pour copier les images sur le serveur.
 
 Il prend en charge un fichier .env qui contient les variables suivantes :
