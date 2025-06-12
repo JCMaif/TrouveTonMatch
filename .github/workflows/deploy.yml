@@ -98,4 +98,5 @@ jobs:
             export PATH=$PATH:/usr/local/bin
             docker pull ${{ secrets.DOCKERHUB_USERNAME }}/${{env.IMAGE}}-backend:${{env.VERSION}}
             docker pull ${{ secrets.DOCKERHUB_USERNAME }}/${{env.IMAGE}}-frontend:${{env.VERSION}}
+            docker-compose down -v
             docker-compose -f docker-compose-nas.yml up -d
