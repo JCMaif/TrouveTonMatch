@@ -26,7 +26,7 @@ services:
     env_file:
       - .env
     healthcheck:
-      test: ["CMD", "wget", "--no-verbose", "--spider", "http://localhost:8080/api/actuator/health"]
+      test: ["CMD", "wget", "--no-verbose", "--spider", "/actuator/health"]
       interval: 30s
       timeout: 20s
       retries: 3

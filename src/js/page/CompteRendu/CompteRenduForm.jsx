@@ -17,5 +17,11 @@ const CompteRenduForm = ({isEditing}) => {
         isAuthenticated.role === "STAFF"
     );
     const [isEditing, setIsEditing] = useState(false);
+
+    return (
+        <div className="container">
+            <h2>Formulaire de compte-rendu</h2>
+        </div>
+    );
 };
 export default CompteRenduForm;
