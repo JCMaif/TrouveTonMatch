@@ -2,53 +2,34 @@
 
 ## Accès
 Cette application est hébergée sur mon serveur personnel, accessible à l'adresse :
-(https://ttm.jc1932.synology.me)
+
+👉 (https://ttm.jc1932.synology.me)
 
 ## Jeux d'utilisateurs
 Il est possible de tester cette application selon plusieurs rôles utilisateurs :
 
-* Plateforme : a des droits étendus sur les autres utilisateurs, peut poster des documents, etc...
-
 <details>
 
-username : plateforme1
-password : plateforme
-
-</details>
-
-* Parrain
-<details>
-
-username : parrain1
-password : parrain
-
-username : parrain2
-password : parrain
-
-</details>
-
-* Porteur
-
-<details>
-
-username : porteur1
-password : porteur
-
-username : porteur2
-password : porteur
-
-username : porteur2
-password : porteur
+| Rôles utilisateurs | Description | Username    | Password |
+| --- | --- |-------------| --- |
+| Plateforme | Est le seul utilisateur ayant les droits d'administration sur l'application. | plateforme1 | plateforme |
+| Parrain | Est un utilisateur ayant des droits de parrain sur l'application. | parrain1    | parrain |
+| Parrain | Ce parrain n’a pas finalisé son inscription. Son profil est à compléter. Un bouton **Renouveler activation** est visible pour `plateforme1`| parrain2    | parrain |
+| Porteur | Est un utilisateur ayant des droits de porteur sur l'application. | porteur1    | porteur |
+| Porteur |  | porteur2    | porteur |
+| Porteur |  | porteur3    | porteur |
 
 </details>
 
 Vous pouvez tout essayer, la base de donnée sera réinitialisée à chaque démarrage de l'application.
 
 Note : Pour la création d'un compte utilisateur, son password est créé par défaut (en attendant l'activation de la fonctionnalité d'envoi de mail automatique avec jeton ou code d'accès).
-A la première connexion, l'utilisateur doit modifier son password.
+A la première connexion, l'utilisateur doit modifier son password. Ce fonctionnement ne sera plus valable lorsque la foncionnalité d'envoi de mail sera activée.
 
 <details>
-password par défaut : `password321`
+
+password par défaut : **password321**
+
 </details>
 
 ## Code source
