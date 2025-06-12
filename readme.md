@@ -10,14 +10,14 @@ Il est possible de tester cette application selon plusieurs rôles utilisateurs 
 
 <details>
 
-| Rôles utilisateurs | Description | Username    | Password |
-| --- | --- |-------------| --- |
-| Plateforme | Est le seul utilisateur ayant les droits d'administration sur l'application. | plateforme1 | plateforme |
-| Parrain | Est un utilisateur ayant des droits de parrain sur l'application. | parrain1    | parrain |
-| Parrain | Ce parrain n’a pas finalisé son inscription. Son profil est à compléter. Un bouton **Renouveler activation** est visible pour `plateforme1`| parrain2    | parrain |
-| Porteur | Est un utilisateur ayant des droits de porteur sur l'application. | porteur1    | porteur |
-| Porteur |  | porteur2    | porteur |
-| Porteur |  | porteur3    | porteur |
+| Rôles utilisateurs | Description                                                                                                                                               | Username    | Password |
+| --- |-----------------------------------------------------------------------------------------------------------------------------------------------------------|-------------| --- |
+| Plateforme | Est le seul utilisateur ayant les droits d'administration sur l'application.                                                                              | plateforme1 | plateforme |
+| Parrain | Est un utilisateur ayant des droits de parrain sur l'application.                                                                                         | parrain1    | parrain |
+| Parrain | Ce parrain n’a pas finalisé son inscription. Son profil est à compléter. Un bouton **Renouveler activation** est visible pour `plateforme1` (non finalisé) | parrain2    | parrain |
+| Porteur | Est un utilisateur ayant des droits de porteur sur l'application.                                                                                         | porteur1    | porteur |
+| Porteur |                                                                                                                                                           | porteur2    | porteur |
+| Porteur |                                                                                                                                                           | porteur3    | porteur |
 
 </details>
 
