@@ -38,7 +38,8 @@ public class SecurityConfig {
                                 "/enum/**",
                                 "/uploads/**",
                                 "/messages/**",
-                                "/enum/**"
+                                "/enum/**",
+                                "/actuator/**"
                         ).permitAll()
                         .requestMatchers(
                                 "/user/**",

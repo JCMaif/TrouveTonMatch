@@ -53,7 +53,14 @@ springdoc:
     path: /public/documentation/api-docs
   swagger-ui:
     path: /public/documentation/swagger-ui.html
-
+management:
+  endpoint:
+    health:
+      show-details: always
+  endpoints:
+    web:
+      exposure:
+        include: "*"
 debug: true
 
 ---
@@ -91,5 +98,13 @@ springdoc:
     path: /public/documentation/api-docs
   swagger-ui:
     path: /public/documentation/swagger-ui.html
+management:
+  endpoint:
+    health:
+      show-details: always
+  endpoints:
+    web:
+      exposure:
+        include: health
 
 debug: false

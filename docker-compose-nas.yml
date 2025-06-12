@@ -1,6 +1,9 @@
 services:
   frontend:
     image: iousco/trouvetonmatch-frontend:0.0.1
+    depends_on:
+      backend:
+        condition: service_healthy
     ports:
       - "3000:80"
     environment:
@@ -22,6 +25,11 @@ services:
       - SPRING_JPA_HIBERNATE_DDL_AUTO=update
     env_file:
       - .env
+    healthcheck:
+      test: [ "CMD", "curl", "--fail", "http://localhost:8080/api/actuator/health" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
     networks:
       - app-network
 
