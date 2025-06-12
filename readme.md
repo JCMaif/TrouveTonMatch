@@ -10,7 +10,7 @@ Il est possible de tester cette application selon plusieurs rôles utilisateurs 
 * Plateforme : a des droits étendus sur les autres utilisateurs, peut poster des documents, etc...
 
 <details>
-```sh
+```
 username : plateforme1
 password : plateforme
 ```
@@ -18,7 +18,7 @@ password : plateforme
 
 * Parrain
 <details>
-```sh
+```
 username : parrain1
 password : parrain
 
@@ -30,7 +30,7 @@ password : parrain
 * Porteur
 
 <details>
-```sh
+```
 username : porteur1
 password : porteur
 
