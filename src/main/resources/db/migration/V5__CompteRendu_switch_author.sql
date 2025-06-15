@@ -1,0 +1,7 @@
+ALTER TABLE compte_rendu
+    DROP CONSTRAINT FK_COMPTE_RENDU_ON_PORTEUR,
+    DROP COLUMN porteur_id;
+
+ALTER TABLE compte_rendu
+    ADD parrain_id BIGINT,
+    ADD CONSTRAINT FK_COMPTE_RENDU_ON_PARRAIN FOREIGN KEY (parrain_id) REFERENCES parrain (id);

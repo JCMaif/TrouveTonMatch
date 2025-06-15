@@ -37,8 +37,23 @@ public class ProjetService {
         Long plateformeId = securityUtils.getAuthenticatedUserPlateformeId();
 
         return projetRepository.findByPlateformeId(plateformeId).stream()
-                .map(projetMapper::toDto)
-                .toList();
+                .map(projet -> {
+                    Porteur porteur = projet.getPorteur();
+                    Parrain parrain = projet.getParrain();
+
+                    return new ProjetDto(
+                            projet.getId(),
+                            projet.getTitle(),
+                            projet.getDescription(),
+                            projet.getStartingDate(),
+                            porteur != null ? porteur.getId() : null,
+                            porteur != null ? porteur.getFirstname() : null,
+                            porteur != null ? porteur.getLastname() : null,
+                            parrain != null ? parrain.getId() : null,
+                            parrain != null ? parrain.getFirstname() : null,
+                            parrain != null ? parrain.getLastname() : null
+                    );
+                }).toList();
     }
 
     public Projet findById(Long id) {

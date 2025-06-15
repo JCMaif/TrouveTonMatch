@@ -31,7 +31,7 @@ const ProjetForm = ({ isEditing }) => {
     const [projetState, setProjetState] = useState(initialState);
 
     const userCanEdit = isAuthenticated && (
-        isAuthenticated.id === projet?.porteur?.id ||
+        isAuthenticated.id === projet?.porteurId ||
         isAuthenticated.role === "ADMIN" ||
         isAuthenticated.role === "STAFF"
     );
@@ -46,6 +46,7 @@ const ProjetForm = ({ isEditing }) => {
                         navigate("/creer-projet");
                     } else {
                         setProjet(data);
+                        console.log("projet", data);
                         setProjetState({
                             title: data.title || "",
                             description: data.description || "",
@@ -76,7 +77,7 @@ const ProjetForm = ({ isEditing }) => {
             }
         };
 
-        if (isEditing && userCanEdit && !projet?.parrain) {
+        if (isEditing && userCanEdit && !projet?.parrainId) {
             fetchParrains();
         }
     }, [isEditing, userCanEdit, projet]);
@@ -202,10 +203,10 @@ const ProjetForm = ({ isEditing }) => {
                             <EditButton onClick={() => navigate(`/projet/edit/${projetId}`)}>Modifier</EditButton>
                         )}
                     </div>
-                    <p><strong>Porteur :</strong> {projet?.porteur?.firstname} {projet?.porteur?.lastname}</p>
+                    <p><strong>Porteur :</strong> {projet?.porteurFirstName} {projet?.PorteurLastname}</p>
                     <p><strong>Date de lancement :</strong> {projet?.startingDate ? new Date(projet.startingDate).toLocaleDateString() : "Non renseignée"}</p>
                     <p><strong>Description :</strong> {projet?.description || "Aucune description"}</p>
-                    <p><strong>Parrain :</strong> {projet?.parrain ? `${projet.parrain.firstName} ${projet.parrain.lastName}` : "Choisissez un parrain"}</p>
+                    <p><strong>Parrain :</strong> {projet?.parrainId ? `${projet.parrainFirstName} ${projet.ParrainLastname}` : "Choisissez un parrain"}</p>
                 </>
             )}
         </div>

@@ -1,11 +1,11 @@
-import React, {useContext, useEffect, useState} from "react";
+import  {useContext, useEffect, useState} from "react";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
 import {plateformeService} from "../../services/services.js";
 
 const Nav = () => {
   const { isAuthenticated} = useContext(AuthContext);
-  const { username, role, id, plateformeId, enabled } = isAuthenticated;
+  const { role, id, plateformeId } = isAuthenticated;
   const [ plateformeNom, setPlateformeNom ] = useState("");
 
   useEffect(() => {

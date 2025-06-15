@@ -32,7 +32,7 @@ public class ProjetController {
     public ResponseEntity<List<ProjetDto>> findAll() {
         List<ProjetDto> projets = projetService.findAllByPlateformeId();
         if (projets.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+            return ResponseEntity.noContent().build();
         }
         return ResponseEntity.ok(projets);
     }

@@ -1,7 +1,11 @@
 package org.simplon.TrouveTonMatch.service;
 
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 
+import jakarta.transaction.Transactional;
 import org.simplon.TrouveTonMatch.dtos.CompteRenduDto;
 import org.simplon.TrouveTonMatch.mapper.CompteRenduMapper;
 import org.simplon.TrouveTonMatch.model.CompteRendu;
@@ -10,6 +14,10 @@ import org.simplon.TrouveTonMatch.model.Porteur;
 import org.simplon.TrouveTonMatch.model.Projet;
 import org.simplon.TrouveTonMatch.model.Utilisateur;
 import org.simplon.TrouveTonMatch.repository.CompteRenduRepository;
+import org.simplon.TrouveTonMatch.specification.CompteRenduSpecification;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import jakarta.persistence.EntityNotFoundException;
@@ -24,140 +32,145 @@ public class CompteRenduService {
     private final ProjetService projetService;
     private final CompteRenduMapper compteRenduMapper;
 
-    public CompteRenduService(CompteRenduRepository compteRenduRepository, UserService userService, ProjetService projetService,
-            CompteRenduMapper compteRenduMapper) {
+    public CompteRenduService(
+            CompteRenduRepository compteRenduRepository,
+            UserService userService,
+            ProjetService projetService,
+            CompteRenduMapper compteRenduMapper
+    ) {
         this.compteRenduRepository = compteRenduRepository;
         this.userService = userService;
         this.projetService = projetService;
         this.compteRenduMapper = compteRenduMapper;
     }
 
-    /*
-    Un compte-rendu ne peut être créé que si :
-    - l'utilisateur connecté est un Porteur
-    - que ce Porteur a un projet
-    - que ce projet a un Parrain
-     */
-    public CompteRenduDto saveCompteRendu(CompteRenduDto compteRenduDto) {
+    public CompteRenduDto saveCompteRendu(CompteRenduDto dto) {
         Utilisateur user = userService.getCurrentUser();
         log.info("user : {}", user);
-        if (!(user instanceof Porteur)) {
-            throw new SecurityException("Seuls les porteurs peuvent créer ou modifier un compte-rendu");
+
+        if (!(user instanceof Parrain parrain)) {
+            throw new SecurityException("Seuls les parrains peuvent créer un compte-rendu");
         }
-        Projet projet = ((Porteur) user).getProjet();
-        if (projet == null) throw new EntityNotFoundException("Ce Projet n'existe pas");
-        if (!(projet.getPorteur().getId().equals(user.getId()))) throw new SecurityException("Ce projet n'appartient pas au porteur connecté");
-        log.info("projet : {}", projet);
 
-        Parrain parrain = projet.getParrain();
-        if (parrain == null) throw new EntityNotFoundException("Ce projet n'a pas encore de parrain");
-        log.info("parrain : {}", parrain);
+        Projet projet = projetService.findById(dto.projetId());
+        if (projet == null) {
+            throw new EntityNotFoundException("Projet introuvable");
+        }
 
-        CompteRendu compteRendu = compteRenduMapper.toEntity(compteRenduDto);
-        compteRendu.setPorteur((Porteur) user);
+        if (!parrain.equals(projet.getParrain())) {
+            throw new SecurityException("Vous ne pouvez rédiger un compte-rendu que pour les projets que vous parrainez.");
+        }
+
+        CompteRendu compteRendu = compteRenduMapper.toEntity(dto);
         compteRendu.setProjet(projet);
+        compteRendu.setParrain(parrain);
         compteRenduRepository.save(compteRendu);
+
         return compteRenduMapper.toDto(compteRendu);
     }
 
-    /*
-    * Les compte-rendus peuvent être lus par le porteur du projet, le parrain associé, ADMIN et STAFF
-    *
-    * */
-    public List<CompteRenduDto> findAllCompteRendu() {
+    public Page<CompteRenduDto> findAllCompteRendu(Pageable pageable) {
         Utilisateur user = userService.getCurrentUser();
-        List<CompteRendu> compteRendus;
 
-        if (user instanceof Porteur) {
-            // Un porteur ne peut voir que ses propres comptes-rendus
-            Porteur porteur = (Porteur) user;
-            compteRendus = compteRenduRepository.findByPorteur(porteur);
-        } else if (user instanceof Parrain) {
-            // Un parrain peut voir les comptes-rendus des projets qu'il parraine
-            Parrain parrain = (Parrain) user;
-            compteRendus = compteRenduRepository.findByProjetParrain(parrain);
+        Page<CompteRendu> compteRendus;
+
+        if (user instanceof Porteur porteur) {
+            compteRendus = compteRenduRepository.findByProjet_Porteur(porteur, pageable);
+        } else if (user instanceof Parrain parrain) {
+            compteRendus = compteRenduRepository.findByParrain(parrain, pageable);
         } else if (userService.isAdminOrStaff(user)) {
-            // Les admins et staff peuvent voir tous les comptes-rendus
-            compteRendus = compteRenduRepository.findAll();
+            compteRendus = compteRenduRepository.findAll(pageable);
         } else {
             throw new SecurityException("Vous n'avez pas la permission de voir les comptes-rendus");
         }
 
-        return compteRendus.stream()
-                .map(compteRenduMapper::toDto)
-                .toList();
+        return compteRendus.map(compteRenduMapper::toDto);
     }
 
+    public Page<CompteRenduDto> searchWithFilters(String projetTitle, String PorteurLastname, String ParrainLastname, LocalDate prochainRdv, Pageable pageable) {
+        Specification<CompteRendu> spec = Specification
+                .where(CompteRenduSpecification.hasProjetTitle(projetTitle))
+                .and(CompteRenduSpecification.hasPorteurLastname(PorteurLastname))
+                .and(CompteRenduSpecification.hasParrainLastname(ParrainLastname))
+                .and(CompteRenduSpecification.hasProchainRdv(prochainRdv));
 
-    public boolean userCanEdit(Long crId) {
-        Utilisateur user = userService.getCurrentUser();
-        if (userService.isAdminOrStaff(user)) {
-            return true;
-        }
-
-        return compteRenduRepository.findById(crId)
-                .map(compteRendu -> {
-                    if (user instanceof Porteur) {
-                        return compteRendu.getPorteur().getId().equals(user.getId());
-                    } else if (user instanceof Parrain) {
-                        return compteRendu.getProjet().getParrain() != null &&
-                                compteRendu.getProjet().getParrain().getId().equals(user.getId());
-                    }
-                    return false;
-                })
-                .orElse(false);
+        return compteRenduRepository.findAll(spec, pageable)
+                .map(compteRenduMapper::toDto);
     }
 
     public CompteRenduDto findById(Long id) {
-        CompteRendu compteRendu = compteRenduRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Compte-rendu introuvable"));
-
         Utilisateur user = userService.getCurrentUser();
-        boolean canAccess = false;
+        Optional<CompteRendu> compteRenduOpt;
 
-        if (user instanceof Porteur) {
-            canAccess = compteRendu.getPorteur().getId().equals(user.getId());
-        } else if (user instanceof Parrain) {
-            Parrain parrain = (Parrain) user;
-            canAccess = compteRendu.getProjet().getParrain() != null &&
-                    compteRendu.getProjet().getParrain().getId().equals(user.getId());
+        if (user instanceof Porteur porteur) {
+            compteRenduOpt = compteRenduRepository.findByIdAndProjet_Porteur(id, porteur);
+        } else if (user instanceof Parrain parrain) {
+            compteRenduOpt = compteRenduRepository.findByIdAndParrain(id, parrain);
         } else if (userService.isAdminOrStaff(user)) {
-            canAccess = true;
-        }
-
-        if (!canAccess) {
+            compteRenduOpt = compteRenduRepository.findById(id); // Admin ou staff : pas de restriction
+        } else {
             throw new SecurityException("Vous n'avez pas la permission d'accéder à ce compte-rendu");
         }
+
+        CompteRendu compteRendu = compteRenduOpt
+                .orElseThrow(() -> new SecurityException("Vous n'avez pas la permission d'accéder à ce compte-rendu"));
 
         return compteRenduMapper.toDto(compteRendu);
     }
 
-    public CompteRenduDto updateCompteRendu(Long id, CompteRenduDto compteRenduDto) {
-        if (compteRenduDto == null) {
-            throw new IllegalArgumentException("Le compte-rendu DTO ne peut pas être nul");
-        }
+    @Transactional
+    public CompteRenduDto update(Long id, CompteRenduDto dto) {
+        Utilisateur user = userService.getCurrentUser();
+        Optional<CompteRendu> compteRenduOpt;
 
-        if (!userCanEdit(id)) {
+        if (user instanceof Porteur porteur) {
+            compteRenduOpt = compteRenduRepository.findByIdAndProjet_Porteur(id, porteur);
+        } else if (user instanceof Parrain parrain) {
+            compteRenduOpt = compteRenduRepository.findByIdAndParrain(id, parrain);
+        } else if (userService.isAdminOrStaff(user)) {
+            compteRenduOpt = compteRenduRepository.findById(id);
+        } else {
             throw new SecurityException("Vous n'avez pas la permission de modifier ce compte-rendu");
         }
 
-        CompteRendu existingCompteRendu = compteRenduRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Compte-rendu introuvable"));
+        CompteRendu compteRendu = compteRenduOpt
+                .orElseThrow(() -> new SecurityException("Vous n'avez pas la permission de modifier ce compte-rendu"));
 
-        compteRenduMapper.partialUpdate(existingCompteRendu, compteRenduDto);
-        CompteRendu updatedCompteRendu = compteRenduRepository.save(existingCompteRendu);
-        return compteRenduMapper.toDto(updatedCompteRendu);
+        return compteRenduMapper.toDto(compteRenduRepository.save(compteRendu));
     }
 
-    public void deleteCompteRendu(Long id) {
-        if (!userCanEdit(id)) {
+    @Transactional
+    public void deleteById(Long id) {
+        Utilisateur user = userService.getCurrentUser();
+        Optional<CompteRendu> compteRenduOpt;
+
+        if (user instanceof Porteur porteur) {
+            compteRenduOpt = compteRenduRepository.findByIdAndProjet_Porteur(id, porteur);
+        } else if (user instanceof Parrain parrain) {
+            compteRenduOpt = compteRenduRepository.findByIdAndParrain(id, parrain);
+        } else if (userService.isAdminOrStaff(user)) {
+            compteRenduOpt = compteRenduRepository.findById(id);
+        } else {
             throw new SecurityException("Vous n'avez pas la permission de supprimer ce compte-rendu");
         }
 
-        if (!compteRenduRepository.existsById(id)) {
-            throw new EntityNotFoundException("Compte-rendu introuvable");
-        }
+        CompteRendu compteRendu = compteRenduOpt
+                .orElseThrow(() -> new SecurityException("Vous n'avez pas la permission de supprimer ce compte-rendu"));
 
-        compteRenduRepository.deleteById(id);
+        compteRenduRepository.delete(compteRendu);
+    }
+
+    public boolean userCanEdit(Long crId) {
+        Utilisateur user = userService.getCurrentUser();
+        if (userService.isAdminOrStaff(user)) return true;
+
+        return compteRenduRepository.findById(crId)
+                .map(compteRendu -> {
+                    if (user instanceof Parrain) {
+                        return compteRendu.getParrain().getId().equals(user.getId());
+                    }
+                    return false;
+                })
+                .orElse(false);
     }
 }

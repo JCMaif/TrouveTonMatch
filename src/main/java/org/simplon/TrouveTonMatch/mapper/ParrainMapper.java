@@ -11,8 +11,8 @@ import org.simplon.TrouveTonMatch.service.ProjetService;
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
 public interface ParrainMapper {
 
-    @Mapping(target = "firstName", source = "firstname")
-    @Mapping(target = "lastName", source = "lastname")
+    @Mapping(target = "firstname", source = "firstname")
+    @Mapping(target = "lastname", source = "lastname")
     ParrainDto toDto(Parrain parrain);
 
 }

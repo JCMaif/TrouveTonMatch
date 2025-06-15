@@ -18,8 +18,14 @@ public record CompteRenduDto(
         String resume,
         String actionsAMener,
         LocalDate prochainRdv,
-        Long porteurId,
-        Long projetId
+        Long parrainId,
+        Long projetId,
+        String projetTitle,
+        String porteurFirstname,
+        String PorteurLastname,
+        String parrainFirstname,
+        String ParrainLastname,
+        Long porteurId
 )
         implements Serializable {
 }

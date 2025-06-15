@@ -11,14 +11,17 @@ import java.time.LocalDate;
 /**
  * DTO for {@link org.simplon.TrouveTonMatch.model.Projet}
  */
-@Value
-@Builder
-public class ProjetDto implements Serializable {
-    Long id;
-    LocalDate startingDate;
-    String title;
-    String description;
-    Porteur porteur;
-    Long plateformeId;
-    ParrainDto parrain;
-}
+
+public record ProjetDto(
+    Long id,
+    String title,
+    String description,
+    LocalDate startingDate,
+    Long porteurId,
+    String porteurFirstname,
+    String PorteurLastname,
+    Long parrainId,
+    String parrainFirstname,
+    String ParrainLastname
+)
+implements Serializable{}

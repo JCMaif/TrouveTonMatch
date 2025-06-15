@@ -1,6 +1,7 @@
 package org.simplon.TrouveTonMatch.mapper;
 
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.mapstruct.MappingConstants;
 import org.mapstruct.ReportingPolicy;
 import org.simplon.TrouveTonMatch.dtos.ProjetCreateDto;
@@ -17,6 +18,12 @@ import org.simplon.TrouveTonMatch.model.Projet;
 )
 public interface ProjetMapper {
 
+    @Mapping(target = "porteurId", source = "porteur.id")
+    @Mapping(target = "porteurFirstname", source = "porteur.firstname")
+    @Mapping(target = "PorteurLastname", source = "porteur.lastname")
+    @Mapping(target = "parrainId", source = "parrain.id")
+    @Mapping(target = "parrainFirstname", source = "parrain.firstname")
+    @Mapping(target = "ParrainLastname", source = "parrain.lastname")
     ProjetDto toDto(Projet projet);
 
     ProjetCreateDto toCreateDto(Projet projet);
