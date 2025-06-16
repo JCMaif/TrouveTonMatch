@@ -134,7 +134,7 @@
 - Notifications : 
   - Quand un porteur choisi un parrain :
     - notification au parrain []
-    - feedback au porteur []
+    - feedback au porteur [x]
     - notification à la plateforme []
   - Quand un porteur saisit un compte-rendu :
     - notification au parrain et à la plateforme []
@@ -162,3 +162,8 @@ Ajout du déploiement automatique :
 ## 12 juin 2025
 * présentation du projet :
   * C'est au parrain de créer un compte-rendu, pas au porteur
+
+## 16/06/2025
+* Correction de création des CR par parrain
+* Correction affichage paginé des résultats et différencié par rôle
+
