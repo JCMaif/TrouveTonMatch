@@ -110,7 +110,7 @@ const CompteRenduForm = () => {
                     <select name="projetId" value={form.projetId} onChange={handleChange}>
                         <option value="">-- Sélectionner --</option>
                         {projets.map((projet) => (
-                            <option key={projet.id} value={projet.id}>{projet.title} - ({projet.PorteurLastname})</option>
+                            <option key={projet.id} value={projet.id}>{projet.title} - ({projet.porteurLastname})</option>
                         ))}
                     </select>
 

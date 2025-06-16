@@ -20,10 +20,10 @@ public interface ProjetMapper {
 
     @Mapping(target = "porteurId", source = "porteur.id")
     @Mapping(target = "porteurFirstname", source = "porteur.firstname")
-    @Mapping(target = "PorteurLastname", source = "porteur.lastname")
+    @Mapping(target = "porteurLastname", source = "porteur.lastname")
     @Mapping(target = "parrainId", source = "parrain.id")
     @Mapping(target = "parrainFirstname", source = "parrain.firstname")
-    @Mapping(target = "ParrainLastname", source = "parrain.lastname")
+    @Mapping(target = "parrainLastname", source = "parrain.lastname")
     ProjetDto toDto(Projet projet);
 
     ProjetCreateDto toCreateDto(Projet projet);

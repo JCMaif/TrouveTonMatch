@@ -1,8 +1,5 @@
 package org.simplon.TrouveTonMatch.service;
 
-import java.time.LocalDate;
-import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
 import jakarta.transaction.Transactional;
@@ -14,10 +11,8 @@ import org.simplon.TrouveTonMatch.model.Porteur;
 import org.simplon.TrouveTonMatch.model.Projet;
 import org.simplon.TrouveTonMatch.model.Utilisateur;
 import org.simplon.TrouveTonMatch.repository.CompteRenduRepository;
-import org.simplon.TrouveTonMatch.specification.CompteRenduSpecification;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import jakarta.persistence.EntityNotFoundException;
@@ -52,7 +47,7 @@ public class CompteRenduService {
             throw new SecurityException("Seuls les parrains peuvent créer un compte-rendu");
         }
 
-        Projet projet = projetService.findById(dto.projetId());
+        Projet projet = projetService.findById(dto.getProjetId());
         if (projet == null) {
             throw new EntityNotFoundException("Projet introuvable");
         }
@@ -85,17 +80,6 @@ public class CompteRenduService {
         }
 
         return compteRendus.map(compteRenduMapper::toDto);
-    }
-
-    public Page<CompteRenduDto> searchWithFilters(String projetTitle, String PorteurLastname, String ParrainLastname, LocalDate prochainRdv, Pageable pageable) {
-        Specification<CompteRendu> spec = Specification
-                .where(CompteRenduSpecification.hasProjetTitle(projetTitle))
-                .and(CompteRenduSpecification.hasPorteurLastname(PorteurLastname))
-                .and(CompteRenduSpecification.hasParrainLastname(ParrainLastname))
-                .and(CompteRenduSpecification.hasProchainRdv(prochainRdv));
-
-        return compteRenduRepository.findAll(spec, pageable)
-                .map(compteRenduMapper::toDto);
     }
 
     public CompteRenduDto findById(Long id) {

@@ -14,17 +14,41 @@ public interface CompteRenduMapper {
     @Mapping(target = "projet", ignore = true)
     CompteRendu toEntity(CompteRenduDto compteRenduDto);
 
-    @Mapping(source = "parrain.id", target = "parrainId")
-    @Mapping(source = "projet.id", target = "projetId")
-    @Mapping(source = "projet.porteur.id", target = "porteurId")
-    @Mapping(source = "parrain.firstname", target = "parrainFirstname")
-    @Mapping(source = "parrain.lastname", target = "ParrainLastname")
-    @Mapping(source = "projet.porteur.firstname", target = "porteurFirstname")
-    @Mapping(source = "projet.porteur.lastname", target = "PorteurLastname")
-    @Mapping(source = "projet.title", target = "projetTitle")
-    CompteRenduDto toDto(CompteRendu compteRendu);
+    default CompteRenduDto toDto(CompteRendu cr) {
+        if (cr == null) return null;
+
+        CompteRenduDto.CompteRenduDtoBuilder builder = CompteRenduDto.builder()
+                .id(cr.getId())
+                .dateEchange(cr.getDateEchange())
+                .heureEchange(cr.getHeureEchange())
+                .moyenEchange(cr.getMoyenEchange())
+                .sujets(cr.getSujets())
+                .resume(cr.getResume())
+                .actionsAMener(cr.getActionsAMener())
+                .prochainRdv(cr.getProchainRdv());
+
+        if (cr.getParrain() != null) {
+            builder.parrainId(cr.getParrain().getId())
+                    .parrainFirstname(cr.getParrain().getFirstname())
+                    .parrainLastname(cr.getParrain().getLastname());
+        }
+
+        if (cr.getProjet() != null) {
+            builder.projetId(cr.getProjet().getId())
+                    .projetTitle(cr.getProjet().getTitle());
+
+            if (cr.getProjet().getPorteur() != null) {
+                builder.porteurId(cr.getProjet().getPorteur().getId())
+                        .porteurFirstname(cr.getProjet().getPorteur().getFirstname())
+                        .porteurLastname(cr.getProjet().getPorteur().getLastname());
+            }
+        }
+
+        return builder.build();
+    }
 
     @InheritConfiguration(name = "toEntity")
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     CompteRendu partialUpdate(@MappingTarget CompteRendu compteRendu, CompteRenduDto compteRenduDto);
 }
+

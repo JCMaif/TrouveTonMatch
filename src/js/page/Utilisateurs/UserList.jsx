@@ -86,7 +86,7 @@ const UserList = ({role, title}) => {
                                         <FaRegUser size={50} color="#ccc"/>
                                     )}
                                 </div>
-                                {user.firstName} {user.lastName}
+                                {user.firstname} {user.lastname}
                             </div>
                         </td>
                         {(isAuthenticated?.role === "ADMIN" || isAuthenticated?.role === "STAFF") && (

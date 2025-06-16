@@ -72,6 +72,7 @@ const ProjetForm = ({ isEditing }) => {
             try {
                 const parrains = await userService.findParrainsDisponibles(isAuthenticated.token);
                 setParrainsDisponibles(parrains);
+                console.log("parrains disponibles :", parrainsDisponibles);
             } catch (e) {
                 console.error("Erreur chargement parrains :", e);
             }
@@ -80,7 +81,7 @@ const ProjetForm = ({ isEditing }) => {
         if (isEditing && userCanEdit && !projet?.parrainId) {
             fetchParrains();
         }
-    }, [isEditing, userCanEdit, projet]);
+    }, [isEditing, userCanEdit, projet,isAuthenticated?.token]);
 
 
     useEffect(() => {
@@ -175,7 +176,7 @@ const ProjetForm = ({ isEditing }) => {
                                     <option value="">-- Sélectionner un parrain --</option>
                                     {parrainsDisponibles.map(parrain => (
                                         <option key={parrain.id} value={parrain.id}>
-                                            {parrain.firstName} {parrain.lastName}
+                                            {parrain.firstname} {parrain.lastname}
                                         </option>
                                     ))}
                                 </select>
@@ -203,10 +204,10 @@ const ProjetForm = ({ isEditing }) => {
                             <EditButton onClick={() => navigate(`/projet/edit/${projetId}`)}>Modifier</EditButton>
                         )}
                     </div>
-                    <p><strong>Porteur :</strong> {projet?.porteurFirstName} {projet?.PorteurLastname}</p>
+                    <p><strong>Porteur :</strong> {projet?.porteurFirstname} {projet?.porteurLastname}</p>
                     <p><strong>Date de lancement :</strong> {projet?.startingDate ? new Date(projet.startingDate).toLocaleDateString() : "Non renseignée"}</p>
                     <p><strong>Description :</strong> {projet?.description || "Aucune description"}</p>
-                    <p><strong>Parrain :</strong> {projet?.parrainId ? `${projet.parrainFirstName} ${projet.ParrainLastname}` : "Choisissez un parrain"}</p>
+                    <p><strong>Parrain :</strong> {projet?.parrainId ? `${projet.parrainFirstname} ${projet.parrainLastname}` : "Choisissez un parrain"}</p>
                 </>
             )}
         </div>

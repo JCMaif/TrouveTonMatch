@@ -26,14 +26,13 @@ const Home = () => {
         setLoading(true);
         try {
             const response = await findAll({
-                page: currentPage - 1,
-                size: pageSize,
-                sortField,
-                sortDirection,
+                page: 0,
+                size: 1000,
                 filters
             }, isAuthenticated.token);
+            console.log("cr :", response.content);
             const data = filterCompteRendus(response.content);
-            console.log('cr :', data);
+            console.log("filteredCr : ", data);
             setCompteRendus(data);
         } catch (e) {
             console.error("Erreur dans la récupération des compte-rendus : ", e);
@@ -62,14 +61,23 @@ const Home = () => {
         if (isAuthenticated) {
             fetchCR();
         }
-    }, [isAuthenticated, currentPage, sortField, sortDirection, filters]);
+    }, [isAuthenticated]);
 
     const handleClick = (id) => navigate(`/compte-rendu/${id}`);
 
     const handleSort = (field) => {
-        const direction = sortField === field && sortDirection === 'ASC' ? 'DESC' : 'ASC';
+        const isAsc = sortField === field && sortDirection === 'asc';
+        const newOrder = isAsc ? 'desc' : 'asc';
+
+        const sorted = [...compteRendus].sort((a, b) => {
+            const aValue = a[field]?.toString().toLowerCase() ?? '';
+            const bValue = b[field]?.toString().toLowerCase() ?? '';
+            return (aValue < bValue ? -1 : aValue > bValue ? 1 : 0) * (newOrder === 'asc' ? 1 : -1);
+        });
+
+        setCompteRendus(sorted);
         setSortField(field);
-        setSortDirection(direction);
+        setSortDirection(newOrder);
     };
 
     return (
@@ -89,18 +97,18 @@ const Home = () => {
                     <table>
                         <thead>
                         <tr>
-                            <th onClick={() => handleSort('dateEchange')}>Date {sortField === 'dateEchange' ? (sortDirection === 'ASC' ? '↑' : '↓') : ''}</th>
+                            <th onClick={() => handleSort('dateEchange')}>Date ↑↓</th>
                             {isAdminOrStaff && (
                                 <>
-                                    <th onClick={() => handleSort('PorteurLastname')}>Porteur {sortField === 'PorteurLastname' ? (sortDirection === 'ASC' ? '↑' : '↓') : ''}</th>
-                                    <th onClick={() => handleSort('ParrainLastname')}>Parrain {sortField === 'ParrainLastname' ? (sortDirection === 'ASC' ? '↑' : '↓') : ''}</th>
+                                    <th onClick={() => handleSort('porteurLastname')}>Porteur ↑↓</th>
+                                    <th onClick={() => handleSort('parrainLastname')}>Parrain ↑↓</th>
                                 </>
                             )}
                             {isParrain && (
-                                <th onClick={() => handleSort('projetTitle')}>Projet {sortField === 'projetTitle' ? (sortDirection === 'ASC' ? '↑' : '↓') : ''}</th>
+                                <th onClick={() => handleSort('projetTitle')}>Projet ↑↓</th>
                             )}
-                            <th onClick={() => handleSort('sujets')}>Sujet {sortField === 'sujets' ? (sortDirection === 'ASC' ? '↑' : '↓') : ''}</th>
-                            <th onClick={() => handleSort('prochainRdv')}>Échéance {sortField === 'prochainRdv' ? (sortDirection === 'ASC' ? '↑' : '↓') : ''}</th>
+                            <th onClick={() => handleSort('sujets')}>Sujet ↑↓</th>
+                            <th onClick={() => handleSort('prochainRdv')}>Échéance ↑↓</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -109,8 +117,8 @@ const Home = () => {
                                 <td>{cr.dateEchange}</td>
                                 {isAdminOrStaff && (
                                     <>
-                                        <td>{cr.porteurFirstname} {cr.PorteurLastname}</td>
-                                        <td>{cr.parrainFirstname} {cr.ParrainLastname}</td>
+                                        <td>{cr.porteurFirstname} {cr.porteurLastname}</td>
+                                        <td>{cr.parrainFirstname} {cr.parrainLastname}</td>
                                     </>
                                 )}
                                 {isParrain && (

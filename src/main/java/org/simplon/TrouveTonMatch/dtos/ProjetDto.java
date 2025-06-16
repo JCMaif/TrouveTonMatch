@@ -1,10 +1,5 @@
 package org.simplon.TrouveTonMatch.dtos;
 
-import lombok.Builder;
-import lombok.Value;
-import org.simplon.TrouveTonMatch.model.Parrain;
-import org.simplon.TrouveTonMatch.model.Porteur;
-
 import java.io.Serializable;
 import java.time.LocalDate;
 
@@ -19,9 +14,9 @@ public record ProjetDto(
     LocalDate startingDate,
     Long porteurId,
     String porteurFirstname,
-    String PorteurLastname,
+    String porteurLastname,
     Long parrainId,
     String parrainFirstname,
-    String ParrainLastname
+    String parrainLastname
 )
 implements Serializable{}
