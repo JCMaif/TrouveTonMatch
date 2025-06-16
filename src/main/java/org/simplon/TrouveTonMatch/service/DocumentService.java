@@ -1,23 +1,19 @@
 package org.simplon.TrouveTonMatch.service;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.rmi.RemoteException;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
 import org.simplon.TrouveTonMatch.dtos.DocumentDto;
-import org.simplon.TrouveTonMatch.model.CompteRendu;
 import org.simplon.TrouveTonMatch.model.Document;
-import org.simplon.TrouveTonMatch.model.DocumentMapper;
+import org.simplon.TrouveTonMatch.mapper.DocumentMapper;
 import org.simplon.TrouveTonMatch.repository.CompteRenduRepository;
 import org.simplon.TrouveTonMatch.repository.DocumentRepository;
 import org.simplon.TrouveTonMatch.security.SecurityUtils;

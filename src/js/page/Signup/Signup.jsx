@@ -112,7 +112,7 @@ const Signup = ({ role }) => {
                     {isSubmitting ? "Création..." : "Créer"}
                 </button>
 
-                <pre className="styleguide-state-preview">{JSON.stringify(state, null, 2)}</pre>
+                {/*<pre className="styleguide-state-preview">{JSON.stringify(state, null, 2)}</pre>*/}
             </form>
         </div>
     );

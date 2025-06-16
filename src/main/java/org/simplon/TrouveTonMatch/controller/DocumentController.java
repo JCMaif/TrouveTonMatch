@@ -1,23 +1,13 @@
 package org.simplon.TrouveTonMatch.controller;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.security.Principal;
 import java.util.List;
 
 import org.simplon.TrouveTonMatch.dtos.DocumentDto;
 import org.simplon.TrouveTonMatch.model.Document;
-import org.simplon.TrouveTonMatch.model.DocumentMapper;
+import org.simplon.TrouveTonMatch.mapper.DocumentMapper;
 import org.simplon.TrouveTonMatch.service.DocumentService;
 import org.springframework.core.io.Resource;
-import org.springframework.core.io.UrlResource;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;

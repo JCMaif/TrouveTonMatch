@@ -32,7 +32,26 @@ const createService = (resourcePath) => {
 
 export const plateformeService = createService("plateforme");
 export const enumService = createService("enum");
-export const compteRenduService = createService("compte-rendu");
+export const compteRenduService = {
+    ...createService("compte-rendu"),
+
+    findAll: async ({ page = 0, size = 10, sortField = 'dateEchange', sortDirection = 'DESC', filters = {} }, token) => {
+        const queryParams = new URLSearchParams({
+            page,
+            size,
+            sort: `${sortField},${sortDirection}`,
+            ...Object.entries(filters)
+                .filter(([_, v]) => v != null && v !== '')
+                .reduce((acc, [key, value]) => ({ ...acc, [key]: value }), {})
+        });
+
+        const endpoint = Object.keys(filters).length > 0
+            ? `${API_BASE_URL}/compte-rendu/search?${queryParams}`
+            : `${API_BASE_URL}/compte-rendu?${queryParams}`;
+
+        return await apiRequest(endpoint, { method: "GET" }, token);
+    }
+};
 
 export const documentService = {
     ...createService("documents"),

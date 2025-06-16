@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { AuthContext } from "../../context/AuthContext.jsx";
 import { documentService, userService } from "../../services/services.js";
 import {Link, useNavigate} from "react-router-dom";
@@ -12,8 +12,8 @@ const Bibliotheque = () => {
     const [documents, setDocuments] = useState([]);
     const [userMap, setUserMap] = useState({});
     const [error, setError] = useState(null);
-    const navigate = useNavigate();
-    const { findAll,getDocumentById} = useAuthenticatedService(documentService);
+    useNavigate();
+    const { findAll} = useAuthenticatedService(documentService);
 
     const userCanCRUD = isAuthenticated && (
         isAuthenticated.role === "ADMIN" ||

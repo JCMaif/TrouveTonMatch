@@ -49,7 +49,7 @@ public class CompteRendu {
 
     @ManyToOne
     @JsonIgnore
-    private Porteur porteur;
+    private Parrain parrain;
 
     @ManyToOne
     @JsonIgnore

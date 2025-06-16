@@ -6,20 +6,28 @@ import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
-/**
- * DTO for {@link org.simplon.TrouveTonMatch.model.CompteRendu}
- */
-public record CompteRenduDto(
-        Long id,
-        LocalDate dateEchange,
-        LocalTime heureEchange,
-        MoyenEchange moyenEchange,
-        String sujets,
-        String resume,
-        String actionsAMener,
-        LocalDate prochainRdv,
-        Long porteurId,
-        Long projetId
-)
-        implements Serializable {
+import lombok.Builder;
+import lombok.Data;
+
+@Data
+@Builder
+public class CompteRenduDto implements Serializable {
+    private Long id;
+    private LocalDate dateEchange;
+    private LocalTime heureEchange;
+    private MoyenEchange moyenEchange;
+    private String sujets;
+    private String resume;
+    private String actionsAMener;
+    private LocalDate prochainRdv;
+
+    private Long parrainId;
+    private Long projetId;
+    private String projetTitle;
+
+    private String porteurFirstname;
+    private String porteurLastname;
+    private String parrainFirstname;
+    private String parrainLastname;
+    private Long porteurId;
 }

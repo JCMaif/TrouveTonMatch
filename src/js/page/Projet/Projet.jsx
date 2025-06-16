@@ -14,6 +14,7 @@ const Projets = () => {
         const fetchProjets = async () => {
             try {
                 const data = await findAll();
+                console.log("projets",data);
                 setProjets(data);
             } catch (err) {
                 setError("Failed to fetch projects");
@@ -41,8 +42,8 @@ const Projets = () => {
                 {projets.map((projet) => (
                     <tr key={projet.id} onClick={() => handleClick(projet.id)}>
                         <td>{projet.title}</td>
-                        <td>{projet.porteur.firstame}  {projet.porteur.lastname}</td>
-                        <td>{projet.parrain?.firstName}  {projet.parrain?.lastName}</td>
+                        <td>{projet.porteurFirstname} {projet.porteurLastname}</td>
+                        <td>{projet.parrainFirstname} {projet.parrainLastname}</td>
                     </tr>
                 ))}
                 </tbody>

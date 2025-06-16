@@ -1,4 +1,4 @@
-import React, {useContext, useState} from "react";
+import {useContext, useState} from "react";
 import { documentService } from "../../services/services.js";
 import { AuthContext } from "../../context/AuthContext";
 
@@ -27,7 +27,7 @@ const UploadDocument = ({ onUploadSuccess }) => {
             setUploading(true);
             await documentService.create(formData, isAuthenticated.token);
             setFile(null);
-            onUploadSuccess?.(); // déclenche un rafraîchissement de la liste des documents, si défini
+            onUploadSuccess?.();
         } catch (err) {
             console.error(err);
             setError("Erreur lors de l'envoi du document.");
